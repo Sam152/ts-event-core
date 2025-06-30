@@ -1,4 +1,4 @@
-import { AggregateRepository } from "./AggregateRepository.ts";
+import { AggregateRepository } from "../AggregateRepository.ts";
 
 export function createMemoryAggregateRepository(): AggregateRepository {
   return {};

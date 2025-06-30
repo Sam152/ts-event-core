@@ -1,4 +1,4 @@
-import { AggregateInstance } from "../aggregate/AggregateInstance.ts";
+import { AggregateInstance } from "./AggregateInstance.ts";
 
 export type AggregateRepository = {
   retrieve: (type: AggregateInstance["type"], id: AggregateInstance["id"]) => Promise<AggregateInstance>;
