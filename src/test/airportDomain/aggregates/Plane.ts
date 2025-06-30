@@ -26,20 +26,19 @@ function scanBoardingPass(
 
 function confirmTakeOff(
   plane: PlaneState,
-  data: Record<PropertyKey, never>,
 ): PlaneEvent {
   if (plane.status === "IN_THE_AIR") {
-    throw new Error("Plane is already in the air.");
+    throw new Error("Plane has already confirmed as in the air.");
   }
   return {
     type: "FLIGHT_DEPARTED",
   };
 }
 
-function confirmLanding(
-  plane: PlaneState,
-  data: Record<PropertyKey, never>,
-): PlaneEvent {
+function confirmLanding(plane: PlaneState): PlaneEvent {
+  if (plane.status === "ON_THE_GROUND") {
+    throw new Error("Plane has already confirmed as landed.");
+  }
   return {
     type: "FLIGHT_ARRIVED",
   };
@@ -68,14 +67,27 @@ type PlaneEvent = {
 
 function planeReducer(state: PlaneState, event: PlaneEvent): PlaneState {
   switch (event.type) {
-    case "PLANE_ENTERED_SERVICE":
+    case "FLIGHT_DEPARTED": {
+      return {
+        ...state,
+        status: "IN_THE_AIR",
+      };
+    }
+    case "FLIGHT_ARRIVED": {
+      return {
+        ...state,
+        status: "ON_THE_GROUND",
+      };
+    }
+    case "PLANE_ENTERED_SERVICE": {
       return {
         totalSeats: event.seatingCapacity,
         totalBoardedPassengers: 0,
         passengerManifest: {},
         status: "ON_THE_GROUND",
       };
-    case "PASSENGER_BOARDED":
+    }
+    case "PASSENGER_BOARDED": {
       return {
         ...state,
         totalBoardedPassengers: state.totalBoardedPassengers + 1,
@@ -84,10 +96,14 @@ function planeReducer(state: PlaneState, event: PlaneEvent): PlaneState {
           [event.passportNumber]: event.passengerName,
         },
       };
-    case "PASSENGER_DISEMBARKED":
+    }
+    case "PASSENGER_DISEMBARKED": {
+      const { [event.passportNumber]: _, ...remainingPassengers } = state.passengerManifest;
       return {
         ...state,
         totalBoardedPassengers: state.totalBoardedPassengers - 1,
+        passengerManifest: remainingPassengers,
       };
+    }
   }
 }
