@@ -1,10 +1,20 @@
-import { EventStore } from "./EventStore.ts";
+import { EventEnvelope, EventStore } from "./EventStore.ts";
 
 export function createMemoryEventStore(): EventStore<unknown> {
   /**
    * A map of aggregate IDs to an array of events.
    */
-  const events: Record<string, unknown[]> = {};
+  const storage: Record<string, EventEnvelope<unknown>[]> = {};
 
-  return {};
+  return {
+    persist: async (events) => {
+    },
+    retrieve: async ({
+      aggregateType,
+      aggregateId,
+      fromVersion,
+    }) => {
+      return [];
+    },
+  };
 }
