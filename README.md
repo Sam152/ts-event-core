@@ -1,5 +1,5 @@
 Event Core
 ===
 
-Status: In development / unmaintained
+Status: In Development / Unmaintained
 
