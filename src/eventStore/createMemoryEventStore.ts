@@ -1,23 +1,24 @@
 import { EventEnvelope, EventStore } from "./EventStore.ts";
 import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
 
-export function createMemoryEventStore(): EventStore<unknown> {
-  const storage: Record<string, EventEnvelope<unknown>[]> = {};
+export function createMemoryEventStore<TEventType>(): EventStore<TEventType> {
+  const storage: Record<string, EventEnvelope<TEventType>[]> = {};
   const createKey = (aggregateType: string, aggregateId: string) => `${aggregateType}:${aggregateId}`;
 
   return {
-    persist: (events) => {
+    persist: async (events) => {
       events.forEach((event) => {
         const key = createKey(event.aggregateType, event.aggregateId);
-        const existingEvents = storage[key] || [];
+        if (!storage[key]) {
+          storage[key] = [];
+        }
 
-        if (existingEvents.some((existing) => existing.aggregateVersion === event.aggregateVersion)) {
+        if (storage[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)) {
           throw new UniqueConstraintViolationError();
         }
 
         storage[key].push(event);
       });
-      return Promise.resolve();
     },
     retrieve: ({
       aggregateType,
