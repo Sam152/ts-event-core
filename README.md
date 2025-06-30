@@ -1,5 +1,3 @@
-Event Core
-===
+# Event Core
 
 Status: In Development / Unmaintained
-

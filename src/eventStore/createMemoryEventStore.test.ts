@@ -72,7 +72,7 @@ const testEventStream: EventEnvelope<PlaneEvent>[] = [
 Deno.test("should persist and retrieve events", async () => {
   const eventStore = createMemoryEventStore<PlaneEvent>();
 
-  await eventStore.persist(testEventStream.filter(e => e.aggregateId === "plane-001").slice(0, 2));
+  await eventStore.persist(testEventStream.filter((e) => e.aggregateId === "plane-001").slice(0, 2));
 
   const retrievedEvents = await eventStore.retrieve({
     aggregateType: "PLANE",
@@ -87,7 +87,7 @@ Deno.test("should persist and retrieve events", async () => {
 Deno.test("should retrieve events from specific version", async () => {
   const eventStore = createMemoryEventStore<PlaneEvent>();
 
-  await eventStore.persist(testEventStream.filter(e => e.aggregateId === "plane-001"));
+  await eventStore.persist(testEventStream.filter((e) => e.aggregateId === "plane-001"));
 
   const retrievedEvents = await eventStore.retrieve({
     aggregateType: "PLANE",
@@ -116,10 +116,11 @@ Deno.test("should throw UniqueConstraintViolationError for duplicate version", a
   await eventStore.persist([testEventStream[0]]);
 
   await assertRejects(
-    () => eventStore.persist([{
-      ...testEventStream[1],
-      aggregateVersion: 1,
-    }]),
+    () =>
+      eventStore.persist([{
+        ...testEventStream[1],
+        aggregateVersion: 1,
+      }]),
     UniqueConstraintViolationError,
   );
 });
@@ -148,7 +149,7 @@ Deno.test("should handle multiple aggregates independently", async () => {
 Deno.test("should persist multiple events in single call", async () => {
   const eventStore = createMemoryEventStore<PlaneEvent>();
 
-  await eventStore.persist(testEventStream.filter(e => e.aggregateId === "plane-002"));
+  await eventStore.persist(testEventStream.filter((e) => e.aggregateId === "plane-002"));
 
   const retrievedEvents = await eventStore.retrieve({
     aggregateType: "PLANE",
