@@ -4,7 +4,7 @@ export type EventStore<TEvent> = {
    *
    * @throws UniqueConstraintViolationError
    */
-  persist: (events: EventEnvelope<TEvent>[]) => Promise<void>;
+  persist: (events: Event<TEvent>[]) => Promise<void>;
 
   /**
    * Retrieves events for the given aggregate type and ID, optionally from a specific version. Returns an
@@ -14,13 +14,13 @@ export type EventStore<TEvent> = {
     aggregateType: string;
     aggregateId: string;
     fromVersion?: number;
-  }) => Promise<EventEnvelope<TEvent>[]>;
+  }) => Promise<Event<TEvent>[]>;
 };
 
-export type EventEnvelope<TEvent> = {
+export type Event<TEventPayload> = {
   recordedAt: Date;
   aggregateType: string;
   aggregateId: string;
   aggregateVersion: number;
-  event: TEvent;
+  payload: TEventPayload;
 };

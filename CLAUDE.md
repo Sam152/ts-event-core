@@ -7,3 +7,4 @@ Code according to these conventions:
 - All event types are SHOUTING_SNAKE_CASE.
 - All aggregate types are SHOUTING_SNAKE_CASE.
 - All data for tests should use types or data from the example domain in ./src/test/airlineDomain.
+- Never use the `any` typescript type, under any circumstances.

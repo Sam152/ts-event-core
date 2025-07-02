@@ -8,7 +8,8 @@ type CommandMap<TAggregateRootState, TEvent> = {
 };
 
 export type AggregateDefinition<TAggregateRootState, TEvent> = {
-  aggregateTypeId: string;
-  reduce: AggregateReducer<TAggregateRootState, TEvent>;
+  reducer: AggregateReducer<TAggregateRootState, TEvent>;
   commands: CommandMap<TAggregateRootState, TEvent>;
 };
+
+export type AggregateDefinitionMap = Record<string, AggregateDefinition<any, any>>;
