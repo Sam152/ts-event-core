@@ -1,5 +1,19 @@
-import { CommandIssuer } from "../../../command/CommandIssuer.ts";
-import { airlineAggregates } from "../aggregates/airlineAggregates.ts";
+import {CommandIssuer} from "../../../command/CommandIssuer.ts";
+import {airlineAggregates, AirlineEvent} from "../aggregates/airlineAggregates.ts";
 
-export function boardingProcessManager(issueCommand: CommandIssuer<typeof airlineAggregates>) {
+export async function boardingProcessManager(
+  event: AirlineEvent,
+  issueCommand: CommandIssuer<typeof airlineAggregates>,
+) {
+  if (event.payload.type === "BOARDING_PASS_SCANNED") {
+    await issueCommand({
+      aggregateType: "PLANE",
+      command: "confirmPassengerBoarding",
+      aggregateId: "",
+      data: {
+        passengerName: event.payload.passengerName,
+        passportNumber: event.payload.passportNumber,
+      },
+    });
+  }
 }
