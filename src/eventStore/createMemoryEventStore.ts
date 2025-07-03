@@ -2,7 +2,7 @@ import { Event, EventStore } from "./EventStore.ts";
 import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
 
 type CreateMemoryEventStoreArgs<TEvent extends Event<unknown>> = {
-  emitters: Array<(event: TEvent) => Promise<void> | void>;
+  emitters?: Array<(event: TEvent) => Promise<void> | void>;
 };
 
 export function createMemoryEventStore<TEvent extends Event<unknown>>(
@@ -22,7 +22,7 @@ export function createMemoryEventStore<TEvent extends Event<unknown>>(
         }
 
         storage[key].push(event);
-        await Promise.all(emitters.map((emitter) => emitter(event)));
+        await Promise.all(emitters?.map((emitter) => emitter(event)) ?? []);
       }));
     },
     retrieve: ({
