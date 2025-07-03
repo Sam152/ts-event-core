@@ -8,9 +8,7 @@ export function createMemoryEventStore<TEvent extends Event<unknown>>(): EventSt
     persist: async (events) => {
       events.forEach((event) => {
         const key = streamKey(event.aggregateType, event.aggregateId);
-        if (!storage[key]) {
-          storage[key] = [];
-        }
+        storage[key] = storage[key] ?? [];
 
         if (storage[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)) {
           throw new UniqueConstraintViolationError();
