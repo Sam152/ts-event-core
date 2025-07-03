@@ -1,5 +1,5 @@
-import {CommandIssuer} from "../../../command/CommandIssuer.ts";
-import {airlineAggregates, AirlineEvent} from "../aggregates/airlineAggregates.ts";
+import { CommandIssuer } from "../../../command/CommandIssuer.ts";
+import { airlineAggregates, AirlineEvent } from "../aggregates/airlineAggregates.ts";
 
 export async function boardingProcessManager(
   event: AirlineEvent,

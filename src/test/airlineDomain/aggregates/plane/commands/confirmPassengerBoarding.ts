@@ -1,4 +1,4 @@
-import {PlaneEvent, PlaneState} from "../state/planeReducer.ts";
+import { PlaneEvent, PlaneState } from "../state/planeReducer.ts";
 
 export function confirmPassengerBoarding(
   plane: PlaneState,
