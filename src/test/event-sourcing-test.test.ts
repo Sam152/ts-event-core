@@ -1,14 +1,10 @@
-import {createBasicCommandIssuer} from "../command/createBasicCommandIssuer.ts";
-import {gateAggregateType} from "./airlineDomain/aggregates/gate/gateAggregateType.ts";
-import {planeAggregateType} from "./airlineDomain/aggregates/plane/planeAggregateType.ts";
-import {createMemoryEventStore} from "../eventStore/createMemoryEventStore.ts";
+import { createBasicCommandIssuer } from "../command/createBasicCommandIssuer.ts";
+import { createMemoryEventStore } from "../eventStore/createMemoryEventStore.ts";
+import { airlineAggregates } from "./airlineDomain/aggregates/airlineAggregates.ts";
 
 Deno.test("you can do event sourcing", async () => {
   const issueCommand = createBasicCommandIssuer({
-    aggregates: {
-      GATE: gateAggregateType,
-      PLANE: planeAggregateType,
-    },
+    aggregates: airlineAggregates,
     eventStore: createMemoryEventStore(),
   });
 

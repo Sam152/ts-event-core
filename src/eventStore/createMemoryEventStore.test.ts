@@ -1,8 +1,8 @@
-import {assertEquals, assertRejects} from "@std/assert";
-import {createMemoryEventStore} from "./createMemoryEventStore.ts";
-import {Event} from "./EventStore.ts";
-import {UniqueConstraintViolationError} from "./UniqueConstraintViolationError.ts";
-import {PlaneEvent} from "../test/airlineDomain/aggregates/plane/state/planeReducer.ts";
+import { assertEquals, assertRejects } from "@std/assert";
+import { createMemoryEventStore } from "./createMemoryEventStore.ts";
+import { Event } from "./EventStore.ts";
+import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
+import { PlaneEvent } from "../test/airlineDomain/aggregates/plane/state/planeReducer.ts";
 
 const testEventStream: Event<PlaneEvent>[] = [
   {
