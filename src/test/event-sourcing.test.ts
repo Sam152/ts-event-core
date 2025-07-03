@@ -5,7 +5,9 @@ import { airlineAggregates } from "./airlineDomain/aggregates/airlineAggregates.
 Deno.test("you can do event sourcing", async () => {
   const issueCommand = createBasicCommandIssuer({
     aggregates: airlineAggregates,
-    eventStore: createMemoryEventStore(),
+    eventStore: createMemoryEventStore({
+      subscribers: [],
+    }),
   });
 
   await issueCommand({

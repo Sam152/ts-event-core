@@ -2,11 +2,11 @@ import { Event, EventStore } from "./EventStore.ts";
 import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
 
 type CreateMemoryEventStoreArgs<TEvent extends Event<unknown>> = {
-  emitters?: Array<(event: TEvent) => Promise<void> | void>;
+  subscribers: Array<(event: TEvent) => Promise<void> | void>;
 };
 
 export function createMemoryEventStore<TEvent extends Event<unknown>>(
-  { emitters }: CreateMemoryEventStoreArgs<TEvent>,
+  { subscribers }: CreateMemoryEventStoreArgs<TEvent>,
 ): EventStore<TEvent> {
   const storage: Record<string, TEvent[]> = {};
   const streamKey = (aggregateType: string, aggregateId: string) => `${aggregateType}:${aggregateId}`;
@@ -22,7 +22,7 @@ export function createMemoryEventStore<TEvent extends Event<unknown>>(
         }
 
         storage[key].push(event);
-        await Promise.all(emitters?.map((emitter) => emitter(event)) ?? []);
+        await Promise.all(subscribers?.map((subscriber) => subscriber(event)) ?? []);
       }));
     },
     retrieve: ({
