@@ -1,7 +1,7 @@
 import { GateEvent, GateState } from "../state/gateReducer.ts";
 
 export function scanBoardingPass(
-  gate: GateState,
+  _gate: GateState,
   data: { passengerName: string; passportNumber: string },
 ): GateEvent {
   return {

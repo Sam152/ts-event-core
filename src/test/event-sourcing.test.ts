@@ -9,19 +9,6 @@ Deno.test("you can do event sourcing", async () => {
   });
 
   await issueCommand({
-    aggregateType: "PLANE",
-    aggregateId: "VH-XYZ",
-    command: "confirmLanding",
-    data: undefined,
-  });
-  await issueCommand({
-    aggregateType: "PLANE",
-    aggregateId: "VH-XYZ",
-    command: "confirmTakeOff",
-    data: undefined,
-  });
-
-  await issueCommand({
     aggregateType: "GATE",
     command: "scanBoardingPass",
     aggregateId: "PER-T4-A5",
@@ -29,5 +16,17 @@ Deno.test("you can do event sourcing", async () => {
       passengerName: "Foo",
       passportNumber: "13",
     },
+  });
+  await issueCommand({
+    aggregateType: "PLANE",
+    aggregateId: "VH-XYZ",
+    command: "confirmTakeOff",
+    data: undefined,
+  });
+  await issueCommand({
+    aggregateType: "PLANE",
+    aggregateId: "VH-XYZ",
+    command: "confirmLanding",
+    data: undefined,
   });
 });

@@ -1,10 +1,10 @@
-export type EventStore<TEvent> = {
+export type EventStore<TEvent extends Event<unknown>> = {
   /**
    * Persist events in the event store.
    *
    * @throws UniqueConstraintViolationError
    */
-  persist: (events: Event<TEvent>[]) => Promise<void>;
+  persist: (events: TEvent[]) => Promise<void>;
 
   /**
    * Retrieves events for the given aggregate type and ID, optionally from a specific version. Returns an
@@ -14,7 +14,7 @@ export type EventStore<TEvent> = {
     aggregateType: string;
     aggregateId: string;
     fromVersion?: number;
-  }) => Promise<Event<TEvent>[]>;
+  }) => Promise<TEvent[]>;
 };
 
 export type Event<TEventPayload> = {

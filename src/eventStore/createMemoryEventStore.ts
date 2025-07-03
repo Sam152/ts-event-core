@@ -1,8 +1,8 @@
 import { Event, EventStore } from "./EventStore.ts";
 import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
 
-export function createMemoryEventStore<TEventType>(): EventStore<TEventType> {
-  const storage: Record<string, Event<TEventType>[]> = {};
+export function createMemoryEventStore<TEvent extends Event<unknown>>(): EventStore<TEvent> {
+  const storage: Record<string, TEvent[]> = {};
   const streamKey = (aggregateType: string, aggregateId: string) => `${aggregateType}:${aggregateId}`;
   return {
     persist: async (events) => {
