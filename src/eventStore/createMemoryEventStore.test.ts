@@ -1,10 +1,9 @@
 import { assertEquals, assertRejects } from "@std/assert";
 import { createMemoryEventStore } from "./createMemoryEventStore.ts";
-import { Event } from "./EventStore.ts";
 import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
-import { PlaneEvent } from "../test/airlineDomain/aggregates/plane/state/planeReducer.ts";
+import { AirlineEvent } from "../test/airlineDomain/aggregates/airlineAggregates.ts";
 
-const testEventStream: Event<PlaneEvent>[] = [
+const testEventStream: AirlineEvent[] = [
   {
     recordedAt: new Date("2023-01-01T10:00:00Z"),
     aggregateType: "PLANE",
@@ -48,7 +47,7 @@ const testEventStream: Event<PlaneEvent>[] = [
 ];
 
 Deno.test("should persist and retrieve events", async () => {
-  const eventStore = createMemoryEventStore<PlaneEvent>();
+  const eventStore = createMemoryEventStore<AirlineEvent>();
   await eventStore.persist(testEventStream);
   assertEquals(
     (await eventStore.retrieve({
@@ -64,7 +63,7 @@ Deno.test("should persist and retrieve events", async () => {
 });
 
 Deno.test("should retrieve events from specific version", async () => {
-  const eventStore = createMemoryEventStore<PlaneEvent>();
+  const eventStore = createMemoryEventStore<AirlineEvent>();
   await eventStore.persist(testEventStream);
   const retrievedEvents = await eventStore.retrieve({
     aggregateType: "PLANE",
@@ -86,7 +85,7 @@ Deno.test("should return empty array for non-existent aggregate", async () => {
 });
 
 Deno.test("should throw UniqueConstraintViolationError for duplicate version", async () => {
-  const eventStore = createMemoryEventStore<PlaneEvent>();
+  const eventStore = createMemoryEventStore<AirlineEvent>();
 
   await eventStore.persist([testEventStream[0]]);
 
