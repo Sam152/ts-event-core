@@ -1,5 +1,5 @@
 import { CommandIssuer } from "../../../command/CommandIssuer.ts";
-import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoots/airlineAggregateRoots.ts";
+import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
 
 /**
  * A process manager facilitates coordination between aggregates, this is an example of an orchestrated

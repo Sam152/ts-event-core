@@ -1,4 +1,4 @@
-import { AirlineEvent } from "../aggregateRoots/airlineAggregateRoots.ts";
+import { AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
 
 type FlightActivityLog = {
   passengers: {

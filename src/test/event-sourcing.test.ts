@@ -1,7 +1,7 @@
 import { createImmediateCommandIssuer } from "../command/createImmediateCommandIssuer.ts";
-import { createMemoryEventStore } from "../eventStore/createMemoryEventStore.ts";
-import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoots/airlineAggregateRoots.ts";
-import { boardingProcessManager } from "./airlineDomain/processManagers/boardingProcessManager.ts";
+import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
+import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
+import { createMemoryEventStore } from "../eventStore/memory/createMemoryEventStore.ts";
 
 Deno.test("you can do event sourcing", async () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();

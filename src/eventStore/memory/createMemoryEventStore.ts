@@ -1,5 +1,5 @@
-import { Event, EventStore } from "./EventStore.ts";
-import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
+import { Event, EventStore } from "../EventStore.ts";
+import { AggregateDataConsistencyError } from "../AggregateDataConsistencyError.ts";
 
 type EventSubscriber<TEvent extends Event<unknown>> = (event: TEvent) => Promise<void> | void;
 type EventEmitter<TEvent extends Event<unknown>> = {
@@ -20,7 +20,7 @@ export function createMemoryEventStore<TEvent extends Event<unknown>>():
         storage[key] = storage[key] ?? [];
 
         if (storage[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)) {
-          throw new UniqueConstraintViolationError();
+          throw new AggregateDataConsistencyError();
         }
 
         storage[key].push(event);
