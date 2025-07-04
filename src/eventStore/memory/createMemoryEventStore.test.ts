@@ -1,7 +1,7 @@
 import { assertEquals, assertRejects } from "@std/assert";
 import { createMemoryEventStore } from "./createMemoryEventStore.ts";
-import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
-import { AirlineEvent } from "../test/airlineDomain/aggregateRoots/airlineAggregateRoots.ts";
+import { AirlineEvent } from "../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
+import { AggregateDataConsistencyError } from "../AggregateDataConsistencyError.ts";
 
 const testEventStream: AirlineEvent[] = [
   {
@@ -84,13 +84,13 @@ Deno.test("should return empty array for non-existent aggregate", async () => {
   );
 });
 
-Deno.test("should throw UniqueConstraintViolationError for duplicate version", async () => {
+Deno.test("should throw an error when attempting to persist a version collision", async () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
 
   await eventStore.persist([testEventStream[0]]);
 
   await assertRejects(
     () => eventStore.persist([testEventStream[0]]),
-    UniqueConstraintViolationError,
+    AggregateDataConsistencyError,
   );
 });
