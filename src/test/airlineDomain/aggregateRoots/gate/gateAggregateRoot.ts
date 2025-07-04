@@ -2,7 +2,7 @@ import { AggregateDefinition } from "../../../../aggregate/AggregateDefinition.t
 import { scanBoardingPass } from "./commands/scanBoardingPass.ts";
 import { GateEvent, gateReducer, GateState } from "./state/gateReducer.ts";
 
-export const gateAggregateType = {
+export const gateAggregateRoot = {
   reducer: gateReducer,
   commands: {
     scanBoardingPass,

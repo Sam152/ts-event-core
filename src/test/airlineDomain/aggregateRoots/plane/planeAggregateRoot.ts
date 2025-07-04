@@ -4,7 +4,7 @@ import { confirmPassengerBoarding } from "./commands/confirmPassengerBoarding.ts
 import { confirmTakeOff } from "./commands/confirmTakeOff.ts";
 import { PlaneEvent, planeReducer, PlaneState } from "./state/planeReducer.ts";
 
-export const planeAggregateType = {
+export const planeAggregateRoot = {
   reducer: planeReducer,
   commands: {
     confirmTakeOff,

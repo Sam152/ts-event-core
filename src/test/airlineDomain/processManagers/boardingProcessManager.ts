@@ -1,9 +1,21 @@
 import { CommandIssuer } from "../../../command/CommandIssuer.ts";
-import { airlineAggregates, AirlineEvent } from "../aggregates/airlineAggregates.ts";
+import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoots/airlineAggregateRoots.ts";
 
+/**
+ * A process manager facilitates coordination between aggregates, this is an example of an orchestrated
+ * workflow (as opposed to a choreographed one) since the process manager acts a central decision-making
+ * hub for the domain.
+ *
+ * Aggregates are always eventually consistent with respect to each-other, so a process manager needs to
+ * account for downstream aggregates rejecting the issued command and raising unfavourable events, or
+ * eventual consistency must be a tolerable feature of the domain.
+ *
+ * Where strong consistency is a hard requirement of a transaction within the domain, all events and
+ * aggregates must be colocated within the same aggregate root.
+ */
 export async function boardingProcessManager(
   event: AirlineEvent,
-  issueCommand: CommandIssuer<typeof airlineAggregates>,
+  issueCommand: CommandIssuer<typeof airlineAggregateRoots>,
 ) {
   if (event.payload.type === "BOARDING_PASS_SCANNED") {
     await issueCommand({

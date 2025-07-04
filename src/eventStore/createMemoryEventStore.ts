@@ -1,17 +1,19 @@
 import { Event, EventStore } from "./EventStore.ts";
 import { UniqueConstraintViolationError } from "./UniqueConstraintViolationError.ts";
 
-type CreateMemoryEventStoreArgs<TEvent extends Event<unknown>> = {
-  subscribers: Array<(event: TEvent) => Promise<void> | void>;
+type EventSubscriber<TEvent extends Event<unknown>> = (event: TEvent) => Promise<void> | void;
+type EventEmitter<TEvent extends Event<unknown>> = {
+  addSubscriber: (subscriber: EventSubscriber<TEvent>) => void;
 };
 
-export function createMemoryEventStore<TEvent extends Event<unknown>>(
-  { subscribers }: CreateMemoryEventStoreArgs<TEvent>,
-): EventStore<TEvent> {
+export function createMemoryEventStore<TEvent extends Event<unknown>>():
+  & EventStore<TEvent>
+  & EventEmitter<TEvent> {
   const storage: Record<string, TEvent[]> = {};
-  const streamKey = (aggregateType: string, aggregateId: string) => `${aggregateType}:${aggregateId}`;
+  const subscribers: EventSubscriber<TEvent>[] = [];
 
   return {
+    addSubscriber: subscribers.push,
     persist: async (events) => {
       await Promise.all(events.map(async (event) => {
         const key = streamKey(event.aggregateType, event.aggregateId);
@@ -37,4 +39,8 @@ export function createMemoryEventStore<TEvent extends Event<unknown>>(
       );
     },
   };
+}
+
+function streamKey(aggregateType: string, aggregateId: string): string {
+  return `${aggregateType}:${aggregateId}`;
 }

@@ -1,9 +1,9 @@
-import { createBasicCommandIssuer } from "../command/createBasicCommandIssuer.ts";
+import { createImmediateCommandIssuer } from "../command/createImmediateCommandIssuer.ts";
 import { createMemoryEventStore } from "../eventStore/createMemoryEventStore.ts";
-import { airlineAggregates } from "./airlineDomain/aggregates/airlineAggregates.ts";
+import { airlineAggregateRoots } from "./airlineDomain/aggregateRoots/airlineAggregateRoots.ts";
 
-const issueCommand = createBasicCommandIssuer({
-  aggregates: airlineAggregates,
+const issueCommand = createImmediateCommandIssuer({
+  aggregateRoots: airlineAggregateRoots,
   eventStore: createMemoryEventStore(),
 });
 
