@@ -1,6 +1,6 @@
 import { Commander } from "../Commander.ts";
-import { AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
 import { Event, EventStore } from "../../eventStore/EventStore.ts";
+import { AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
 
 /**
  * An immediate command issuer processes commands right away. This is in contrast to other kinds
