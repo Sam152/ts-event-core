@@ -1,8 +1,18 @@
+/**
+ * Events record statements of fact that occur while commands are
+ * processing.
+ */
+export type Event<TEventPayload = unknown> = {
+  recordedAt: Date;
+  aggregateType: string;
+  aggregateId: string;
+  aggregateVersion: number;
+  payload: TEventPayload;
+};
+
 export type EventStore<TEvent extends Event> = {
   /**
    * Persist events in the event store.
-   *
-   * @throws UniqueConstraintViolationError
    */
   persist: (events: TEvent[]) => Promise<void>;
 
@@ -15,12 +25,4 @@ export type EventStore<TEvent extends Event> = {
     aggregateId: string;
     fromVersion?: number;
   }) => Promise<TEvent[]>;
-};
-
-export type Event<TEventPayload = unknown> = {
-  recordedAt: Date;
-  aggregateType: string;
-  aggregateId: string;
-  aggregateVersion: number;
-  payload: TEventPayload;
 };

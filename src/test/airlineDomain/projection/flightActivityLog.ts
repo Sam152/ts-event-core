@@ -13,7 +13,12 @@ type FlightActivityLog = {
   };
 };
 
-export function flightActivityLog(state: FlightActivityLog, event: AirlineEvent): FlightActivityLog {
+export const flightActivityLogInitialState = {
+  passengers: {},
+  planes: {},
+};
+
+export function flightActivityLogReducer(state: FlightActivityLog, event: AirlineEvent): FlightActivityLog {
   switch (event.payload.type) {
     case "PASSENGER_BOARDED": {
       const passengerKey = `${event.payload.passengerName}:${event.payload.passportNumber}`;
