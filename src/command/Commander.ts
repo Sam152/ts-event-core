@@ -1,6 +1,6 @@
 import { AggregateRootDefinitionMap } from "../aggregate/AggregateRootDefinition.ts";
 
-export type CommandIssuer<TAggregateMap extends AggregateRootDefinitionMap> = <
+export type Commander<TAggregateMap extends AggregateRootDefinitionMap> = <
   TAggregateType extends keyof TAggregateMap,
   TCommandName extends keyof TAggregateMap[TAggregateType]["commands"],
 >(args: {

@@ -1,6 +1,6 @@
-import { CommandIssuer } from "./CommandIssuer.ts";
-import { AggregateRootDefinitionMap } from "../aggregate/AggregateRootDefinition.ts";
-import { Event, EventStore } from "../eventStore/EventStore.ts";
+import { Commander } from "../Commander.ts";
+import { AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
+import { Event, EventStore } from "../../eventStore/EventStore.ts";
 
 /**
  * An immediate command issuer processes commands right away. This is in contrast to other kinds
@@ -14,7 +14,7 @@ export function createImmediateCommandIssuer<
     eventStore: EventStore<TEventType>;
     aggregateRoots: TAggregateMap;
   },
-): CommandIssuer<TAggregateMap> {
+): Commander<TAggregateMap> {
   // @todo
 
   return async ({ aggregateType, command, data }) => {
