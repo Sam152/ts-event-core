@@ -17,6 +17,12 @@ export function createImmediateCommandIssuer<
 ): Commander<TAggregateMap> {
   // @todo
 
+  // Load the aggregate data.
+
   return async ({ aggregateType, command, data }) => {
+    // load the aggregate data.
+
+    const aggregateData = {};
+    aggregateRoots[aggregateType]["commands"][command](aggregateData, data);
   };
 }
