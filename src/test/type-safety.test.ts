@@ -1,4 +1,4 @@
-import { createImmediateCommandIssuer } from "../command/createImmediateCommandIssuer.ts";
+import { createImmediateCommandIssuer } from "../command/immediate/createImmediateCommandIssuer.ts";
 import { airlineAggregateRoots } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createMemoryEventStore } from "../eventStore/memory/createMemoryEventStore.ts";
 

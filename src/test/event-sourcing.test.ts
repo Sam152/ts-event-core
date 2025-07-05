@@ -1,4 +1,4 @@
-import { createImmediateCommandIssuer } from "../command/createImmediateCommandIssuer.ts";
+import { createImmediateCommandIssuer } from "../command/immediate/createImmediateCommandIssuer.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
 import { createMemoryEventStore } from "../eventStore/memory/createMemoryEventStore.ts";
@@ -9,7 +9,7 @@ import {
 } from "./airlineDomain/projection/flightActivityLog.ts";
 import { assertEquals } from "@std/assert";
 
-Deno.test("you can do event sourcing", async () => {
+Deno.test("you can build an event sourced system", async () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
   const issueCommand = createImmediateCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
