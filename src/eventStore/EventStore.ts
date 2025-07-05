@@ -1,4 +1,4 @@
-export type EventStore<TEvent extends Event<unknown>> = {
+export type EventStore<TEvent extends Event> = {
   /**
    * Persist events in the event store.
    *
@@ -17,7 +17,7 @@ export type EventStore<TEvent extends Event<unknown>> = {
   }) => Promise<TEvent[]>;
 };
 
-export type Event<TEventPayload> = {
+export type Event<TEventPayload = unknown> = {
   recordedAt: Date;
   aggregateType: string;
   aggregateId: string;

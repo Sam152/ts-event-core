@@ -8,7 +8,7 @@ import { Event, EventStore } from "../eventStore/EventStore.ts";
  */
 export function createImmediateCommandIssuer<
   TAggregateMap extends AggregateDefinitionMap,
-  TEventType extends Event<unknown>,
+  TEventType extends Event,
 >(
   { eventStore, aggregateRoots }: {
     eventStore: EventStore<TEventType>;
