@@ -1,6 +1,6 @@
 /**
- * Events record statements of fact that occurred within a domain, while
- * processing a command.
+ * Events record statements of fact that occurred within a domain, while processing
+ * commands. They are the single source of truth for all recorded data in the domain.
  */
 export type Event<TEventPayload = unknown> = {
   recordedAt: Date;
