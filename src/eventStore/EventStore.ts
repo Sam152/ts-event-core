@@ -1,6 +1,6 @@
 /**
- * Events record statements of fact that occur while commands are
- * processing.
+ * Events record statements of fact that occurred within a domain, while
+ * processing a command.
  */
 export type Event<TEventPayload = unknown> = {
   recordedAt: Date;
@@ -11,15 +11,7 @@ export type Event<TEventPayload = unknown> = {
 };
 
 export type EventStore<TEvent extends Event> = {
-  /**
-   * Persist events in the event store.
-   */
   persist: (events: TEvent[]) => Promise<void>;
-
-  /**
-   * Retrieves events for the given aggregate type and ID, optionally from a specific version. Returns an
-   * empty array, if none exist.
-   */
   retrieve: (args: {
     aggregateType: string;
     aggregateId: string;
