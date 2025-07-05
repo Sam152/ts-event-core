@@ -1,7 +1,7 @@
 import { assertEquals, assertRejects } from "@std/assert";
 import { createMemoryEventStore } from "./createMemoryEventStore.ts";
 import { AirlineEvent } from "../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { AggregateDataConsistencyError } from "../AggregateDataConsistencyError.ts";
+import { AggregateDataConsistencyError } from "../error/AggregateDataConsistencyError.ts";
 
 const testEventStream: AirlineEvent[] = [
   {

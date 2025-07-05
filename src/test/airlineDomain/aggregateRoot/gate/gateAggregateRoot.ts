@@ -1,4 +1,4 @@
-import { AggregateDefinition } from "../../../../aggregate/AggregateDefinition.ts";
+import { AggregateRootDefinition } from "../../../../aggregate/AggregateRootDefinition.ts";
 import { scanBoardingPass } from "./commands/scanBoardingPass.ts";
 import { GateEvent, gateReducer, GateState } from "./state/gateReducer.ts";
 
@@ -7,4 +7,4 @@ export const gateAggregateRoot = {
   commands: {
     scanBoardingPass,
   },
-} satisfies AggregateDefinition<GateState, GateEvent>;
+} satisfies AggregateRootDefinition<GateState, GateEvent>;

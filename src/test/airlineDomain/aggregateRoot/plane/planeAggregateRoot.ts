@@ -1,4 +1,4 @@
-import { AggregateDefinition } from "../../../../aggregate/AggregateDefinition.ts";
+import { AggregateRootDefinition } from "../../../../aggregate/AggregateRootDefinition.ts";
 import { confirmLanding } from "./commands/confirmLanding.ts";
 import { confirmPassengerBoarding } from "./commands/confirmPassengerBoarding.ts";
 import { confirmTakeOff } from "./commands/confirmTakeOff.ts";
@@ -11,4 +11,4 @@ export const planeAggregateRoot = {
     confirmLanding,
     confirmPassengerBoarding,
   },
-} satisfies AggregateDefinition<PlaneState, PlaneEvent>;
+} satisfies AggregateRootDefinition<PlaneState, PlaneEvent>;

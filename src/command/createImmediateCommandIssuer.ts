@@ -1,5 +1,5 @@
 import { CommandIssuer } from "./CommandIssuer.ts";
-import { AggregateDefinitionMap } from "../aggregate/AggregateDefinition.ts";
+import { AggregateRootDefinitionMap } from "../aggregate/AggregateRootDefinition.ts";
 import { Event, EventStore } from "../eventStore/EventStore.ts";
 
 /**
@@ -7,7 +7,7 @@ import { Event, EventStore } from "../eventStore/EventStore.ts";
  * of command buses which may acknowledge commands, to be processed later.
  */
 export function createImmediateCommandIssuer<
-  TAggregateMap extends AggregateDefinitionMap,
+  TAggregateMap extends AggregateRootDefinitionMap,
   TEventType extends Event,
 >(
   { eventStore, aggregateRoots }: {
