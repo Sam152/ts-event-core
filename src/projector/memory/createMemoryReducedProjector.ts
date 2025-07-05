@@ -1,6 +1,10 @@
 import { Projector } from "../Projector.ts";
 import { Event } from "../../eventStore/EventStore.ts";
 
+/**
+ * Create a projector which uses a reducer and stores the resulting data in
+ * memory.
+ */
 export function createMemoryReducedProjector<TEvent extends Event, TState>(
   { initialState, reducer }: {
     initialState: TState;
