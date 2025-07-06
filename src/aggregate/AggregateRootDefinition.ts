@@ -1,6 +1,6 @@
 import { Event } from "../eventStore/EventStore.ts";
 
-export type AggregateReducer<TState, TEvent> = (event: TEvent, state: TState) => TState;
+export type AggregateReducer<TState, TEvent> = (state: TState, event: TEvent) => TState;
 
 type CommandMap<TAggregateRootState, TEvent> = {
   [key: string]: <TCommandData extends never>(
