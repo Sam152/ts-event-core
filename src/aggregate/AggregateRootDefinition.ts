@@ -1,4 +1,4 @@
-export type AggregateReducer<TState, TEvent> = (state: TState, event: TEvent) => TState;
+export type AggregateReducer<TState, TEvent> = (event: TEvent, state: TState) => TState;
 
 type CommandMap<TAggregateRootState, TEvent> = {
   [key: string]: <TCommandData extends never>(
@@ -8,8 +8,11 @@ type CommandMap<TAggregateRootState, TEvent> = {
 };
 
 export type AggregateRootDefinition<TAggregateRootState = any, TEvent = any> = {
-  reducer: AggregateReducer<TAggregateRootState, TEvent>;
   commands: CommandMap<TAggregateRootState, TEvent>;
+  state: {
+    initialState: TAggregateRootState;
+    reducer: AggregateReducer<TAggregateRootState, TEvent>;
+  };
 };
 
 export type AggregateRootDefinitionMap = Record<string, AggregateRootDefinition>;

@@ -3,7 +3,10 @@ import { scanBoardingPass } from "./commands/scanBoardingPass.ts";
 import { GateEvent, gateReducer, GateState } from "./state/gateReducer.ts";
 
 export const gateAggregateRoot = {
-  reducer: gateReducer,
+  state: {
+    reducer: gateReducer,
+    initialState: {},
+  },
   commands: {
     scanBoardingPass,
   },

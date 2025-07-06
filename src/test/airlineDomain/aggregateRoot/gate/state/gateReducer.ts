@@ -6,6 +6,6 @@ export type GateEvent = {
   passportNumber: string;
 };
 
-export function gateReducer(state: GateState, event: GateEvent): GateState {
+export function gateReducer(event: GateEvent, state: GateState): GateState {
   return {};
 }

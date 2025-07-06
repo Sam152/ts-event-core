@@ -1,7 +1,6 @@
 import { EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootRepository } from "../AggregateRootRepository.ts";
 import { AggregateRootDefinitionMap } from "../AggregateRootDefinition.ts";
-import { LoadedAggregateRoot } from "../LoadedAggregateRoot.ts";
 
 export function createAggregateRootRepository<TAggregateDefinitionMap extends AggregateRootDefinitionMap>(
   { eventStore, aggregateRoots }: { eventStore: EventStore; aggregateRoots: TAggregateDefinitionMap },
@@ -11,9 +10,22 @@ export function createAggregateRootRepository<TAggregateDefinitionMap extends Ag
       { aggregateRootId, aggregateRootType },
     ) => {
       const definition = aggregateRoots[aggregateRootType];
-      const events = await eventStore.retrieve({ aggregateRootId, aggregateRootType });
+      const events = await eventStore.retrieve({
+        aggregateRootId,
+        aggregateRootType: aggregateRootType as string,
+      });
 
-      return {} as LoadedAggregateRoot<any, any>;
+      const state = events.reduce(
+        definition.state.reducer,
+        definition.state.initialState,
+      );
+
+      return {
+        aggregateRootId,
+        aggregateRootType,
+        aggregateVersion: events.at(-1)?.aggregateVersion,
+        state,
+      };
     },
     persist: async (
       { aggregate, pendingEvents },

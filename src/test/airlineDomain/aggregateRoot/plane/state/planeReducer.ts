@@ -1,38 +1,8 @@
-export type PlaneState = {
-  status: "ON_THE_GROUND" | "IN_THE_AIR";
-  totalSeats: number;
-  totalBoardedPassengers: number;
-  /**
-   * A map of passport IDs to passenger names.
-   */
-  passengerManifest: Record<string, string>;
-};
+import { PlaneEvent } from "./PlaneEvent.ts";
+import { assertPlaneInService, PlaneState } from "./PlaneState.ts";
 
-export type PlaneEvent = {
-  type: "PASSENGER_BOARDED" | "PASSENGER_DISEMBARKED";
-  passengerName: string;
-  passportNumber: string;
-} | {
-  type: "FLIGHT_DEPARTED" | "FLIGHT_ARRIVED";
-} | {
-  type: "PLANE_ENTERED_SERVICE";
-  seatingCapacity: number;
-};
-
-export function planeReducer(state: PlaneState, event: PlaneEvent): PlaneState {
+export function planeReducer(event: PlaneEvent, state: PlaneState): PlaneState {
   switch (event.type) {
-    case "FLIGHT_DEPARTED": {
-      return {
-        ...state,
-        status: "IN_THE_AIR",
-      };
-    }
-    case "FLIGHT_ARRIVED": {
-      return {
-        ...state,
-        status: "ON_THE_GROUND",
-      };
-    }
     case "PLANE_ENTERED_SERVICE": {
       return {
         totalSeats: event.seatingCapacity,
@@ -41,7 +11,22 @@ export function planeReducer(state: PlaneState, event: PlaneEvent): PlaneState {
         status: "ON_THE_GROUND",
       };
     }
+    case "FLIGHT_DEPARTED": {
+      assertPlaneInService(state);
+      return {
+        ...state,
+        status: "IN_THE_AIR",
+      };
+    }
+    case "FLIGHT_ARRIVED": {
+      assertPlaneInService(state);
+      return {
+        ...state,
+        status: "ON_THE_GROUND",
+      };
+    }
     case "PASSENGER_BOARDED": {
+      assertPlaneInService(state);
       return {
         ...state,
         totalBoardedPassengers: state.totalBoardedPassengers + 1,
@@ -52,6 +37,7 @@ export function planeReducer(state: PlaneState, event: PlaneEvent): PlaneState {
       };
     }
     case "PASSENGER_DISEMBARKED": {
+      assertPlaneInService(state);
       const { [event.passportNumber]: _, ...remainingPassengers } = state.passengerManifest;
       return {
         ...state,
