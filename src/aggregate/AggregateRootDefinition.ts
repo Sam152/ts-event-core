@@ -25,5 +25,5 @@ export type EventsRaisedByAggregateRoots<TAggregateRootDefinitionMap extends Agg
       TAggregateRootDefinitionMap[
         keyof TAggregateRootDefinitionMap
       ]["state"]["reducer"]
-    >[0]
+    >[1]
   >;

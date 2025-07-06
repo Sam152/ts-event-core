@@ -23,7 +23,9 @@ export function createAggregateRootRepository<TAggregateDefinitionMap extends Ag
         aggregateRootType: aggregateRootType as string,
       });
 
-      const state = events.reduce(
+      const state = events.map(
+        (event) => event.payload,
+      ).reduce(
         definition.state.reducer,
         definition.state.initialState,
       );

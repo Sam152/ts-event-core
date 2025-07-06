@@ -29,10 +29,10 @@ export function createImmediateCommandIssuer<
 
     const pendingEvents = pendingEventPayloads.map(
       (payload, i) => ({
-        aggregateRootType,
+        aggregateRootType: aggregateRootType as string,
         aggregateRootId,
         recordedAt: new Date(),
-        version: (aggregate.aggregateVersion ?? 1) + i,
+        aggregateVersion: (aggregate.aggregateVersion ?? 1) + i,
         payload,
       }),
     );

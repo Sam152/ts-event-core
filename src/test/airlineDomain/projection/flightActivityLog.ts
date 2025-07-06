@@ -37,8 +37,8 @@ export function flightActivityLogReducer(state: FlightActivityLog, event: Airlin
         ...state,
         planes: {
           ...state.planes,
-          [event.aggregateId]: {
-            tripsFlown: (state.planes[event.aggregateId]?.tripsFlown || 0) + 1,
+          [event.aggregateRootId]: {
+            tripsFlown: (state.planes[event.aggregateRootId]?.tripsFlown || 0) + 1,
           },
         },
       };

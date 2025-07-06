@@ -3,10 +3,10 @@
  * commands. They are the single source of truth for all recorded data in the domain.
  */
 export type Event<TEventPayload = unknown> = {
-  recordedAt: Date;
-  aggregateType: string;
-  aggregateId: string;
+  aggregateRootType: string;
+  aggregateRootId: string;
   aggregateVersion: number;
+  recordedAt: Date;
   payload: TEventPayload;
 };
 

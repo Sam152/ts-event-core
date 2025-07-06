@@ -1,7 +1,7 @@
 import { PlaneEvent } from "./PlaneEvent.ts";
 import { assertPlaneInService, PlaneState } from "./PlaneState.ts";
 
-export function planeReducer(event: PlaneEvent, state: PlaneState): PlaneState {
+export function planeReducer(state: PlaneState, event: PlaneEvent): PlaneState {
   switch (event.type) {
     case "PLANE_ENTERED_SERVICE": {
       return {

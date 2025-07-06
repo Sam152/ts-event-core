@@ -16,7 +16,7 @@ export function createMemoryEventStore<TEvent extends Event>():
     addSubscriber: subscribers.push,
     persist: async (events) => {
       await Promise.all(events.map(async (event) => {
-        const key = streamKey(event.aggregateType, event.aggregateId);
+        const key = streamKey(event.aggregateRootType, event.aggregateRootId);
         storage[key] = storage[key] ?? [];
 
         if (storage[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)) {

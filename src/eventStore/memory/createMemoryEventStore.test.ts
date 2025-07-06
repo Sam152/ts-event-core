@@ -6,8 +6,8 @@ import { AggregateDataConsistencyError } from "../error/AggregateDataConsistency
 const testEventStream: AirlineEvent[] = [
   {
     recordedAt: new Date("2023-01-01T10:00:00Z"),
-    aggregateType: "PLANE",
-    aggregateId: "plane-001",
+    aggregateRootType: "PLANE",
+    aggregateRootId: "plane-001",
     aggregateVersion: 1,
     payload: {
       type: "PLANE_ENTERED_SERVICE",
@@ -16,8 +16,8 @@ const testEventStream: AirlineEvent[] = [
   },
   {
     recordedAt: new Date("2023-01-01T11:00:00Z"),
-    aggregateType: "PLANE",
-    aggregateId: "plane-001",
+    aggregateRootType: "PLANE",
+    aggregateRootId: "plane-001",
     aggregateVersion: 2,
     payload: {
       type: "PASSENGER_BOARDED",
@@ -27,8 +27,8 @@ const testEventStream: AirlineEvent[] = [
   },
   {
     recordedAt: new Date("2023-01-01T12:00:00Z"),
-    aggregateType: "PLANE",
-    aggregateId: "plane-001",
+    aggregateRootType: "PLANE",
+    aggregateRootId: "plane-001",
     aggregateVersion: 3,
     payload: {
       type: "FLIGHT_DEPARTED",
@@ -36,8 +36,8 @@ const testEventStream: AirlineEvent[] = [
   },
   {
     recordedAt: new Date("2023-01-01T10:00:00Z"),
-    aggregateType: "PLANE",
-    aggregateId: "plane-002",
+    aggregateRootType: "PLANE",
+    aggregateRootId: "plane-002",
     aggregateVersion: 1,
     payload: {
       type: "PLANE_ENTERED_SERVICE",
