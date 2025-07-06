@@ -22,11 +22,21 @@ export function createImmediateCommandIssuer<
     });
 
     const commandMap = aggregateRoots[aggregateRootType].commands;
-    const commandResult = commandMap[command as keyof typeof commandMap](aggregate.state, data);
+    const commandFunction = commandMap[command as keyof typeof commandMap];
 
-    await aggregateRootRepository.persist({
-      aggregate,
-      pendingEvents: Array.isArray(commandResult) ? commandResult : [commandResult],
-    });
+    const commandResult = commandFunction(aggregate.state, data);
+    const pendingEventPayloads = Array.isArray(commandResult) ? commandResult : [commandResult];
+
+    const pendingEvents = pendingEventPayloads.map(
+      (payload, i) => ({
+        aggregateRootType,
+        aggregateRootId,
+        recordedAt: new Date(),
+        version: (aggregate.aggregateVersion ?? 1) + i,
+        payload,
+      }),
+    );
+
+    await aggregateRootRepository.persist({ aggregate, pendingEvents });
   };
 }
