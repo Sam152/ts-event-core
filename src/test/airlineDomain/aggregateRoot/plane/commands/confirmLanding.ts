@@ -1,4 +1,5 @@
-import { PlaneEvent, PlaneState } from "../state/planeReducer.ts";
+import { PlaneState } from "../state/PlaneState.ts";
+import { PlaneEvent } from "../state/PlaneEvent.ts";
 
 export function confirmLanding(_plane: PlaneState): PlaneEvent {
   return {

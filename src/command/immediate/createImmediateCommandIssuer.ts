@@ -1,5 +1,4 @@
 import { Commander } from "../Commander.ts";
-import { Event, EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
 import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
 
@@ -10,10 +9,8 @@ import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository
  */
 export function createImmediateCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap,
-  TEventType extends Event,
 >(
   { aggregateRootRepository, aggregateRoots }: {
-    eventStore: EventStore<TEventType>;
     aggregateRoots: TAggregateMap;
     aggregateRootRepository: AggregateRootRepository<TAggregateMap>;
   },

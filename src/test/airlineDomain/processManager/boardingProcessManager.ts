@@ -18,7 +18,7 @@ export async function boardingProcessManager(
 ) {
   if (event.payload.type === "BOARDING_PASS_SCANNED") {
     await issueCommand({
-      aggregateType: "PLANE",
+      aggregateRootType: "PLANE",
       command: "confirmPassengerBoarding",
       aggregateRootId: "",
       data: {

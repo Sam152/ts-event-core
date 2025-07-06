@@ -6,7 +6,7 @@ export type LoadedAggregateRoot<
 > = {
   aggregateRootType: TAggregateType;
   aggregateRootId: string;
-  state: ReturnType<TAggregateDefinition["reducer"]>;
+  state: ReturnType<TAggregateDefinition["state"]["reducer"]>;
 
   /**
    * The aggregate version, if the loaded aggregate was previously saved. If

@@ -8,12 +8,16 @@ import {
   flightActivityLogReducer,
 } from "./airlineDomain/projection/flightActivityLog.ts";
 import { assertEquals } from "@std/assert";
+import { createAggregateRootRepository } from "../aggregate/repository/createAggregateRootRepository.ts";
 
 Deno.test("you can build an event sourced system", async () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
   const issueCommand = createImmediateCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
-    eventStore: eventStore,
+    aggregateRootRepository: createAggregateRootRepository({
+      aggregateRoots: airlineAggregateRoots,
+      eventStore,
+    }),
   });
 
   const flightActivityLog = createMemoryReducedProjector({
@@ -25,7 +29,13 @@ Deno.test("you can build an event sourced system", async () => {
   eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
 
   await issueCommand({
-    aggregateType: "GATE",
+    aggregateRootType: "PLANE",
+    aggregateRootId: "VH-XYZ",
+    command: "confirmTakeOff",
+    data: undefined,
+  });
+  await issueCommand({
+    aggregateRootType: "GATE",
     command: "scanBoardingPass",
     aggregateRootId: "PER-T4-A5",
     data: {
@@ -34,13 +44,13 @@ Deno.test("you can build an event sourced system", async () => {
     },
   });
   await issueCommand({
-    aggregateType: "PLANE",
+    aggregateRootType: "PLANE",
     aggregateRootId: "VH-XYZ",
     command: "confirmTakeOff",
     data: undefined,
   });
   await issueCommand({
-    aggregateType: "PLANE",
+    aggregateRootType: "PLANE",
     aggregateRootId: "VH-XYZ",
     command: "confirmLanding",
     data: undefined,

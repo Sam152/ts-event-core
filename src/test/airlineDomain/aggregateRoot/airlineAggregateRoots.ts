@@ -1,8 +1,6 @@
 import { gateAggregateRoot } from "./gate/gateAggregateRoot.ts";
 import { planeAggregateRoot } from "./plane/planeAggregateRoot.ts";
-import { PlaneEvent } from "./plane/state/planeReducer.ts";
-import { GateEvent } from "./gate/state/gateReducer.ts";
-import { Event } from "../../../eventStore/EventStore.ts";
+import { EventsRaisedByAggregateRoots } from "../../../aggregate/AggregateRootDefinition.ts";
 
 /**
  * Each aggregate root forms a logical grouping of events and commands in an event
@@ -15,4 +13,4 @@ export const airlineAggregateRoots = {
   PLANE: planeAggregateRoot,
 };
 
-export type AirlineEvent = Event<PlaneEvent | GateEvent>;
+export type AirlineEvent = EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>;
