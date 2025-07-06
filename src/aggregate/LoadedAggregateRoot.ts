@@ -1,6 +1,11 @@
 import { AggregateRootDefinition } from "./AggregateRootDefinition.ts";
 
-export type LoadedAggregateRoot<TAggregateDefinition extends AggregateRootDefinition> = {
-  id: string;
-  type: string;
+export type LoadedAggregateRoot<
+  TAggregateType,
+  TAggregateDefinition extends AggregateRootDefinition,
+> = {
+  aggregateRootType: TAggregateType;
+  aggregateRootId: string;
+  state: ReturnType<TAggregateDefinition["reducer"]>;
+  version: number;
 };

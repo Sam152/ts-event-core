@@ -51,8 +51,8 @@ Deno.test("should persist and retrieve events", async () => {
   await eventStore.persist(testEventStream);
   assertEquals(
     (await eventStore.retrieve({
-      aggregateType: "PLANE",
-      aggregateId: "plane-001",
+      aggregateRootType: "PLANE",
+      aggregateRootId: "plane-001",
     })).map((e) => e.payload.type),
     [
       "PLANE_ENTERED_SERVICE",
@@ -66,8 +66,8 @@ Deno.test("should retrieve events from specific version", async () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
   await eventStore.persist(testEventStream);
   const retrievedEvents = await eventStore.retrieve({
-    aggregateType: "PLANE",
-    aggregateId: "plane-001",
+    aggregateRootType: "PLANE",
+    aggregateRootId: "plane-001",
     fromVersion: 2,
   });
   assertEquals(retrievedEvents.length, 1);
@@ -77,8 +77,8 @@ Deno.test("should retrieve events from specific version", async () => {
 Deno.test("should return empty array for non-existent aggregate", async () => {
   assertEquals(
     (await createMemoryEventStore().retrieve({
-      aggregateType: "PLANE",
-      aggregateId: "non-existent",
+      aggregateRootType: "PLANE",
+      aggregateRootId: "non-existent",
     })).length,
     0,
   );

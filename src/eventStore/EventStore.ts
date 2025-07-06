@@ -10,11 +10,11 @@ export type Event<TEventPayload = unknown> = {
   payload: TEventPayload;
 };
 
-export type EventStore<TEvent extends Event> = {
+export type EventStore<TEvent extends Event = Event> = {
   persist: (events: TEvent[]) => Promise<void>;
   retrieve: (args: {
-    aggregateType: string;
-    aggregateId: string;
+    aggregateRootType: string;
+    aggregateRootId: string;
     fromVersion?: number;
   }) => Promise<TEvent[]>;
 };

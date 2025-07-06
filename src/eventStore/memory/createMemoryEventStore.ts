@@ -28,11 +28,11 @@ export function createMemoryEventStore<TEvent extends Event>():
       }));
     },
     retrieve: ({
-      aggregateType,
-      aggregateId,
+      aggregateRootType,
+      aggregateRootId,
       fromVersion,
     }) => {
-      const key = streamKey(aggregateType, aggregateId);
+      const key = streamKey(aggregateRootType, aggregateRootId);
       const events = storage[key] || [];
       return Promise.resolve(
         fromVersion !== undefined ? events.filter((event) => event.aggregateVersion > fromVersion) : events,
