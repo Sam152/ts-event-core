@@ -21,9 +21,7 @@ type CommandMap<TAggregateRootState, TEvent> = {
 
 export type AggregateRootDefinitionMap = Record<
   string,
-  // How can this be typed correctly, given TAggregateRootState is required to be both
-  // a function argument and return type, so covariant/contravariant issues apply with
-  // using either unknown or never for this use case.
+  // https://stackoverflow.com/questions/79691749/how-to-correctly-type-a-record-of-generic-functions-with-the-same-input-and-outp
   AggregateRootDefinition<
     any,
     any
