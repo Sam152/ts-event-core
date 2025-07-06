@@ -5,7 +5,8 @@ import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository
 
 /**
  * An immediate command issuer processes commands right away. This is in contrast to other kinds
- * of command buses which may acknowledge commands, to be processed later.
+ * of command issuers which may acknowledge commands to be processed later or provide additional
+ * features.
  */
 export function createImmediateCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap,
