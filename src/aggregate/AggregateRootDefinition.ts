@@ -7,9 +7,9 @@ type CommandMap<TAggregateRootState, TEvent> = {
   ) => TEvent | TEvent[];
 };
 
-export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
+export type AggregateRootDefinition<TAggregateRootState = any, TEvent = any> = {
   reducer: AggregateReducer<TAggregateRootState, TEvent>;
   commands: CommandMap<TAggregateRootState, TEvent>;
 };
 
-export type AggregateRootDefinitionMap = Record<string, AggregateRootDefinition<any, any>>;
+export type AggregateRootDefinitionMap = Record<string, AggregateRootDefinition>;

@@ -1,6 +1,6 @@
 import { AggregateRootDefinition } from "./AggregateRootDefinition.ts";
 
-export type AggregateInstance<TAggregateDefinition extends AggregateRootDefinition<any, any>> = {
+export type LoadedAggregateRoot<TAggregateDefinition extends AggregateRootDefinition> = {
   id: string;
   type: string;
 };
