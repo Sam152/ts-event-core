@@ -15,6 +15,6 @@ export type AggregateRootRepository<TAggregateDefinitionMap extends AggregateRoo
     TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
     TLoadedAggregateRoot extends LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>,
   >(
-    args: { aggregate: TLoadedAggregateRoot; pendingEvents: Event[] },
+    args: { aggregate: TLoadedAggregateRoot; raisedEvents: Event["payload"][] },
   ) => Promise<void>;
 };

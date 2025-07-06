@@ -25,18 +25,11 @@ export function createImmediateCommandIssuer<
     const commandFunction = commandMap[command as keyof typeof commandMap];
 
     const commandResult = commandFunction(aggregate.state, data);
-    const pendingEventPayloads = Array.isArray(commandResult) ? commandResult : [commandResult];
+    const raisedEvents = Array.isArray(commandResult) ? commandResult : [commandResult];
 
-    const pendingEvents = pendingEventPayloads.map(
-      (payload, i) => ({
-        aggregateRootType: aggregateRootType as string,
-        aggregateRootId,
-        recordedAt: new Date(),
-        aggregateVersion: (aggregate.aggregateVersion ?? 1) + i,
-        payload,
-      }),
-    );
-
-    await aggregateRootRepository.persist({ aggregate, pendingEvents });
+    await aggregateRootRepository.persist({
+      aggregate,
+      raisedEvents,
+    });
   };
 }

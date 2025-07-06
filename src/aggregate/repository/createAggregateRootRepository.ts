@@ -37,9 +37,16 @@ export function createAggregateRootRepository<TAggregateDefinitionMap extends Ag
         state,
       };
     },
-    persist: async (
-      { aggregate, pendingEvents },
-    ) => {
+    persist: async ({ raisedEvents, aggregate }) => {
+      const pendingEvents = raisedEvents.map(
+        (payload, i) => ({
+          aggregateRootType: aggregate.aggregateRootType,
+          aggregateRootId: aggregate.aggregateRootId,
+          recordedAt: new Date(),
+          aggregateVersion: (aggregate.aggregateVersion ?? 0) + (i + 1),
+          payload,
+        }),
+      );
       await eventStore.persist(pendingEvents);
     },
   };
