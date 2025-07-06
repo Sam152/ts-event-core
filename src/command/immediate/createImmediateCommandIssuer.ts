@@ -20,9 +20,12 @@ export function createImmediateCommandIssuer<
   // Load the aggregate data.
 
   return async ({ aggregateType, command, data }) => {
-    // load the aggregate data.
+    // load the aggregate
 
     const aggregateData = {};
-    aggregateRoots[aggregateType]["commands"][command](aggregateData, data);
+    const commandMap = aggregateRoots[aggregateType].commands;
+    const raisedEvents = commandMap[command as keyof typeof commandMap](aggregateData, data);
+
+    // persist the aggregate
   };
 }
