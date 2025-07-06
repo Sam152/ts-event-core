@@ -21,7 +21,7 @@ type CommandMap<TAggregateRootState, TEvent> = {
 
 export type AggregateRootDefinitionMap = Record<
   string,
-  // https://stackoverflow.com/questions/79691749/how-to-correctly-type-a-record-of-generic-functions-with-the-same-input-and-outp
+  // https://stackoverflow.com/questions/79691749
   AggregateRootDefinition<
     any,
     any
