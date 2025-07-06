@@ -2,6 +2,11 @@ import { EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootRepository } from "../AggregateRootRepository.ts";
 import { AggregateRootDefinitionMap } from "../AggregateRootDefinition.ts";
 
+/**
+ * This aggregate root repository loads the whole event stream for an aggregate root,
+ * and reduces them on demand. This can be suitable for use cases where an aggregate
+ * root has a limited number of events.
+ */
 export function createAggregateRootRepository<TAggregateDefinitionMap extends AggregateRootDefinitionMap>(
   { eventStore, aggregateRoots }: { eventStore: EventStore; aggregateRoots: TAggregateDefinitionMap },
 ): AggregateRootRepository<TAggregateDefinitionMap> {
@@ -29,6 +34,8 @@ export function createAggregateRootRepository<TAggregateDefinitionMap extends Ag
     },
     persist: async (
       { aggregate, pendingEvents },
-    ) => {},
+    ) => {
+      await eventStore.persist(pendingEvents);
+    },
   };
 }
