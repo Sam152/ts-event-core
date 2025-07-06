@@ -2,7 +2,7 @@ import { AggregateRootDefinition } from "./AggregateRootDefinition.ts";
 
 export type LoadedAggregateRoot<
   TAggregateType,
-  TAggregateDefinition extends AggregateRootDefinition,
+  TAggregateDefinition extends AggregateRootDefinition<unknown, unknown>,
 > = {
   aggregateRootType: TAggregateType;
   aggregateRootId: string;

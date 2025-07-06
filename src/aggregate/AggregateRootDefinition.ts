@@ -9,7 +9,7 @@ type CommandMap<TAggregateRootState, TEvent> = {
   ) => TEvent | TEvent[];
 };
 
-export type AggregateRootDefinition<TAggregateRootState = any, TEvent = any> = {
+export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
   commands: CommandMap<TAggregateRootState, TEvent>;
   state: {
     initialState: TAggregateRootState;
@@ -17,7 +17,7 @@ export type AggregateRootDefinition<TAggregateRootState = any, TEvent = any> = {
   };
 };
 
-export type AggregateRootDefinitionMap = Record<string, AggregateRootDefinition>;
+export type AggregateRootDefinitionMap = Record<string, AggregateRootDefinition<any, any>>;
 
 export type EventsRaisedByAggregateRoots<TAggregateRootDefinitionMap extends AggregateRootDefinitionMap> =
   Event<
