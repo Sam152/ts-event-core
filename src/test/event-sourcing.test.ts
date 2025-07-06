@@ -27,7 +27,7 @@ Deno.test("you can build an event sourced system", async () => {
   await issueCommand({
     aggregateType: "GATE",
     command: "scanBoardingPass",
-    aggregateId: "PER-T4-A5",
+    aggregateRootId: "PER-T4-A5",
     data: {
       passengerName: "Foo",
       passportNumber: "13",
@@ -35,13 +35,13 @@ Deno.test("you can build an event sourced system", async () => {
   });
   await issueCommand({
     aggregateType: "PLANE",
-    aggregateId: "VH-XYZ",
+    aggregateRootId: "VH-XYZ",
     command: "confirmTakeOff",
     data: undefined,
   });
   await issueCommand({
     aggregateType: "PLANE",
-    aggregateId: "VH-XYZ",
+    aggregateRootId: "VH-XYZ",
     command: "confirmLanding",
     data: undefined,
   });

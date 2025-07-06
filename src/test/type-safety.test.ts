@@ -13,7 +13,7 @@ Deno.test("produces type errors given an invalid aggregate type", async () => {
     aggregateType: "NOT_AN_AGGREGATE",
     // @ts-expect-error - this should produce a type error.
     command: "NOT_A_COMMAND",
-    aggregateId: "PER-T4-A5",
+    aggregateRootId: "PER-T4-A5",
     // @ts-expect-error - this should produce a type error.
     data: {
       incorrectCommandData: true,
@@ -26,7 +26,7 @@ Deno.test("produces type errors given an invalid command", async () => {
     aggregateType: "PLANE",
     // @ts-expect-error - this should produce a type error.
     command: "NOT_A_COMMAND",
-    aggregateId: "PER-T4-A5",
+    aggregateRootId: "PER-T4-A5",
     // @ts-expect-error - this should produce a type error.
     data: {
       incorrectCommandData: true,
@@ -39,7 +39,7 @@ Deno.test("produces type errors given invalid command data", async () => {
     aggregateType: "PLANE",
     // @ts-expect-error - this should produce a type error.
     command: "confirmPassengerBoarding",
-    aggregateId: "PER-T4-A5",
+    aggregateRootId: "PER-T4-A5",
     // @ts-expect-error - this should produce a type error.
     data: {
       incorrectCommandData: true,

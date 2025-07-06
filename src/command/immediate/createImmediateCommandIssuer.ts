@@ -1,6 +1,7 @@
 import { Commander } from "../Commander.ts";
 import { Event, EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
+import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
 
 /**
  * An immediate command issuer processes commands right away. This is in contrast to other kinds
@@ -10,22 +11,24 @@ export function createImmediateCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap,
   TEventType extends Event,
 >(
-  { eventStore, aggregateRoots }: {
+  { aggregateRootRepository, aggregateRoots }: {
     eventStore: EventStore<TEventType>;
     aggregateRoots: TAggregateMap;
+    aggregateRootRepository: AggregateRootRepository<TAggregateMap>;
   },
 ): Commander<TAggregateMap> {
-  // @todo
+  return async ({ aggregateRootType, aggregateRootId, command, data }) => {
+    const aggregate = await aggregateRootRepository.retrieve({
+      aggregateRootId,
+      aggregateRootType,
+    });
 
-  // Load the aggregate data.
+    const commandMap = aggregateRoots[aggregateRootType].commands;
+    const commandResult = commandMap[command as keyof typeof commandMap](aggregate.state, data);
 
-  return async ({ aggregateType, command, data }) => {
-    // load the aggregate
-
-    const aggregateData = {};
-    const commandMap = aggregateRoots[aggregateType].commands;
-    const commandResult = commandMap[command as keyof typeof commandMap](aggregateData, data);
-
-    // persist the aggregate
+    await aggregateRootRepository.persist({
+      aggregate,
+      pendingEvents: Array.isArray(commandResult) ? commandResult : [commandResult],
+    });
   };
 }

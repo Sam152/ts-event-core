@@ -1,11 +1,11 @@
 import { AggregateRootDefinitionMap } from "../aggregate/AggregateRootDefinition.ts";
 
 export type Commander<TAggregateMap extends AggregateRootDefinitionMap> = <
-  TAggregateType extends keyof TAggregateMap,
-  TCommandName extends keyof TAggregateMap[TAggregateType]["commands"],
+  TAggregateRootType extends keyof TAggregateMap,
+  TCommandName extends keyof TAggregateMap[TAggregateRootType]["commands"],
 >(args: {
-  aggregateType: TAggregateType;
-  aggregateId: string;
+  aggregateRootType: TAggregateRootType;
+  aggregateRootId: string;
   command: TCommandName;
-  data: Parameters<TAggregateMap[TAggregateType]["commands"][TCommandName]>[1];
+  data: Parameters<TAggregateMap[TAggregateRootType]["commands"][TCommandName]>[1];
 }) => Promise<void>;

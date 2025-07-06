@@ -20,7 +20,7 @@ export async function boardingProcessManager(
     await issueCommand({
       aggregateType: "PLANE",
       command: "confirmPassengerBoarding",
-      aggregateId: "",
+      aggregateRootId: "",
       data: {
         passengerName: event.payload.passengerName,
         passportNumber: event.payload.passportNumber,
