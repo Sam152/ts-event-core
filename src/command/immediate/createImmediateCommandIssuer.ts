@@ -24,7 +24,7 @@ export function createImmediateCommandIssuer<
 
     const aggregateData = {};
     const commandMap = aggregateRoots[aggregateType].commands;
-    const raisedEvents = commandMap[command as keyof typeof commandMap](aggregateData, data);
+    const commandResult = commandMap[command as keyof typeof commandMap](aggregateData, data);
 
     // persist the aggregate
   };
