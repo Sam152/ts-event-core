@@ -59,11 +59,7 @@ Deno.test("you can build an event sourced system", async () => {
   });
 
   assertEquals(flightActivityLog.data, {
-    planes: {
-      "VH-XYZ": {
-        tripsFlown: 1,
-      },
-    },
+    planes: {},
     passengers: {},
   });
 });

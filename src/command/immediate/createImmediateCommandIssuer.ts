@@ -21,6 +21,7 @@ export function createImmediateCommandIssuer<
       aggregateRootType,
     });
 
+    // @todo, can this not be any?
     const commandMap = aggregateRoots[aggregateRootType].commands;
     const commandFunction = commandMap[command as keyof typeof commandMap];
 

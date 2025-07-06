@@ -1,4 +1,4 @@
-import { EventStore } from "../../eventStore/EventStore.ts";
+import { Event, EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootRepository } from "../AggregateRootRepository.ts";
 import { AggregateRootDefinitionMap, EventsRaisedByAggregateRoots } from "../AggregateRootDefinition.ts";
 
@@ -38,9 +38,9 @@ export function createAggregateRootRepository<TAggregateDefinitionMap extends Ag
       };
     },
     persist: async ({ raisedEvents, aggregate }) => {
-      const pendingEvents = raisedEvents.map(
+      const pendingEvents: Event[] = raisedEvents.map(
         (payload, i) => ({
-          aggregateRootType: aggregate.aggregateRootType,
+          aggregateRootType: aggregate.aggregateRootType as string,
           aggregateRootId: aggregate.aggregateRootId,
           recordedAt: new Date(),
           aggregateVersion: (aggregate.aggregateVersion ?? 0) + (i + 1),
