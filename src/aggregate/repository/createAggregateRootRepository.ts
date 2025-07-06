@@ -1,18 +1,21 @@
 import { Event, EventsRaisedByAggregateRoots, EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootRepository } from "../AggregateRootRepository.ts";
-import { AggregateRootDefinitionMap } from "../AggregateRootDefinition.ts";
+import { AggregateMapTypes, AggregateRootDefinitionMap } from "../AggregateRootDefinition.ts";
 
 /**
  * This aggregate root repository loads the whole event stream for an aggregate root,
  * and reduces them on demand. This can be suitable for use cases where an aggregate
  * root has a limited number of events.
  */
-export function createAggregateRootRepository<TAggregateDefinitionMap extends AggregateRootDefinitionMap>(
+export function createAggregateRootRepository<
+  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateMapTypes = AggregateMapTypes,
+>(
   { eventStore, aggregateRoots }: {
-    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap>>;
+    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateMapTypes, TAggregateDefinitionMap>>;
     aggregateRoots: TAggregateDefinitionMap;
   },
-): AggregateRootRepository<TAggregateDefinitionMap> {
+): AggregateRootRepository<TAggregateMapTypes, TAggregateDefinitionMap> {
   return {
     retrieve: async (
       { aggregateRootId, aggregateRootType },

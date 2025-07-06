@@ -19,11 +19,12 @@ type CommandMap<TAggregateRootState, TEvent> = {
   ) => TEvent | TEvent[];
 };
 
-export type AggregateRootDefinitionMap = Record<
-  string,
-  // https://stackoverflow.com/questions/79691749
-  AggregateRootDefinition<
-    any,
-    any
-  >
->;
+export type AggregateMapTypes = {
+  [key: string]: {
+    state: any;
+    event: any;
+  };
+};
+export type AggregateRootDefinitionMap<TTypeMap extends AggregateMapTypes = AggregateMapTypes> = {
+  [K in keyof TTypeMap]: AggregateRootDefinition<TTypeMap[K]["state"], TTypeMap[K]["event"]>;
+};

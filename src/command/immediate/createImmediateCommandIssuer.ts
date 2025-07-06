@@ -1,5 +1,5 @@
 import { Commander } from "../Commander.ts";
-import { AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
+import { AggregateMapTypes, AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
 import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
 
 /**
@@ -8,20 +8,20 @@ import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository
  * features.
  */
 export function createImmediateCommandIssuer<
-  TAggregateMap extends AggregateRootDefinitionMap,
+  TAggregateMapTypes extends AggregateMapTypes,
+  TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
 >(
   { aggregateRootRepository, aggregateRoots }: {
     aggregateRoots: TAggregateMap;
-    aggregateRootRepository: AggregateRootRepository<TAggregateMap>;
+    aggregateRootRepository: AggregateRootRepository<TAggregateMapTypes, TAggregateMap>;
   },
-): Commander<TAggregateMap> {
+): Commander<TAggregateMap, TAggregateMapTypes> {
   return async ({ aggregateRootType, aggregateRootId, command, data }) => {
     const aggregate = await aggregateRootRepository.retrieve({
       aggregateRootId,
       aggregateRootType,
     });
 
-    // @todo, can this not be any?
     const commandMap = aggregateRoots[aggregateRootType].commands;
     const commandFunction = commandMap[command as keyof typeof commandMap];
 

@@ -1,11 +1,14 @@
 import { LoadedAggregateRoot } from "./LoadedAggregateRoot.ts";
-import { AggregateRootDefinitionMap } from "./AggregateRootDefinition.ts";
+import { AggregateMapTypes, AggregateRootDefinitionMap } from "./AggregateRootDefinition.ts";
 import { Event } from "../eventStore/EventStore.ts";
 
 /**
  * Retrieve and persist aggregate roots.
  */
-export type AggregateRootRepository<TAggregateDefinitionMap extends AggregateRootDefinitionMap> = {
+export type AggregateRootRepository<
+  TAggregateMapTypes extends AggregateMapTypes,
+  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+> = {
   retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(
     args: { aggregateRootType: TAggregateRootType; aggregateRootId: string },
   ) => Promise<LoadedAggregateRoot<TAggregateRootType, TAggregateDefinitionMap[TAggregateRootType]>>;
