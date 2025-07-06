@@ -1,5 +1,3 @@
-import { Event } from "../eventStore/EventStore.ts";
-
 export type AggregateReducer<TState, TEvent> = (state: TState, event: TEvent) => TState;
 
 type CommandMap<TAggregateRootState, TEvent> = {
@@ -18,12 +16,3 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 };
 
 export type AggregateRootDefinitionMap = Record<string, AggregateRootDefinition<any, any>>;
-
-export type EventsRaisedByAggregateRoots<TAggregateRootDefinitionMap extends AggregateRootDefinitionMap> =
-  Event<
-    Parameters<
-      TAggregateRootDefinitionMap[
-        keyof TAggregateRootDefinitionMap
-      ]["state"]["reducer"]
-    >[1]
-  >;

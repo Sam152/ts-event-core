@@ -1,3 +1,5 @@
+import { AggregateRootDefinitionMap } from "../aggregate/AggregateRootDefinition.ts";
+
 /**
  * Events record statements of fact that occurred within a domain, while processing
  * commands. They are the single source of truth for all recorded data in the domain.
@@ -18,3 +20,12 @@ export type EventStore<TEvent extends Event = Event> = {
     fromVersion?: number;
   }) => Promise<TEvent[]>;
 };
+
+export type EventsRaisedByAggregateRoots<TAggregateRootDefinitionMap extends AggregateRootDefinitionMap> =
+  Event<
+    Parameters<
+      TAggregateRootDefinitionMap[
+        keyof TAggregateRootDefinitionMap
+      ]["state"]["reducer"]
+    >[1]
+  >;
