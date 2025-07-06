@@ -30,9 +30,11 @@ Deno.test("you can build an event sourced system", async () => {
 
   await issueCommand({
     aggregateRootType: "PLANE",
-    aggregateRootId: "VH-XYZ",
-    command: "confirmTakeOff",
-    data: undefined,
+    command: "registerNewPlaneReadyForService",
+    aggregateRootId: "TEC-152",
+    data: {
+      seatingCapacity: 123,
+    },
   });
   await issueCommand({
     aggregateRootType: "GATE",
@@ -45,13 +47,13 @@ Deno.test("you can build an event sourced system", async () => {
   });
   await issueCommand({
     aggregateRootType: "PLANE",
-    aggregateRootId: "VH-XYZ",
+    aggregateRootId: "TEC-152",
     command: "confirmTakeOff",
     data: undefined,
   });
   await issueCommand({
     aggregateRootType: "PLANE",
-    aggregateRootId: "VH-XYZ",
+    aggregateRootId: "TEC-152",
     command: "confirmLanding",
     data: undefined,
   });

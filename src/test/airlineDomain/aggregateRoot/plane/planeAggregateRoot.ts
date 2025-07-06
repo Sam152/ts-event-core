@@ -5,6 +5,7 @@ import { confirmTakeOff } from "./commands/confirmTakeOff.ts";
 import { PlaneState } from "./state/PlaneState.ts";
 import { PlaneEvent } from "./state/PlaneEvent.ts";
 import { planeReducer } from "./state/planeReducer.ts";
+import { registerNewPlaneReadyForService } from "./commands/registerNewPlaneReadyForService.ts";
 
 export const planeAggregateRoot = {
   state: {
@@ -12,8 +13,9 @@ export const planeAggregateRoot = {
     initialState: undefined,
   },
   commands: {
+    registerNewPlaneReadyForService,
+    confirmPassengerBoarding,
     confirmTakeOff,
     confirmLanding,
-    confirmPassengerBoarding,
   },
 } satisfies AggregateRootDefinition<PlaneState, PlaneEvent>;
