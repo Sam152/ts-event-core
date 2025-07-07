@@ -13,7 +13,7 @@ export function createMemoryEventStore<TEvent extends Event>():
   const subscribers: EventSubscriber<TEvent>[] = [];
 
   return {
-    addSubscriber: subscribers.push,
+    addSubscriber: subscribers.push.bind(subscribers),
     persist: async (events) => {
       await Promise.all(events.map(async (event) => {
         const key = streamKey(event.aggregateRootType, event.aggregateRootId);
