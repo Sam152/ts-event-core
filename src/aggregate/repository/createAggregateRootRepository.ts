@@ -40,8 +40,8 @@ export function createAggregateRootRepository<
         state,
       };
     },
-    persist: async ({ raisedEvents, aggregate }) => {
-      const pendingEvents: Event[] = raisedEvents.map(
+    persist: async ({ aggregate, pendingPayloads }) => {
+      const pendingEvents: Event[] = pendingPayloads.map(
         (payload, i) => ({
           aggregateRootType: aggregate.aggregateRootType as string,
           aggregateRootId: aggregate.aggregateRootId,
