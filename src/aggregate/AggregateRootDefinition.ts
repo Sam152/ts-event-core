@@ -20,16 +20,15 @@ type CommandMap<TAggregateRootState, TEvent> = {
 };
 
 /**
- * Typescript cannot define a record and infer the
+ * Typescript cannot define a record of generics, without additional inference
+ * from a mapped type.
  *
  * @see https://stackoverflow.com/questions/65343641
  */
-export type AggregateRootDefinitionMapTypes = {
-  [key: string]: {
-    state: any;
-    event: any;
-  };
-};
+export type AggregateRootDefinitionMapTypes = Record<string, {
+  state: any;
+  event: any;
+}>;
 export type AggregateRootDefinitionMap<TTypeMap extends AggregateRootDefinitionMapTypes> = {
   [K in keyof TTypeMap]: AggregateRootDefinition<TTypeMap[K]["state"], TTypeMap[K]["event"]>;
 };
