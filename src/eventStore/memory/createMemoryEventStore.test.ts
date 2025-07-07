@@ -77,7 +77,7 @@ Deno.test("should retrieve events from specific version", async () => {
 Deno.test("should return empty array for non-existent aggregate", async () => {
   assertEquals(
     (await createMemoryEventStore().retrieve({
-      aggregateRootType: "PLANaE",
+      aggregateRootType: "PLANE",
       aggregateRootId: "non-existent",
     })).length,
     0,
