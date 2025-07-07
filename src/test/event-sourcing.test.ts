@@ -19,14 +19,13 @@ Deno.test("you can build an event sourced system", async () => {
       eventStore,
     }),
   });
+  eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
 
   const flightActivityLog = createMemoryReducedProjector({
     initialState: flightActivityLogInitialState,
     reducer: flightActivityLogReducer,
   });
-
   eventStore.addSubscriber(flightActivityLog.projector);
-  eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
 
   await issueCommand({
     aggregateRootType: "PLANE",
