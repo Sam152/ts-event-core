@@ -21,7 +21,14 @@ type CommandMap<TAggregateRootState, TEvent> = {
 
 /**
  * Typescript cannot define a record of generics, without additional inference
- * from a mapped type.
+ * from a mapped type. When used as a generic, this type infers all the TState and
+ * TEvent types used in a map, then keys them off into definitions via the
+ * AggregateRootDefinitionMap type.
+ *
+ * An alternative is to define AggregateRootDefinitionMap as
+ * Record<string, AggregateRootDefinition<any, any>>, which seems to maintain fine
+ * type safety for callers, but this means internally the library has to contend
+ * with `any`.
  *
  * @see https://stackoverflow.com/questions/65343641
  */
