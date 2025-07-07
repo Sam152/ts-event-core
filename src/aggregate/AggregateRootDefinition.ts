@@ -26,8 +26,8 @@ type CommandMap<TAggregateRootState, TEvent> = {
  */
 export type AggregateRootDefinitionMapTypes = {
   [key: string]: {
-    state: unknown;
-    event: unknown;
+    state: any;
+    event: any;
   };
 };
 export type AggregateRootDefinitionMap<TTypeMap extends AggregateRootDefinitionMapTypes> = {
