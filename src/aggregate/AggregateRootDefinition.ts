@@ -19,12 +19,17 @@ type CommandMap<TAggregateRootState, TEvent> = {
   ) => TEvent | TEvent[];
 };
 
-export type AggregateMapTypes = {
+/**
+ * Typescript cannot define a record and infer the
+ *
+ * @see https://stackoverflow.com/questions/65343641
+ */
+export type AggregateRootDefinitionMapTypes = {
   [key: string]: {
     state: any;
     event: any;
   };
 };
-export type AggregateRootDefinitionMap<TTypeMap extends AggregateMapTypes = AggregateMapTypes> = {
+export type AggregateRootDefinitionMap<TTypeMap extends AggregateRootDefinitionMapTypes> = {
   [K in keyof TTypeMap]: AggregateRootDefinition<TTypeMap[K]["state"], TTypeMap[K]["event"]>;
 };

@@ -1,12 +1,12 @@
 import { LoadedAggregateRoot } from "./LoadedAggregateRoot.ts";
-import { AggregateMapTypes, AggregateRootDefinitionMap } from "./AggregateRootDefinition.ts";
+import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "./AggregateRootDefinition.ts";
 import { Event } from "../eventStore/EventStore.ts";
 
 /**
  * Retrieve and persist aggregate roots.
  */
 export type AggregateRootRepository<
-  TAggregateMapTypes extends AggregateMapTypes,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
 > = {
   retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(

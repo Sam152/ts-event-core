@@ -1,5 +1,8 @@
 import { Commander } from "../Commander.ts";
-import { AggregateMapTypes, AggregateRootDefinitionMap } from "../../aggregate/AggregateRootDefinition.ts";
+import {
+  AggregateRootDefinitionMap,
+  AggregateRootDefinitionMapTypes,
+} from "../../aggregate/AggregateRootDefinition.ts";
 import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
 
 /**
@@ -8,7 +11,7 @@ import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository
  * features.
  */
 export function createImmediateCommandIssuer<
-  TAggregateMapTypes extends AggregateMapTypes,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
 >(
   { aggregateRootRepository, aggregateRoots }: {

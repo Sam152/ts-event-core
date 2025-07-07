@@ -1,6 +1,6 @@
 import { Event, EventsRaisedByAggregateRoots, EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootRepository } from "../AggregateRootRepository.ts";
-import { AggregateMapTypes, AggregateRootDefinitionMap } from "../AggregateRootDefinition.ts";
+import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../AggregateRootDefinition.ts";
 
 /**
  * This aggregate root repository loads the whole event stream for an aggregate root,
@@ -9,7 +9,7 @@ import { AggregateMapTypes, AggregateRootDefinitionMap } from "../AggregateRootD
  */
 export function createAggregateRootRepository<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateMapTypes = AggregateMapTypes,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
 >(
   { eventStore, aggregateRoots }: {
     eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateMapTypes, TAggregateDefinitionMap>>;
