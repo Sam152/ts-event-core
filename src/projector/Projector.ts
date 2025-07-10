@@ -7,7 +7,7 @@ import { Event } from "../eventStore/EventStore.ts";
  * Read models are typically eventually consistent and thus are not required to
  * adhere to any of the boundaries defined by the aggregate roots.
  *
- * New read models can be added at any point in time and then can be deleted after
+ * New read models can be added at any point in time and can then be deleted after
  * they are no longer useful.
  *
  * Projectors can be structured as reducers, or they can mutate data structures as they
@@ -15,8 +15,8 @@ import { Event } from "../eventStore/EventStore.ts";
  * a whole or selectively choose to build smaller structures out of individual aggregates
  * or other relations found within the event payload.
  *
- * They can build data structures that are in-memory, relational databases, speciality
- * databases or any other system that provides utility over your data.
+ * These data structures can be stored in memory, relational databases, speciality
+ * databases or any other system that provides utility.
  *
  * For these reasons, the signature of a projector is extremely simple, the only contract
  * an event sourced system needs to fulfil is providing a stream of events. How data can be
