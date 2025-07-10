@@ -1,11 +1,18 @@
-export type GateState = {};
-
-export type GateEvent = {
-  type: "BOARDING_PASS_SCANNED";
-  passengerName: string;
-  passportNumber: string;
-};
+import { GateState } from "./GateState.ts";
+import { GateEvent } from "./GateEvent.ts";
 
 export function gateReducer(state: GateState, event: GateEvent): GateState {
-  return {};
+  switch (event.type) {
+    case "GATE_CLOSED":
+      return {
+        status: "CLOSED",
+      };
+    case "GATE_OPENED":
+      return {
+        status: "OPEN",
+        planeDepartingAtGate: event.openedForPlane,
+      };
+    default:
+      return state;
+  }
 }
