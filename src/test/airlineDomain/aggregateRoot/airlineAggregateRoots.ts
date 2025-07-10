@@ -1,5 +1,5 @@
 import { gateAggregateRoot } from "./gate/gateAggregateRoot.ts";
-import { planeAggregateRoot } from "./plane/planeAggregateRoot.ts";
+import { flightAggregateRoot } from "./flight/flightAggregateRoot.ts";
 import { EventsRaisedByAggregateRoots } from "../../../eventStore/EventStore.ts";
 
 /**
@@ -10,7 +10,7 @@ import { EventsRaisedByAggregateRoots } from "../../../eventStore/EventStore.ts"
  */
 export const airlineAggregateRoots = {
   GATE: gateAggregateRoot,
-  PLANE: planeAggregateRoot,
+  FLIGHT: flightAggregateRoot,
 };
 
 export type AirlineEvent = EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>;

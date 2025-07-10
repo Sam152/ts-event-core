@@ -1,9 +1,9 @@
-import { assertPlaneInService, PlaneState } from "../state/PlaneState.ts";
-import { PlaneEvent } from "../state/PlaneEvent.ts";
+import { assertPlaneInService, FlightState } from "../state/FlightState.ts";
+import { FlightEvent } from "../state/FlightEvent.ts";
 
 export function confirmTakeOff(
-  plane: PlaneState,
-): PlaneEvent {
+  plane: FlightState,
+): FlightEvent {
   assertPlaneInService(plane);
 
   if (plane.status === "IN_THE_AIR") {

@@ -10,7 +10,7 @@ const testEventStream: AirlineEvent[] = [
     aggregateRootId: "plane-001",
     aggregateVersion: 1,
     payload: {
-      type: "PLANE_ENTERED_SERVICE",
+      type: "NEW_FLIGHT_SCHEDULED",
       seatingCapacity: 180,
     },
   },
@@ -40,7 +40,7 @@ const testEventStream: AirlineEvent[] = [
     aggregateRootId: "plane-002",
     aggregateVersion: 1,
     payload: {
-      type: "PLANE_ENTERED_SERVICE",
+      type: "NEW_FLIGHT_SCHEDULED",
       seatingCapacity: 220,
     },
   },
@@ -55,7 +55,7 @@ Deno.test("should persist and retrieve events", async () => {
       aggregateRootId: "plane-001",
     })).map((e) => e.payload.type),
     [
-      "PLANE_ENTERED_SERVICE",
+      "NEW_FLIGHT_SCHEDULED",
       "PASSENGER_BOARDED",
       "FLIGHT_DEPARTED",
     ],

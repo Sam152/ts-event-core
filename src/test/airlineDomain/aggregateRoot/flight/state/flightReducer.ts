@@ -1,9 +1,9 @@
-import { PlaneEvent } from "./PlaneEvent.ts";
-import { assertPlaneInService, PlaneState } from "./PlaneState.ts";
+import { FlightEvent } from "./FlightEvent.ts";
+import { assertPlaneInService, FlightState } from "./FlightState.ts";
 
-export function planeReducer(state: PlaneState, event: PlaneEvent): PlaneState {
+export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
   switch (event.type) {
-    case "PLANE_ENTERED_SERVICE": {
+    case "NEW_FLIGHT_SCHEDULED": {
       return {
         totalSeats: event.seatingCapacity,
         totalBoardedPassengers: 0,

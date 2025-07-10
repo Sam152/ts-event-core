@@ -4,9 +4,9 @@ import { boardingProcessManager } from "./airlineDomain/processManager/boardingP
 import { createMemoryEventStore } from "../eventStore/memory/createMemoryEventStore.ts";
 import { createMemoryReducedProjector } from "../projector/memory/createMemoryReducedProjector.ts";
 import {
-  flightActivityLogInitialState,
   flightActivityLogReducer,
-} from "./airlineDomain/projection/flightActivityLog.ts";
+  passengerActivityLogInitialState,
+} from "./airlineDomain/projection/passengerActivityLog.ts";
 import { assertEquals } from "@std/assert";
 import { createAggregateRootRepository } from "../aggregate/repository/createAggregateRootRepository.ts";
 
@@ -22,67 +22,60 @@ Deno.test("you can build an event sourced system", async () => {
   eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
 
   const flightActivityLog = createMemoryReducedProjector({
-    initialState: flightActivityLogInitialState,
+    initialState: passengerActivityLogInitialState,
     reducer: flightActivityLogReducer,
   });
   eventStore.addSubscriber(flightActivityLog.projector);
 
   await issueCommand({
-    aggregateRootType: "PLANE",
-    command: "registerNewPlaneReadyForService",
-    aggregateRootId: "TEC-152",
+    aggregateRootType: "FLIGHT",
+    command: "scheduleFlight",
+    aggregateRootId: "VA-497",
     data: {
-      seatingCapacity: 123,
+      seatingCapacity: 32,
     },
   });
 
   await issueCommand({
     aggregateRootType: "GATE",
     command: "openGate",
-    aggregateRootId: "PER-T4-A5",
+    aggregateRootId: "PERTH-T2-DOMESTIC-6",
     data: {
-      openForPlane: "TEC-152",
+      openForFlight: "VA-497",
     },
   });
   await issueCommand({
     aggregateRootType: "GATE",
     command: "scanBoardingPass",
-    aggregateRootId: "PER-T4-A5",
+    aggregateRootId: "PERTH-T2-DOMESTIC-6",
     data: {
       passengerName: "Waldo Mcdaniel",
-      passportNumber: "PA111199999",
+      passportNumber: "PA777",
     },
   });
   await issueCommand({
     aggregateRootType: "GATE",
     command: "closeGate",
-    aggregateRootId: "PER-T4-A5",
+    aggregateRootId: "PERTH-T2-DOMESTIC-6",
     data: undefined,
   });
 
   await issueCommand({
-    aggregateRootType: "PLANE",
-    aggregateRootId: "TEC-152",
+    aggregateRootType: "FLIGHT",
+    aggregateRootId: "VA-497",
     command: "confirmTakeOff",
     data: undefined,
   });
   await issueCommand({
-    aggregateRootType: "PLANE",
-    aggregateRootId: "TEC-152",
+    aggregateRootType: "FLIGHT",
+    aggregateRootId: "VA-497",
     command: "confirmLanding",
     data: undefined,
   });
 
   assertEquals(flightActivityLog.data, {
-    planes: {
-      "TEC-152": {
-        tripsFlown: 1,
-      },
-    },
-    passengers: {
-      "Waldo Mcdaniel": {
-        flightsTaken: 1,
-      },
+    "Waldo Mcdaniel": {
+      flightsTaken: 1,
     },
   });
 });

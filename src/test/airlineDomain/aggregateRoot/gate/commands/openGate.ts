@@ -3,7 +3,7 @@ import { GateEvent } from "../state/GateEvent.ts";
 
 export function openGate(
   gate: GateState,
-  data: { openForPlane: string },
+  data: { openForFlight: string },
 ): GateEvent {
   if (gate.status === "OPEN") {
     return {
@@ -13,6 +13,6 @@ export function openGate(
   }
   return {
     type: "GATE_OPENED",
-    openedForPlane: data.openForPlane,
+    openedForPlane: data.openForFlight,
   };
 }

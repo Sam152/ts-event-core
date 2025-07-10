@@ -27,7 +27,7 @@ Deno.test("produces type errors given an invalid aggregate type", async () => {
 
 Deno.test("produces type errors given an invalid command", async () => {
   const _params: Parameters<typeof issueCommand>[0] = {
-    aggregateRootType: "PLANE",
+    aggregateRootType: "FLIGHT",
     // @ts-expect-error - this should produce a type error.
     command: "NOT_A_COMMAND",
     aggregateRootId: "PER-T4-A5",
@@ -40,7 +40,7 @@ Deno.test("produces type errors given an invalid command", async () => {
 
 Deno.test("produces type errors given invalid command data", async () => {
   const _params: Parameters<typeof issueCommand>[0] = {
-    aggregateRootType: "PLANE",
+    aggregateRootType: "FLIGHT",
     // @ts-expect-error - this should produce a type error.
     command: "confirmPassengerBoarding",
     aggregateRootId: "PER-T4-A5",

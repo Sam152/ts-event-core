@@ -1,6 +1,6 @@
 import { AssertionError } from "@std/assert";
 
-export type PlaneState = {
+export type FlightState = {
   status: "ON_THE_GROUND" | "IN_THE_AIR";
   totalSeats: number;
   totalBoardedPassengers: number;
@@ -18,7 +18,7 @@ export type PlaneState = {
  * For that reason, this assert can be used to narrow to the case of a plane having
  * entered service.
  */
-export function assertPlaneInService(state: PlaneState): asserts state is Exclude<PlaneState, undefined> {
+export function assertPlaneInService(state: FlightState): asserts state is Exclude<FlightState, undefined> {
   if (typeof state === "undefined") {
     throw new AssertionError("Plane failed assertion of being in service.");
   }

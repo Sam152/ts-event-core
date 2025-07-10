@@ -1,10 +1,10 @@
-import { assertPlaneInService, PlaneState } from "../state/PlaneState.ts";
-import { PlaneEvent } from "../state/PlaneEvent.ts";
+import { assertPlaneInService, FlightState } from "../state/FlightState.ts";
+import { FlightEvent } from "../state/FlightEvent.ts";
 
-export function confirmPassengerBoarding(
-  plane: PlaneState,
+export function registerPassengerOnBoard(
+  plane: FlightState,
   data: { passengerName: string; passportNumber: string },
-): PlaneEvent {
+): FlightEvent {
   assertPlaneInService(plane);
   return {
     type: "PASSENGER_BOARDED",
