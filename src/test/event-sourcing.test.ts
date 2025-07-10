@@ -49,8 +49,8 @@ Deno.test("you can build an event sourced system", async () => {
     command: "scanBoardingPass",
     aggregateRootId: "PER-T4-A5",
     data: {
-      passengerName: "Foo",
-      passportNumber: "13",
+      passengerName: "Waldo Mcdaniel",
+      passportNumber: "PA111199999",
     },
   });
   await issueCommand({
@@ -80,7 +80,7 @@ Deno.test("you can build an event sourced system", async () => {
       },
     },
     passengers: {
-      "Foo:13": {
+      "Waldo Mcdaniel": {
         flightsTaken: 1,
       },
     },

@@ -4,7 +4,7 @@ import { EventsRaisedByAggregateRoots } from "../../../eventStore/EventStore.ts"
 
 /**
  * Each aggregate root forms a logical grouping of events and commands in an event
- * sourced system. It is the meeting place of data and behaviour, and everything inside the
+ * sourced system. It is the meeting place of data and behavior, and everything inside the
  * boundary is considered to execute in a deterministic, predictable and sequential fashion.
  * This can also be referred to as a "consistency boundary".
  */

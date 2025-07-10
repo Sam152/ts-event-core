@@ -21,13 +21,12 @@ export const flightActivityLogInitialState = {
 export function flightActivityLogReducer(state: FlightActivityLog, event: AirlineEvent): FlightActivityLog {
   switch (event.payload.type) {
     case "PASSENGER_BOARDED": {
-      const passengerKey = `${event.payload.passengerName}:${event.payload.passportNumber}`;
       return {
         ...state,
         passengers: {
           ...state.passengers,
-          [passengerKey]: {
-            flightsTaken: (state.passengers[passengerKey]?.flightsTaken || 0) + 1,
+          [event.payload.passengerName]: {
+            flightsTaken: (state.passengers[event.payload.passengerName]?.flightsTaken || 0) + 1,
           },
         },
       };
