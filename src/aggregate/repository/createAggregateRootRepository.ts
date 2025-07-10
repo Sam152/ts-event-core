@@ -12,7 +12,7 @@ export function createAggregateRootRepository<
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
 >(
   { eventStore, aggregateRoots }: {
-    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateMapTypes, TAggregateDefinitionMap>>;
+    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap, TAggregateMapTypes>>;
     aggregateRoots: TAggregateDefinitionMap;
   },
 ): AggregateRootRepository<TAggregateMapTypes, TAggregateDefinitionMap> {

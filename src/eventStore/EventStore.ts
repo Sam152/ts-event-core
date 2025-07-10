@@ -1,7 +1,4 @@
-import {
-  AggregateRootDefinitionMap,
-  AggregateRootDefinitionMapTypes,
-} from "../aggregate/AggregateRootDefinition.ts";
+import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes, } from "../aggregate/AggregateRootDefinition.ts";
 
 /**
  * Events record statements of fact that occurred within a domain, while processing
@@ -25,8 +22,8 @@ export type EventStore<TEvent extends Event = Event> = {
 };
 
 export type EventsRaisedByAggregateRoots<
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
 > = Event<
   Parameters<
     TAggregateRootDefinitionMap[
