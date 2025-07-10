@@ -13,6 +13,7 @@ export function scanBoardingPass(
   }
   return {
     type: "BOARDING_PASS_SCANNED",
+    boardingPlane: gate.planeDepartingAtGate,
     passengerName: data.passengerName,
     passportNumber: data.passportNumber,
   };

@@ -2,6 +2,7 @@ export type GateEvent = {
   type: "BOARDING_PASS_SCANNED";
   passengerName: string;
   passportNumber: string;
+  boardingPlane: string;
 } | {
   type: "GATE_OPENED";
   openedForPlane: string;

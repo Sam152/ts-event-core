@@ -35,6 +35,15 @@ Deno.test("you can build an event sourced system", async () => {
       seatingCapacity: 123,
     },
   });
+
+  await issueCommand({
+    aggregateRootType: "GATE",
+    command: "openGate",
+    aggregateRootId: "PER-T4-A5",
+    data: {
+      openForPlane: "TEC-152",
+    },
+  });
   await issueCommand({
     aggregateRootType: "GATE",
     command: "scanBoardingPass",
@@ -44,6 +53,13 @@ Deno.test("you can build an event sourced system", async () => {
       passportNumber: "13",
     },
   });
+  await issueCommand({
+    aggregateRootType: "GATE",
+    command: "closeGate",
+    aggregateRootId: "PER-T4-A5",
+    data: undefined,
+  });
+
   await issueCommand({
     aggregateRootType: "PLANE",
     aggregateRootId: "TEC-152",
