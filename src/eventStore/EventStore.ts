@@ -18,7 +18,7 @@ export type EventStore<TEvent extends Event = Event> = {
     aggregateRootType: string;
     aggregateRootId: string;
     fromVersion?: number;
-  }) => Promise<TEvent[]>;
+  }) => AsyncGenerator<TEvent>;
 };
 
 export type EventsRaisedByAggregateRoots<

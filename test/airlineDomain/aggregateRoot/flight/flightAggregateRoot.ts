@@ -1,4 +1,4 @@
-import { AggregateRootDefinition } from "../../../../aggregate/AggregateRootDefinition.ts";
+import { AggregateRootDefinition } from "../../../../src/aggregate/AggregateRootDefinition.ts";
 import { confirmLanding } from "./commands/confirmLanding.ts";
 import { registerPassengerOnBoard } from "./commands/registerPassengerOnBoard.ts";
 import { confirmTakeOff } from "./commands/confirmTakeOff.ts";

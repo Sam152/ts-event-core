@@ -1,10 +1,10 @@
-import { createImmediateCommandIssuer } from "../command/immediate/createImmediateCommandIssuer.ts";
+import { createImmediateCommandIssuer } from "../src/command/immediate/createImmediateCommandIssuer.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
-import { createMemoryEventStore } from "../eventStore/memory/createMemoryEventStore.ts";
-import { createMemoryReducedProjector } from "../projector/memory/createMemoryReducedProjector.ts";
+import { createMemoryEventStore } from "../src/eventStore/memory/createMemoryEventStore.ts";
+import { createMemoryReducedProjector } from "../src/projector/memory/createMemoryReducedProjector.ts";
 import { assertEquals } from "@std/assert";
-import { createAggregateRootRepository } from "../aggregate/repository/createAggregateRootRepository.ts";
+import { createAggregateRootRepository } from "../src/aggregate/repository/createAggregateRootRepository.ts";
 import {
   passengerActivityInitialState,
   passengerActivityReducer,

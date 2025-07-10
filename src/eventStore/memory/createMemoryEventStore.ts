@@ -27,15 +27,15 @@ export function createMemoryEventStore<TEvent extends Event>():
         await Promise.all(subscribers?.map((subscriber) => subscriber(event)) ?? []);
       }));
     },
-    retrieve: ({
+    retrieve: async function* ({
       aggregateRootType,
       aggregateRootId,
       fromVersion,
-    }) => {
+    }) {
       const key = streamKey(aggregateRootType, aggregateRootId);
       const events = storage[key] || [];
-      return Promise.resolve(
-        fromVersion !== undefined ? events.filter((event) => event.aggregateVersion > fromVersion) : events,
+      yield* (
+        fromVersion !== undefined ? events.filter((event) => event.aggregateVersion > fromVersion) : events
       );
     },
   };

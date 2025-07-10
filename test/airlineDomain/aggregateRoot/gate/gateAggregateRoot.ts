@@ -1,4 +1,4 @@
-import { AggregateRootDefinition } from "../../../../aggregate/AggregateRootDefinition.ts";
+import { AggregateRootDefinition } from "../../../../src/aggregate/AggregateRootDefinition.ts";
 import { scanBoardingPass } from "./commands/scanBoardingPass.ts";
 import { gateReducer } from "./state/gateReducer.ts";
 import { GateState } from "./state/GateState.ts";

@@ -21,22 +21,22 @@ export function createAggregateRootRepository<
       { aggregateRootId, aggregateRootType },
     ) => {
       const definition = aggregateRoots[aggregateRootType];
-      const events = await eventStore.retrieve({
+      const events = eventStore.retrieve({
         aggregateRootId,
         aggregateRootType: aggregateRootType as string,
       });
 
-      const state = events.map(
-        (event) => event.payload,
-      ).reduce(
-        definition.state.reducer,
-        definition.state.initialState,
-      );
+      let aggregateVersion: number | undefined = undefined;
+      let state = definition.state.initialState;
+      for await (const event of events) {
+        state = definition.state.reducer(state, event.payload);
+        aggregateVersion = event.aggregateVersion;
+      }
 
       return {
         aggregateRootId,
         aggregateRootType,
-        aggregateVersion: events.at(-1)?.aggregateVersion,
+        aggregateVersion,
         state,
       };
     },

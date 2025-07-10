@@ -1,7 +1,7 @@
-import { createImmediateCommandIssuer } from "../command/immediate/createImmediateCommandIssuer.ts";
+import { createImmediateCommandIssuer } from "../src/command/immediate/createImmediateCommandIssuer.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { createMemoryEventStore } from "../eventStore/memory/createMemoryEventStore.ts";
-import { createAggregateRootRepository } from "../aggregate/repository/createAggregateRootRepository.ts";
+import { createMemoryEventStore } from "../src/eventStore/memory/createMemoryEventStore.ts";
+import { createAggregateRootRepository } from "../src/aggregate/repository/createAggregateRootRepository.ts";
 
 const issueCommand = createImmediateCommandIssuer({
   aggregateRoots: airlineAggregateRoots,
