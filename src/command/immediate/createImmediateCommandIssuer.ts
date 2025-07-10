@@ -1,4 +1,4 @@
-import { Commander } from "../Commander.ts";
+import { CommandIssuer } from "../CommandIssuer.ts";
 import {
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
@@ -18,7 +18,7 @@ export function createImmediateCommandIssuer<
     aggregateRoots: TAggregateMap;
     aggregateRootRepository: AggregateRootRepository<TAggregateMapTypes, TAggregateMap>;
   },
-): Commander<TAggregateMap, TAggregateMapTypes> {
+): CommandIssuer<TAggregateMap, TAggregateMapTypes> {
   return async ({ aggregateRootType, aggregateRootId, command, data }) => {
     const aggregate = await aggregateRootRepository.retrieve({
       aggregateRootId,
