@@ -3,12 +3,13 @@ import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRo
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
 import { createMemoryEventStore } from "../eventStore/memory/createMemoryEventStore.ts";
 import { createMemoryReducedProjector } from "../projector/memory/createMemoryReducedProjector.ts";
-import {
-  flightActivityLogReducer,
-  passengerActivityLogInitialState,
-} from "./airlineDomain/projection/passengerActivityLog.ts";
 import { assertEquals } from "@std/assert";
 import { createAggregateRootRepository } from "../aggregate/repository/createAggregateRootRepository.ts";
+import {
+  passengerActivityInitialState,
+  passengerActivityReducer,
+} from "./airlineDomain/readModels/passengerActivity.ts";
+import { eventLogInitialState, eventLogReducer } from "./airlineDomain/readModels/eventLog.ts";
 
 Deno.test("you can build an event sourced system", async () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
@@ -21,11 +22,17 @@ Deno.test("you can build an event sourced system", async () => {
   });
   eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
 
-  const flightActivityLog = createMemoryReducedProjector({
-    initialState: passengerActivityLogInitialState,
-    reducer: flightActivityLogReducer,
+  const passengerActivity = createMemoryReducedProjector({
+    initialState: passengerActivityInitialState,
+    reducer: passengerActivityReducer,
   });
-  eventStore.addSubscriber(flightActivityLog.projector);
+  eventStore.addSubscriber(passengerActivity.projector);
+
+  const eventLog = createMemoryReducedProjector({
+    initialState: eventLogInitialState,
+    reducer: eventLogReducer,
+  });
+  eventStore.addSubscriber(eventLog.projector);
 
   await issueCommand({
     aggregateRootType: "FLIGHT",
@@ -73,9 +80,18 @@ Deno.test("you can build an event sourced system", async () => {
     data: undefined,
   });
 
-  assertEquals(flightActivityLog.data, {
+  assertEquals(passengerActivity.data, {
     "Waldo Mcdaniel": {
       flightsTaken: 1,
     },
   });
+  assertEquals(eventLog.data, [
+    "FLIGHT: NEW_FLIGHT_SCHEDULED",
+    "GATE: GATE_OPENED",
+    "GATE: BOARDING_PASS_SCANNED",
+    "FLIGHT: PASSENGER_BOARDED",
+    "GATE: GATE_CLOSED",
+    "FLIGHT: FLIGHT_DEPARTED",
+    "FLIGHT: FLIGHT_ARRIVED",
+  ]);
 });

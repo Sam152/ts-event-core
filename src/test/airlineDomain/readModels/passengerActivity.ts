@@ -1,17 +1,17 @@
 import { AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
 
-type PassengerActivityLog = {
+type PassengerActivity = {
   [key: string]: {
     flightsTaken: number;
   };
 };
 
-export const passengerActivityLogInitialState = {};
+export const passengerActivityInitialState = {};
 
-export function flightActivityLogReducer(
-  state: PassengerActivityLog,
+export function passengerActivityReducer(
+  state: PassengerActivity,
   event: AirlineEvent,
-): PassengerActivityLog {
+): PassengerActivity {
   switch (event.payload.type) {
     case "PASSENGER_BOARDED": {
       return {
