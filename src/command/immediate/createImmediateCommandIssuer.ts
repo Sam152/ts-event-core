@@ -11,12 +11,12 @@ import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository
  * features.
  */
 export function createImmediateCommandIssuer<
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 >(
   { aggregateRootRepository, aggregateRoots }: {
     aggregateRoots: TAggregateMap;
-    aggregateRootRepository: AggregateRootRepository<TAggregateMapTypes, TAggregateMap>;
+    aggregateRootRepository: AggregateRootRepository<TAggregateMap, TAggregateMapTypes>;
   },
 ): CommandIssuer<TAggregateMap, TAggregateMapTypes> {
   return async ({ aggregateRootType, aggregateRootId, command, data }) => {

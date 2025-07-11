@@ -15,7 +15,7 @@ export function createAggregateRootRepository<
     eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap, TAggregateMapTypes>>;
     aggregateRoots: TAggregateDefinitionMap;
   },
-): AggregateRootRepository<TAggregateMapTypes, TAggregateDefinitionMap> {
+): AggregateRootRepository<TAggregateDefinitionMap, TAggregateMapTypes> {
   return {
     retrieve: async (
       { aggregateRootId, aggregateRootType },

@@ -6,8 +6,8 @@ import { Event } from "../eventStore/EventStore.ts";
  * Retrieve and persist aggregate roots.
  */
 export type AggregateRootRepository<
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 > = {
   retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(
     args: { aggregateRootType: TAggregateRootType; aggregateRootId: string },

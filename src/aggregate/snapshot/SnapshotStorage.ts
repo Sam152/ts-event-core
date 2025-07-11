@@ -5,8 +5,8 @@ import {
 } from "../AggregateRootDefinition.ts";
 
 export type SnapshotStorage<
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 > = {
   retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(
     args: {
