@@ -5,8 +5,9 @@
 export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
   commands: CommandMap<TAggregateRootState, TEvent>;
   state: {
-    initialState: TAggregateRootState;
     reducer: AggregateReducer<TAggregateRootState, TEvent>;
+    version: string | number;
+    initialState: TAggregateRootState;
   };
 };
 

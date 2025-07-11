@@ -1,4 +1,7 @@
-import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes, } from "../aggregate/AggregateRootDefinition.ts";
+import {
+  AggregateRootDefinitionMap,
+  AggregateRootDefinitionMapTypes,
+} from "../aggregate/AggregateRootDefinition.ts";
 
 export type CommandIssuer<
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,

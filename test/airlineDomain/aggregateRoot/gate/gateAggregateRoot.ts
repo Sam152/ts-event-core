@@ -9,6 +9,7 @@ import { closeGate } from "./commands/closeGate.ts";
 export const gateAggregateRoot = {
   state: {
     reducer: gateReducer,
+    version: 1,
     initialState: {
       status: "CLOSED",
     },
