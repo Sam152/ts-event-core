@@ -2,7 +2,7 @@ import {
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
   AggregateStateVersion,
-} from "../AggregateRootDefinition.ts";
+} from "./AggregateRootDefinition.ts";
 
 export type SnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
