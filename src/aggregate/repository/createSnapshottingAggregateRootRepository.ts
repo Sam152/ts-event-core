@@ -1,19 +1,20 @@
 import { Event, EventsRaisedByAggregateRoots, EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootRepository } from "../AggregateRootRepository.ts";
 import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../AggregateRootDefinition.ts";
+import { SnapshotStorage } from "../SnapshotStorage.ts";
 
 /**
- * This aggregate root repository loads the whole event stream for an aggregate root,
- * and reduces them on demand. This can be suitable for use cases where an aggregate
- * root has a limited number of events.
+ * Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
+ * a large number of events when retrieving an aggregate.
  */
-export function createAggregateRootRepository<
+export function createSnapshottingAggregateRootRepository<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
 >(
-  { eventStore, aggregateRoots }: {
+  { eventStore, aggregateRoots, snapshotStorage }: {
     eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap, TAggregateMapTypes>>;
     aggregateRoots: TAggregateDefinitionMap;
+    snapshotStorage: SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>;
   },
 ): AggregateRootRepository<TAggregateDefinitionMap, TAggregateMapTypes> {
   return {
@@ -21,6 +22,13 @@ export function createAggregateRootRepository<
       { aggregateRootId, aggregateRootType },
     ) => {
       const definition = aggregateRoots[aggregateRootType];
+
+      const snapshot = await snapshotStorage.retrieve({
+        aggregateRootId,
+        aggregateRootType,
+        aggregateRootStateVersion: definition.state.version,
+      });
+
       const events = eventStore.retrieve({
         aggregateRootId,
         aggregateRootType: aggregateRootType as string,

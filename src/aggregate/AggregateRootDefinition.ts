@@ -6,8 +6,13 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
   commands: CommandMap<TAggregateRootState, TEvent>;
   state: {
     reducer: AggregateReducer<TAggregateRootState, TEvent>;
-    version: AggregateStateVersion;
     initialState: TAggregateRootState;
+
+    /**
+     * Reducers can change, so when state is reduced and persisted, by way of a snapshot, we need to be able to
+     * identify a version of the state.
+     */
+    version: AggregateStateVersion;
   };
 };
 

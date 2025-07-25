@@ -1,4 +1,4 @@
-function createTracer<T extends object>(obj: T) {
+export function traceCalls<T extends object>(obj: T) {
   const calls: any[] = [];
   const proxy = new Proxy(obj, {
     get(target, prop, receiver) {
