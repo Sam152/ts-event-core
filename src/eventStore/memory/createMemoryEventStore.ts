@@ -1,5 +1,5 @@
 import { Envelope, EventStore } from "../EventStore.ts";
-import { AggregateDataConsistencyError } from "../error/AggregateDataConsistencyError.ts";
+import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersionIntegrityError.ts";
 
 type EventSubscriber<TEvent extends Envelope> = (event: TEvent) => Promise<void> | void;
 type EventEmitter<TEvent extends Envelope> = {
@@ -20,7 +20,7 @@ export function createMemoryEventStore<TEvent extends Envelope>():
         storage[key] = storage[key] ?? [];
 
         if (storage[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)) {
-          throw new AggregateDataConsistencyError();
+          throw new AggregateRootVersionIntegrityError();
         }
 
         storage[key].push(event);

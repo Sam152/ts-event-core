@@ -1,7 +1,7 @@
 import { assertEquals, assertRejects } from "@std/assert";
 import { createMemoryEventStore } from "./createMemoryEventStore.ts";
 import { AirlineEvent } from "../../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { AggregateDataConsistencyError } from "../error/AggregateDataConsistencyError.ts";
+import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersionIntegrityError.ts";
 
 const testEventStream: AirlineEvent[] = [
   {
@@ -91,6 +91,6 @@ Deno.test("should throw an error when attempting to persist a version collision"
 
   await assertRejects(
     () => eventStore.persist([testEventStream[0]]),
-    AggregateDataConsistencyError,
+    AggregateRootVersionIntegrityError,
   );
 });
