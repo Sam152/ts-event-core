@@ -39,6 +39,10 @@ export function createMemorySnapshotStorage<
   };
 }
 
-function snapshotKey(aggregateType: string, aggregateId: string, version: AggregateStateVersion): string {
-  return `${aggregateType}:${aggregateId}:${version}`;
+function snapshotKey(
+  aggregateType: string,
+  aggregateId: string,
+  aggregateRootStateVersion: AggregateStateVersion,
+): string {
+  return `${aggregateType}:${aggregateId}:${aggregateRootStateVersion}`;
 }
