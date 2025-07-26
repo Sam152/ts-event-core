@@ -33,7 +33,10 @@ export function createMemorySnapshotStorage<
       const key = snapshotKey(aggregateRootType as string, aggregateRootId, aggregateRootStateVersion);
       return storage[key] as LoadedAggregateRoot<
         typeof aggregateRootType,
-        AggregateRootDefinition<unknown, unknown>
+        AggregateRootDefinition<
+          unknown,
+          unknown
+        >
       >;
     },
   };
