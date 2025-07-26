@@ -4,6 +4,7 @@ import { createMemoryEventStore } from "../../eventStore/memory/createMemoryEven
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { traceCalls } from "../../../test/utils/traceCalls.ts";
+import { assertEquals } from "@std/assert";
 
 Deno.test("can use snapshot storage, to avoid loading all events for an aggregate", async () => {
   const tracedEventStore = traceCalls(
@@ -34,8 +35,20 @@ Deno.test("can use snapshot storage, to avoid loading all events for an aggregat
     ],
   });
 
-  await aggregateRootRepository.retrieve({
+  const aggregate = await aggregateRootRepository.retrieve({
     aggregateRootId: "VA-497",
     aggregateRootType: "FLIGHT",
+  });
+
+  assertEquals(aggregate, {
+    aggregateRootId: "VA-497",
+    aggregateRootType: "FLIGHT",
+    aggregateVersion: 2,
+    state: {
+      totalSeats: 100,
+      totalBoardedPassengers: 1,
+      passengerManifest: { PA1234567: "Harold Gribble" },
+      status: "ON_THE_GROUND",
+    },
   });
 });
