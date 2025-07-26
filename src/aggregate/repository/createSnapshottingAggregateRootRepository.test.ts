@@ -26,6 +26,11 @@ Deno.test("can use snapshot storage, to avoid loading all events for an aggregat
         type: "NEW_FLIGHT_SCHEDULED",
         seatingCapacity: 100,
       },
+      {
+        type: "PASSENGER_BOARDED",
+        passengerName: "Harold Gribble",
+        passportNumber: "PA1234567",
+      },
     ],
   });
 

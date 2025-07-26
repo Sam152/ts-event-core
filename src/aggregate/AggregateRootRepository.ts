@@ -1,6 +1,5 @@
 import { LoadedAggregateRoot } from "./LoadedAggregateRoot.ts";
 import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "./AggregateRootDefinition.ts";
-import { Event } from "../eventStore/EventStore.ts";
 
 /**
  * Retrieve and persist aggregate roots.
@@ -18,6 +17,9 @@ export type AggregateRootRepository<
     TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
     TLoadedAggregateRoot extends LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>,
   >(
-    args: { aggregate: TLoadedAggregateRoot; pendingPayloads: Event["payload"][] },
+    args: {
+      aggregate: TLoadedAggregateRoot;
+      pendingPayloads: Parameters<TAggregateDefinition["state"]["reducer"]>[1][];
+    },
   ) => Promise<void>;
 };
