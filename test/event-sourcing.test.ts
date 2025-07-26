@@ -4,20 +4,25 @@ import { boardingProcessManager } from "./airlineDomain/processManager/boardingP
 import { createMemoryEventStore } from "../src/eventStore/memory/createMemoryEventStore.ts";
 import { createMemoryReducedProjector } from "../src/projector/memory/createMemoryReducedProjector.ts";
 import { assertEquals } from "@std/assert";
-import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
 import {
   passengerActivityInitialState,
   passengerActivityReducer,
 } from "./airlineDomain/readModels/passengerActivity.ts";
 import { eventLogInitialState, eventLogReducer } from "./airlineDomain/readModels/eventLog.ts";
+import { describe, it } from "jsr:@std/testing/bdd";
+import {
+  createSnapshottingAggregateRootRepository,
+} from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
+import { createMemorySnapshotStorage } from "../src/aggregate/snapshot/createMemorySnapshotStorage.ts";
 
-Deno.test("you can build an event sourced system", async () => {
+describe("event sourcing", () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
   const issueCommand = createImmediateCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
-    aggregateRootRepository: createBasicAggregateRootRepository({
+    aggregateRootRepository: createSnapshottingAggregateRootRepository({
       aggregateRoots: airlineAggregateRoots,
       eventStore,
+      snapshotStorage: createMemorySnapshotStorage(),
     }),
   });
   eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
@@ -34,64 +39,68 @@ Deno.test("you can build an event sourced system", async () => {
   });
   eventStore.addSubscriber(eventLog.projector);
 
-  await issueCommand({
-    aggregateRootType: "FLIGHT",
-    command: "scheduleFlight",
-    aggregateRootId: "VA-497",
-    data: {
-      seatingCapacity: 32,
-    },
+  it("allows commands to be issued", async () => {
+    await issueCommand({
+      aggregateRootType: "FLIGHT",
+      command: "scheduleFlight",
+      aggregateRootId: "VA-497",
+      data: {
+        seatingCapacity: 32,
+      },
+    });
+
+    await issueCommand({
+      aggregateRootType: "GATE",
+      command: "openGate",
+      aggregateRootId: "PERTH-T2-DOMESTIC-6",
+      data: {
+        openForFlight: "VA-497",
+      },
+    });
+    await issueCommand({
+      aggregateRootType: "GATE",
+      command: "scanBoardingPass",
+      aggregateRootId: "PERTH-T2-DOMESTIC-6",
+      data: {
+        passengerName: "Waldo Mcdaniel",
+        passportNumber: "PA777",
+      },
+    });
+    await issueCommand({
+      aggregateRootType: "GATE",
+      command: "closeGate",
+      aggregateRootId: "PERTH-T2-DOMESTIC-6",
+      data: undefined,
+    });
+
+    await issueCommand({
+      aggregateRootType: "FLIGHT",
+      aggregateRootId: "VA-497",
+      command: "confirmTakeOff",
+      data: undefined,
+    });
+    await issueCommand({
+      aggregateRootType: "FLIGHT",
+      aggregateRootId: "VA-497",
+      command: "confirmLanding",
+      data: undefined,
+    });
   });
 
-  await issueCommand({
-    aggregateRootType: "GATE",
-    command: "openGate",
-    aggregateRootId: "PERTH-T2-DOMESTIC-6",
-    data: {
-      openForFlight: "VA-497",
-    },
+  it("produces projections from the resulting event stream", async () => {
+    assertEquals(passengerActivity.data, {
+      "Waldo Mcdaniel": {
+        flightsTaken: 1,
+      },
+    });
+    assertEquals(eventLog.data, [
+      "FLIGHT: NEW_FLIGHT_SCHEDULED",
+      "GATE: GATE_OPENED",
+      "GATE: BOARDING_PASS_SCANNED",
+      "FLIGHT: PASSENGER_BOARDED",
+      "GATE: GATE_CLOSED",
+      "FLIGHT: FLIGHT_DEPARTED",
+      "FLIGHT: FLIGHT_LANDED",
+    ]);
   });
-  await issueCommand({
-    aggregateRootType: "GATE",
-    command: "scanBoardingPass",
-    aggregateRootId: "PERTH-T2-DOMESTIC-6",
-    data: {
-      passengerName: "Waldo Mcdaniel",
-      passportNumber: "PA777",
-    },
-  });
-  await issueCommand({
-    aggregateRootType: "GATE",
-    command: "closeGate",
-    aggregateRootId: "PERTH-T2-DOMESTIC-6",
-    data: undefined,
-  });
-
-  await issueCommand({
-    aggregateRootType: "FLIGHT",
-    aggregateRootId: "VA-497",
-    command: "confirmTakeOff",
-    data: undefined,
-  });
-  await issueCommand({
-    aggregateRootType: "FLIGHT",
-    aggregateRootId: "VA-497",
-    command: "confirmLanding",
-    data: undefined,
-  });
-
-  assertEquals(passengerActivity.data, {
-    "Waldo Mcdaniel": {
-      flightsTaken: 1,
-    },
-  });
-  assertEquals(eventLog.data, [
-    "FLIGHT: NEW_FLIGHT_SCHEDULED",
-    "GATE: GATE_OPENED",
-    "GATE: BOARDING_PASS_SCANNED",
-    "FLIGHT: PASSENGER_BOARDED",
-    "GATE: GATE_CLOSED",
-    "FLIGHT: FLIGHT_DEPARTED",
-    "FLIGHT: FLIGHT_LANDED",
-  ]);
 });
