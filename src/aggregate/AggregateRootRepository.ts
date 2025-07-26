@@ -19,7 +19,7 @@ export type AggregateRootRepository<
   >(
     args: {
       aggregate: TLoadedAggregateRoot;
-      pendingPayloads: Parameters<TAggregateDefinition["state"]["reducer"]>[1][];
+      pendingEvents: Parameters<TAggregateDefinition["state"]["reducer"]>[1][];
     },
   ) => Promise<void>;
 };

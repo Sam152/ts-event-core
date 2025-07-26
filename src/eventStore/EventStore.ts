@@ -7,7 +7,7 @@ import {
  * Events record statements of fact that occurred within a domain, while processing
  * commands. They are the single source of truth for all recorded data in the domain.
  */
-export type Event<TEventPayload = unknown> = {
+export type Envelope<TEventPayload = unknown> = {
   aggregateRootType: string;
   aggregateRootId: string;
   aggregateVersion: number;
@@ -15,19 +15,19 @@ export type Event<TEventPayload = unknown> = {
   payload: TEventPayload;
 };
 
-export type EventStore<TEvent extends Event = Event> = {
-  persist: (events: TEvent[]) => Promise<void>;
+export type EventStore<TEnvelope extends Envelope = Envelope> = {
+  persist: (events: TEnvelope[]) => Promise<void>;
   retrieve: (args: {
     aggregateRootType: string;
     aggregateRootId: string;
     fromVersion?: number;
-  }) => AsyncGenerator<TEvent>;
+  }) => AsyncGenerator<TEnvelope>;
 };
 
 export type EventsRaisedByAggregateRoots<
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
-> = Event<
+> = Envelope<
   Parameters<
     TAggregateRootDefinitionMap[
       keyof TAggregateRootDefinitionMap

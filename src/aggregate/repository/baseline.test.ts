@@ -27,7 +27,7 @@ describeAll("aggregate root repository", [snapshotting, basic], (repository) => 
         aggregateRootType: "FLIGHT",
         state: undefined,
       },
-      pendingPayloads: [
+      pendingEvents: [
         {
           type: "NEW_FLIGHT_SCHEDULED",
           seatingCapacity: 100,
@@ -66,7 +66,7 @@ describeAll("aggregate root repository", [snapshotting, basic], (repository) => 
 
     await repository.persist({
       aggregate,
-      pendingPayloads: [
+      pendingEvents: [
         {
           type: "PASSENGER_BOARDED",
           passengerName: "Sally Gribble",

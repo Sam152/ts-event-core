@@ -23,7 +23,7 @@ describe("snapshotting aggregate root repository", () => {
         aggregateRootType: "FLIGHT",
         state: undefined,
       },
-      pendingPayloads: [
+      pendingEvents: [
         {
           type: "NEW_FLIGHT_SCHEDULED",
           seatingCapacity: 100,

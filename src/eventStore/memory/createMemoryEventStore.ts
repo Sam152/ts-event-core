@@ -1,12 +1,12 @@
-import { Event, EventStore } from "../EventStore.ts";
+import { Envelope, EventStore } from "../EventStore.ts";
 import { AggregateDataConsistencyError } from "../error/AggregateDataConsistencyError.ts";
 
-type EventSubscriber<TEvent extends Event> = (event: TEvent) => Promise<void> | void;
-type EventEmitter<TEvent extends Event> = {
+type EventSubscriber<TEvent extends Envelope> = (event: TEvent) => Promise<void> | void;
+type EventEmitter<TEvent extends Envelope> = {
   addSubscriber: (subscriber: EventSubscriber<TEvent>) => void;
 };
 
-export function createMemoryEventStore<TEvent extends Event>():
+export function createMemoryEventStore<TEvent extends Envelope>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
   const storage: Record<string, TEvent[]> = {};

@@ -1,4 +1,4 @@
-import { Event, EventsRaisedByAggregateRoots, EventStore } from "../../eventStore/EventStore.ts";
+import { Envelope, EventsRaisedByAggregateRoots, EventStore } from "../../eventStore/EventStore.ts";
 import { AggregateRootRepository } from "../AggregateRootRepository.ts";
 import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../AggregateRootDefinition.ts";
 import { SnapshotStorage } from "../SnapshotStorage.ts";
@@ -50,8 +50,8 @@ export function createSnapshottingAggregateRootRepository<
         state,
       };
     },
-    persist: async ({ aggregate, pendingPayloads }) => {
-      const pendingEvents: Event[] = pendingPayloads.map(
+    persist: async ({ aggregate, pendingEvents }) => {
+      const envelopes: Envelope[] = pendingEvents.map(
         (payload, i) => ({
           aggregateRootType: aggregate.aggregateRootType as string,
           aggregateRootId: aggregate.aggregateRootId,
@@ -60,7 +60,7 @@ export function createSnapshottingAggregateRootRepository<
           payload,
         }),
       );
-      await eventStore.persist(pendingEvents);
+      await eventStore.persist(envelopes);
     },
   };
 }
