@@ -7,6 +7,9 @@ import {
 import { SnapshotStorage } from "../SnapshotStorage.ts";
 import { LoadedAggregateRoot } from "../LoadedAggregateRoot.ts";
 
+/**
+ * Unlike an in-memory implementation of an event store, a
+ */
 export function createMemorySnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
