@@ -1,22 +1,15 @@
 import {
-  AggregateRootDefinitionMap,
-  AggregateRootDefinitionMapTypes,
-  AggregateStateVersion,
+    AggregateRootDefinitionMap,
+    AggregateRootDefinitionMapTypes,
+    AggregateStateVersion,
 } from "./AggregateRootDefinition.ts";
+import { LoadedAggregateRoot } from "./LoadedAggregateRoot.ts";
 
 export type SnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 > = {
-  retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(
-    args: {
-      aggregateRootType: TAggregateRootType;
-      aggregateRootId: string;
-      aggregateRootStateVersion: AggregateStateVersion;
-    },
-  ) => Promise<undefined | ReturnType<TAggregateDefinitionMap[TAggregateRootType]["state"]["reducer"]>>;
-
-  persist: <
+  retrieve: <
     TAggregateRootType extends keyof TAggregateDefinitionMap,
     TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
   >(
@@ -24,7 +17,16 @@ export type SnapshotStorage<
       aggregateRootType: TAggregateRootType;
       aggregateRootId: string;
       aggregateRootStateVersion: AggregateStateVersion;
-      state: ReturnType<TAggregateDefinitionMap[TAggregateRootType]["state"]["reducer"]>;
+    },
+  ) => Promise<undefined | LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>>;
+
+  persist: <
+    TAggregateRootType extends keyof TAggregateDefinitionMap,
+    TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
+  >(
+    args: {
+      aggregateRoot: LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>;
+      aggregateRootStateVersion: AggregateStateVersion;
     },
   ) => Promise<void>;
 };
