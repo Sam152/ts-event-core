@@ -8,7 +8,7 @@ import { createPostgresEventStore } from "./postgres/createPostgresEventStore.ts
 import { startTestContainers } from "../../test/utils/startTestContainers.ts";
 
 describeAll(
-  "event store baseline test cases",
+  "event store baseline",
   [{
     factory: createMemoryEventStore<AirlineEvent>,
     beforeEachHook: () => undefined,

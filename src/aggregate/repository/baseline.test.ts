@@ -24,7 +24,7 @@ const basic = createBasicAggregateRootRepository({
 });
 
 describeAll(
-  "aggregate root repository",
+  "aggregate root repository baseline",
   [{
     repository: snapshotting,
     eventStore: snapshottingEventStore,
