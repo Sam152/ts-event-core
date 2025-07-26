@@ -18,7 +18,7 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
         status: "IN_THE_AIR",
       };
     }
-    case "FLIGHT_ARRIVED": {
+    case "FLIGHT_LANDED": {
       assertPlaneInService(state);
       return {
         ...state,

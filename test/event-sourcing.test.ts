@@ -92,6 +92,6 @@ Deno.test("you can build an event sourced system", async () => {
     "FLIGHT: PASSENGER_BOARDED",
     "GATE: GATE_CLOSED",
     "FLIGHT: FLIGHT_DEPARTED",
-    "FLIGHT: FLIGHT_ARRIVED",
+    "FLIGHT: FLIGHT_LANDED",
   ]);
 });

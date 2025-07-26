@@ -3,7 +3,7 @@ export type FlightEvent = {
   passengerName: string;
   passportNumber: string;
 } | {
-  type: "FLIGHT_DEPARTED" | "FLIGHT_ARRIVED";
+  type: "FLIGHT_DEPARTED" | "FLIGHT_LANDED";
 } | {
   type: "NEW_FLIGHT_SCHEDULED";
   seatingCapacity: number;
