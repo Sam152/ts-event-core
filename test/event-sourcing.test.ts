@@ -4,7 +4,7 @@ import { boardingProcessManager } from "./airlineDomain/processManager/boardingP
 import { createMemoryEventStore } from "../src/eventStore/memory/createMemoryEventStore.ts";
 import { createMemoryReducedProjector } from "../src/projector/memory/createMemoryReducedProjector.ts";
 import { assertEquals } from "@std/assert";
-import { createAggregateRootRepository } from "../src/aggregate/repository/createAggregateRootRepository.ts";
+import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
 import {
   passengerActivityInitialState,
   passengerActivityReducer,
@@ -15,7 +15,7 @@ Deno.test("you can build an event sourced system", async () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
   const issueCommand = createImmediateCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
-    aggregateRootRepository: createAggregateRootRepository({
+    aggregateRootRepository: createBasicAggregateRootRepository({
       aggregateRoots: airlineAggregateRoots,
       eventStore,
     }),

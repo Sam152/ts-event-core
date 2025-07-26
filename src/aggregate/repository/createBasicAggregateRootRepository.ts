@@ -7,7 +7,7 @@ import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../
  * and reduces them on demand. This can be suitable for use cases where an aggregate
  * root has a limited number of events.
  */
-export function createAggregateRootRepository<
+export function createBasicAggregateRootRepository<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
 >(
