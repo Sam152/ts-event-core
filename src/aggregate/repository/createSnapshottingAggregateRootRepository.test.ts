@@ -7,18 +7,18 @@ import { traceCalls } from "../../../test/utils/traceCalls.ts";
 import { describe, it } from "jsr:@std/testing/bdd";
 
 describe("snapshotting aggregate root repository", () => {
-  const tracedEventStore = traceCalls(
+  const { proxy: eventStore, calls: eventStoreCalls } = traceCalls(
     createMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>(),
   );
   const aggregateRootRepository = createSnapshottingAggregateRootRepository({
-    eventStore: tracedEventStore.proxy,
+    eventStore: eventStore,
     aggregateRoots: airlineAggregateRoots,
     snapshotStorage: createMemorySnapshotStorage(),
   });
 
   it("can avoid loading the full event stream", async () => {
     await aggregateRootRepository.persist({
-      aggregate: {
+      aggregateRoot: {
         aggregateRootId: "VA-497",
         aggregateRootType: "FLIGHT",
         state: undefined,
@@ -41,6 +41,6 @@ describe("snapshotting aggregate root repository", () => {
       aggregateRootType: "FLIGHT",
     });
 
-    console.log(tracedEventStore.calls);
+    console.log(eventStoreCalls);
   });
 });

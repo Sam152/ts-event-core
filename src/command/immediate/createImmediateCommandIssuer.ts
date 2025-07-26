@@ -32,7 +32,7 @@ export function createImmediateCommandIssuer<
     const raisedEvents = Array.isArray(commandResult) ? commandResult : [commandResult];
 
     await aggregateRootRepository.persist({
-      aggregate,
+      aggregateRoot: aggregate,
       pendingEvents: raisedEvents,
     });
   };

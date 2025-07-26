@@ -40,13 +40,13 @@ export function createBasicAggregateRootRepository<
         state,
       };
     },
-    persist: async ({ aggregate, pendingEvents }) => {
+    persist: async ({ aggregateRoot, pendingEvents }) => {
       const envelopes: Envelope[] = pendingEvents.map(
         (payload, i) => ({
-          aggregateRootType: aggregate.aggregateRootType as string,
-          aggregateRootId: aggregate.aggregateRootId,
+          aggregateRootType: aggregateRoot.aggregateRootType as string,
+          aggregateRootId: aggregateRoot.aggregateRootId,
           recordedAt: new Date(),
-          aggregateVersion: (aggregate.aggregateVersion ?? 0) + (i + 1),
+          aggregateVersion: (aggregateRoot.aggregateVersion ?? 0) + (i + 1),
           payload,
         }),
       );

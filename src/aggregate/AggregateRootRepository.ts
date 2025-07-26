@@ -18,7 +18,7 @@ export type AggregateRootRepository<
     TLoadedAggregateRoot extends LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>,
   >(
     args: {
-      aggregate: TLoadedAggregateRoot;
+      aggregateRoot: TLoadedAggregateRoot;
       pendingEvents: Parameters<TAggregateDefinition["state"]["reducer"]>[1][];
     },
   ) => Promise<void>;

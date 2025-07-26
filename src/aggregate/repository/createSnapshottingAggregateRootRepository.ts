@@ -50,16 +50,41 @@ export function createSnapshottingAggregateRootRepository<
         state,
       };
     },
-    persist: async ({ aggregate, pendingEvents }) => {
+    persist: async ({ aggregateRoot, pendingEvents }) => {
       const envelopes: Envelope[] = pendingEvents.map(
         (payload, i) => ({
-          aggregateRootType: aggregate.aggregateRootType as string,
-          aggregateRootId: aggregate.aggregateRootId,
+          aggregateRootType: aggregateRoot.aggregateRootType as string,
+          aggregateRootId: aggregateRoot.aggregateRootId,
           recordedAt: new Date(),
-          aggregateVersion: (aggregate.aggregateVersion ?? 0) + (i + 1),
+          aggregateVersion: (aggregateRoot.aggregateVersion ?? 0) + (i + 1),
           payload,
         }),
       );
+
+      const definition = aggregateRoots[aggregateRoot.aggregateRootType];
+      let state = aggregateRoot.state;
+      for await (const envelope of envelopes) {
+        state = definition.state.reducer(state, envelope.payload);
+      }
+
+      const aggregateRootVersion: number | undefined = envelopes.length > 0
+        ? envelopes.at(-1)!.aggregateVersion
+        : aggregateRoot.aggregateVersion;
+
+      // In this case we are choosing to snapshot the aggregate, each time new
+      // events are persisted. We could choose a strategy of snapshotting every
+      // N events, to find a balance between writing aggregates to storage and
+      // retrieving events from the event store.
+      await snapshotStorage.persist({
+        aggregateRootStateVersion: definition.state.version,
+        aggregateRoot: {
+          state,
+          aggregateRootId: aggregateRoot.aggregateRootId,
+          aggregateVersion: aggregateRootVersion,
+          aggregateRootType: aggregateRoot.aggregateRootType,
+        },
+      });
+
       await eventStore.persist(envelopes);
     },
   };
