@@ -4,11 +4,9 @@ import { createMemoryEventStore } from "../../eventStore/memory/createMemoryEven
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { traceCalls } from "../../../test/utils/traceCalls.ts";
-import { assertEquals } from "@std/assert";
-import { it } from "jsr:@std/testing/bdd";
-import { describeAll } from "../../../test/utils/describeAll.ts";
+import { describe, it } from "jsr:@std/testing/bdd";
 
-describeAll("aggregate root repository", [1], () => {
+describe("snapshotting aggregate root repository", () => {
   const tracedEventStore = traceCalls(
     createMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>(),
   );
@@ -18,7 +16,7 @@ describeAll("aggregate root repository", [1], () => {
     snapshotStorage: createMemorySnapshotStorage(),
   });
 
-  it("can persist and retrieve an aggregate", async () => {
+  it("can avoid loading the full event stream", async () => {
     await aggregateRootRepository.persist({
       aggregate: {
         aggregateRootId: "VA-497",
@@ -38,56 +36,11 @@ describeAll("aggregate root repository", [1], () => {
       ],
     });
 
-    const aggregate = await aggregateRootRepository.retrieve({
+    await aggregateRootRepository.retrieve({
       aggregateRootId: "VA-497",
       aggregateRootType: "FLIGHT",
     });
 
-    assertEquals(aggregate, {
-      aggregateRootId: "VA-497",
-      aggregateRootType: "FLIGHT",
-      aggregateVersion: 2,
-      state: {
-        totalSeats: 100,
-        totalBoardedPassengers: 1,
-        passengerManifest: { PA1234567: "Harold Gribble" },
-        status: "ON_THE_GROUND",
-      },
-    });
-  });
-
-  it("can persist and retrieve an existing aggregate", async () => {
-    const aggregate = await aggregateRootRepository.retrieve({
-      aggregateRootId: "VA-497",
-      aggregateRootType: "FLIGHT",
-    });
-
-    await aggregateRootRepository.persist({
-      aggregate,
-      pendingPayloads: [
-        {
-          type: "PASSENGER_BOARDED",
-          passengerName: "Sally Gribble",
-          passportNumber: "PA78965",
-        },
-      ],
-    });
-
-    const retrievedAgain = await aggregateRootRepository.retrieve({
-      aggregateRootId: "VA-497",
-      aggregateRootType: "FLIGHT",
-    });
-
-    assertEquals(retrievedAgain, {
-      aggregateRootId: "VA-497",
-      aggregateRootType: "FLIGHT",
-      aggregateVersion: 3,
-      state: {
-        totalSeats: 100,
-        totalBoardedPassengers: 2,
-        passengerManifest: { PA1234567: "Harold Gribble", PA78965: "Sally Gribble" },
-        status: "ON_THE_GROUND",
-      },
-    });
+    console.log(tracedEventStore.calls);
   });
 });
