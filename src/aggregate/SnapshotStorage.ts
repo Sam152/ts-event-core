@@ -1,7 +1,7 @@
 import {
-    AggregateRootDefinitionMap,
-    AggregateRootDefinitionMapTypes,
-    AggregateStateVersion,
+  AggregateRootDefinitionMap,
+  AggregateRootDefinitionMapTypes,
+  AggregateStateVersion,
 } from "./AggregateRootDefinition.ts";
 import { LoadedAggregateRoot } from "./LoadedAggregateRoot.ts";
 
