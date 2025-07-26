@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+echo "🔍 Running pre-commit checks..."
+
+ROOT_DIR=$(git rev-parse --show-toplevel)
+cd "$ROOT_DIR"
+
+echo "✨ Running deno fmt..."
+deno fmt
+
+echo "🧪 Running deno check..."
+deno check ./src
+
+echo "✅ Running deno test..."
+deno task test
+
+echo "✅ All checks passed. Proceeding with commit."

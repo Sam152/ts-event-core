@@ -1,7 +1,8 @@
 {
   "tasks": {
-    "readme": "deno --allow-write ./docs/generateReadme.ts",
-    "test": "deno test --allow-run"
+    "init": "git config core.hooksPath .githooks",
+    "test": "deno test --allow-run",
+    "readme": "deno --allow-write ./docs/generateReadme.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
