@@ -3,18 +3,27 @@ import { join } from "jsr:@std/path";
 
 function readmeContents(): string {
   return `
-  # ts-event-core
+    # ts-event-core
+    
+    This foo
+    
+    What is the experience like writing this??
+    
+    
+    aa
   
-  This foo
-
-  Status: In Development / Unmaintained
-`.trim() + `\n`;
+    Status: In Development / Unmaintained
+  `;
 }
 
 async function generateReadme() {
-  const contents = readmeContents();
-  await writeTextFile(join(import.meta.dirname!, "../README.md"), contents);
-
+  await writeTextFile(
+    join(import.meta.dirname!, "../README.md"),
+    [
+      (str: string) => str.trim(),
+      (str: string) => `${str}\n`,
+    ].reduce<string>((str, fn) => fn(str), readmeContents()),
+  );
   return "Generating README.md complete";
 }
 
