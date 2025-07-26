@@ -1,28 +1,36 @@
-import { assertEquals, assertRejects } from "@std/assert";
-import { beforeEach, it } from "jsr:@std/testing/bdd";
+import { assertEquals } from "@std/assert";
+import { afterAll, beforeEach, it } from "jsr:@std/testing/bdd";
 import { describeAll } from "../../test/utils/describeAll.ts";
 import { AirlineEvent } from "../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createMemoryEventStore } from "./memory/createMemoryEventStore.ts";
-import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 import { createPostgresEventStore } from "./postgres/createPostgresEventStore.ts";
-import { startTestContainers } from "../../test/utils/startTestContainers.ts";
+import { prepareTestDatabaseContainer } from "../../test/utils/prepareTestDatabaseContainer.ts";
+import postgres from "postgres";
+import { testPostgresConnectionOptions } from "../../test/utils/infra/testPostgresConnectionOptions.ts";
+import { assertRejects } from "@std/assert/rejects";
+import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
+
+const connection = postgres(testPostgresConnectionOptions);
 
 const implementations = [
   {
     factory: createMemoryEventStore<AirlineEvent>,
     beforeEachHook: () => undefined,
+    afterAllHook: () => undefined,
   },
   {
-    factory: () => createPostgresEventStore<AirlineEvent>({ connection: 123 }),
-    beforeEachHook: startTestContainers,
+    factory: () => createPostgresEventStore<AirlineEvent>({ connection }),
+    beforeEachHook: prepareTestDatabaseContainer,
+    afterAllHook: connection.end,
   },
 ];
 
 describeAll(
   "event store baseline",
   implementations,
-  ({ factory, beforeEachHook }) => {
+  ({ factory, beforeEachHook, afterAllHook }) => {
     beforeEach(beforeEachHook);
+    afterAll(afterAllHook);
 
     it("should persist and retrieve events", async () => {
       const eventStore = factory();
