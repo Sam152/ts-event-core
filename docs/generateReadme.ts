@@ -1,28 +1,16 @@
 import writeTextFile = Deno.writeTextFile;
 import { join } from "jsr:@std/path";
-
-function readmeContents(): string {
-  return `
-    # ts-event-core
-    
-    This foo
-    
-    What is the experience like writing this??
-    
-    
-    aa
-  
-    Status: In Development / Unmaintained
-  `;
-}
+import { trimCharsOffFirstLine } from "./utils/trimCharsOffFirstLine.ts";
+import { README } from "./README.ts";
 
 async function generateReadme() {
   await writeTextFile(
     join(import.meta.dirname!, "../README.md"),
     [
+      trimCharsOffFirstLine(4),
       (str: string) => str.trim(),
       (str: string) => `${str}\n`,
-    ].reduce<string>((str, fn) => fn(str), readmeContents()),
+    ].reduce<string>((str, fn) => fn(str), README()),
   );
   return "Generating README.md complete";
 }
