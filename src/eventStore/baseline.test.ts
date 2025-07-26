@@ -7,15 +7,20 @@ import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersion
 import { createPostgresEventStore } from "./postgres/createPostgresEventStore.ts";
 import { startTestContainers } from "../../test/utils/startTestContainers.ts";
 
-describeAll(
-  "event store baseline",
-  [{
+const implementations = [
+  {
     factory: createMemoryEventStore<AirlineEvent>,
     beforeEachHook: () => undefined,
-  }, {
+  },
+  {
     factory: () => createPostgresEventStore<AirlineEvent>({ connection: 123 }),
     beforeEachHook: startTestContainers,
-  }],
+  },
+];
+
+describeAll(
+  "event store baseline",
+  implementations,
   ({ factory, beforeEachHook }) => {
     beforeEach(beforeEachHook);
 
