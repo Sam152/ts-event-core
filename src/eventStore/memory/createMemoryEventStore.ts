@@ -6,6 +6,10 @@ type EventEmitter<TEvent extends Envelope> = {
   addSubscriber: (subscriber: EventSubscriber<TEvent>) => void;
 };
 
+/**
+ * An in-memory test store is most useful for testing purposes. Most apps would provide a
+ * persistent event store.
+ */
 export function createMemoryEventStore<TEvent extends Envelope>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
