@@ -1,5 +1,14 @@
-import { EventStore } from "../EventStore.ts";
+import { Envelope, EventStore } from "../EventStore.ts";
 
-// @ts-expect-error - todo
-export function createPostgresEventStore(): EventStore<unknown> {
+export function createPostgresEventStore<TEvent extends Envelope>(): EventStore<TEvent> {
+  return {
+    persist: async (events) => {
+    },
+    retrieve: async function* ({
+      aggregateRootType,
+      aggregateRootId,
+      fromVersion,
+    }) {
+    },
+  };
 }

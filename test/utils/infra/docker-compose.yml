@@ -2,7 +2,7 @@ services:
   ts-event-core-postgres:
     image: postgres:17
     ports:
-      - '28940:5432'
+      - "28940:5432"
     volumes:
       - ./seed.sql:/docker-entrypoint-initdb.d/init.sql
     environment:

@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "readme": "deno --allow-write ./docs/generateReadme.ts"
+    "readme": "deno --allow-write ./docs/generateReadme.ts",
+    "test": "deno test --allow-run"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",

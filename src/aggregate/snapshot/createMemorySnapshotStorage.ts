@@ -8,7 +8,16 @@ import { SnapshotStorage } from "../SnapshotStorage.ts";
 import { LoadedAggregateRoot } from "../LoadedAggregateRoot.ts";
 
 /**
- * Unlike an in-memory implementation of an event store, a
+ * An in-memory implementation of the snapshot storage type.
+ *
+ * Unlike an event store, in-memory snapshot storage can be a useful concept in production
+ * because having snapshots stored in memory for the duration of the process, saves a lot
+ * of traffic to the database over the lifetime of the process. This is provided the application
+ * can tolerate a "warm up" for each aggregate root, where on the first load, all events will
+ * still be loaded and reduced.
+ *
+ * For cases where too many events exist to replay and reduce on demand, persistent snapshot
+ * storage can be used.
  */
 export function createMemorySnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
