@@ -5,9 +5,10 @@ import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { traceCalls } from "../../../test/utils/traceCalls.ts";
 import { assertEquals } from "@std/assert";
-import { describe, it } from "jsr:@std/testing/bdd";
+import { it } from "jsr:@std/testing/bdd";
+import { describeAll } from "../../../test/utils/describeAll.ts";
 
-describe("aggregate root repository", () => {
+describeAll("aggregate root repository", [1], () => {
   const tracedEventStore = traceCalls(
     createMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>(),
   );
