@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🔍 Running pre-commit checks..."
+echo "Running pre-commit checks"
 
 ROOT_DIR=$(git rev-parse --show-toplevel)
 cd "$ROOT_DIR"
