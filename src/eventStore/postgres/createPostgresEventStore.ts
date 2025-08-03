@@ -1,7 +1,7 @@
 import { Event, EventStore } from "../EventStore.ts";
 import postgres from "postgres";
-import { JSONValue } from "npm:postgres@3.4.7";
 import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersionIntegrityError.ts";
+import { JSONValue } from "npm:postgres@3.4.7";
 
 /**
  * A persistent event store backed by Postgres.
@@ -33,22 +33,22 @@ export function createPostgresEventStore<TEvent extends Event>(
 ): EventStore<TEvent> {
   return {
     persist: async (events) => {
+      if (events.length === 0) {
+        return;
+      }
       try {
-        // @todo: batch insert these events in a single query.
-        for (const event of events) {
-          await sql`
-            INSERT INTO event_core.events 
-              ("aggregateRootType", "aggregateRootId", "aggregateVersion", "payload")
-            VALUES 
-              (
-                ${event.aggregateRootType},
-                ${event.aggregateRootId},
-                ${event.aggregateVersion},
-                ${sql.json(event.payload as JSONValue)}
-              )
-            RETURNING *;
-          `;
+        await sql`
+          INSERT INTO event_core.events ${
+          sql(
+            events.map((event) => ({
+              aggregateRootType: event.aggregateRootType,
+              aggregateRootId: event.aggregateRootId,
+              aggregateVersion: event.aggregateVersion,
+              payload: event.payload as JSONValue,
+            })),
+          )
         }
+        `;
       } catch (error) {
         const isAggregateIntegrityError = error &&
           typeof error === "object" &&
