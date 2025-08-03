@@ -33,7 +33,7 @@ export function createImmediateCommandIssuer<
 
     await aggregateRootRepository.persist({
       aggregateRoot: aggregate,
-      pendingEvents: raisedEvents,
+      pendingEventPayloads: raisedEvents,
     });
   };
 }

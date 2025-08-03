@@ -40,7 +40,7 @@ describeAll(
           aggregateRootType: "FLIGHT",
           state: undefined,
         },
-        pendingEvents: [
+        pendingEventPayloads: [
           {
             type: "NEW_FLIGHT_SCHEDULED",
             seatingCapacity: 100,
@@ -79,7 +79,7 @@ describeAll(
 
       await repository.persist({
         aggregateRoot: aggregate,
-        pendingEvents: [
+        pendingEventPayloads: [
           {
             type: "PASSENGER_BOARDED",
             passengerName: "Sally Gribble",

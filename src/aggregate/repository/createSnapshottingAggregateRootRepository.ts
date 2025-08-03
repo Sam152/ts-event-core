@@ -50,8 +50,8 @@ export function createSnapshottingAggregateRootRepository<
         state,
       };
     },
-    persist: async ({ aggregateRoot, pendingEvents }) => {
-      const envelopes: Envelope[] = pendingEvents.map(
+    persist: async ({ aggregateRoot, pendingEventPayloads }) => {
+      const envelopes: Envelope[] = pendingEventPayloads.map(
         (payload, i) => ({
           aggregateRootType: aggregateRoot.aggregateRootType as string,
           aggregateRootId: aggregateRoot.aggregateRootId,
