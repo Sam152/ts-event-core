@@ -8,9 +8,8 @@ export function README(): string {
     
     It contains a series of loosely coupled types which show how the core of an event
     sourced system might fit together and various implementations of each type. Provided
-    these types can be satisfied, components can be swapped and interchanged depending on
-    needs of a particular project.
-       
+    these types can be satisfied, components can be swapped and interchanged.
+    
     ----
     
     # 
