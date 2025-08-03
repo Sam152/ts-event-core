@@ -10,13 +10,12 @@ import { Envelope } from "../eventStore/EventStore.ts";
  * New read models can be added at any point in time and can then be deleted after
  * they are no longer useful.
  *
- * Projectors can be structured as reducers, or they can mutate data structures as they
- * go. They may deal with data structures that describe all the events in the system as
+ * They may deal with data structures that describe all the events in the system as
  * a whole or selectively choose to build smaller structures out of individual aggregates
  * or other relations found within the event payload.
  *
  * These data structures can be stored in memory, relational databases, speciality
- * databases or any other system that provides utility.
+ * databases or any other system that provides utility and value to the application.
  *
  * For these reasons, the signature of a projector is extremely simple, the only contract
  * an event sourced system needs to fulfil is providing a stream of events. How data can be
