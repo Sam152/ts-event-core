@@ -12,7 +12,7 @@ async function generateReadme(contents: string) {
       (str: string) => str.trim(),
       (str: string) => str.replace("{{ index }}", buildIndex(str)),
       (str: string) => `${str}\n`,
-      (str: string) => `<!--- This is an HTML comment in Markdown -->\n\n${str}`,
+      (str: string) => `<!--- This file was automatically generated from ./docs/README.ts -->\n\n${str}`,
     ].reduce<string>((str, fn) => fn(str), contents),
   );
   return "Generating README.md complete";

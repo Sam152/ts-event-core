@@ -1,4 +1,4 @@
-<!--- This is an HTML comment in Markdown -->
+<!--- This file was automatically generated from ./docs/README.ts -->
 
 ts-event-core
 ====
