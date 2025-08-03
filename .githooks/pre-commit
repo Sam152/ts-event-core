@@ -17,6 +17,6 @@ echo "✅ Running deno test..."
 deno task test
 
 echo "📖 Building README..."
-deno task readme
+deno task readme && git add "$ROOT_DIR/README.md"
 
 echo "✅ All checks passed. Proceeding with commit."
