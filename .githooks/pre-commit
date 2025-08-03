@@ -16,4 +16,7 @@ deno check ./src
 echo "✅ Running deno test..."
 deno task test
 
+echo "📖 Building README..."
+deno task readme
+
 echo "✅ All checks passed. Proceeding with commit."
