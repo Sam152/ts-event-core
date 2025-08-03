@@ -12,6 +12,16 @@ export function README(): string {
     
     ----
     
-    # Index
+    {{ index }}
+    
+    ----
+    
+    # Hello
+    
+    ## Hello hello
+    
+    ### Hello hello
+    
+    # hello
   `;
 }
