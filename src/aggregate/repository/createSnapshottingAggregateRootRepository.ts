@@ -51,7 +51,7 @@ export function createSnapshottingAggregateRootRepository<
       };
     },
     persist: async ({ aggregateRoot, pendingEventPayloads }) => {
-      const envelopes: Event[] = pendingEventPayloads.map(
+      const events: Event[] = pendingEventPayloads.map(
         (payload, i) => ({
           aggregateRootType: aggregateRoot.aggregateRootType as string,
           aggregateRootId: aggregateRoot.aggregateRootId,
@@ -63,12 +63,12 @@ export function createSnapshottingAggregateRootRepository<
 
       const definition = aggregateRoots[aggregateRoot.aggregateRootType];
       let state = aggregateRoot.state;
-      for await (const envelope of envelopes) {
-        state = definition.state.reducer(state, envelope.payload);
+      for await (const event of events) {
+        state = definition.state.reducer(state, event.payload);
       }
 
-      const aggregateRootVersion: number | undefined = envelopes.length > 0
-        ? envelopes.at(-1)!.aggregateVersion
+      const aggregateRootVersion: number | undefined = events.length > 0
+        ? events.at(-1)!.aggregateVersion
         : aggregateRoot.aggregateVersion;
 
       // In this case we are choosing to snapshot the aggregate, each time new
@@ -85,7 +85,7 @@ export function createSnapshottingAggregateRootRepository<
         },
       });
 
-      await eventStore.persist(envelopes);
+      await eventStore.persist(events);
     },
   };
 }

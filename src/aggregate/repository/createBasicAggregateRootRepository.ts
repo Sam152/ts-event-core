@@ -41,7 +41,7 @@ export function createBasicAggregateRootRepository<
       };
     },
     persist: async ({ aggregateRoot, pendingEventPayloads }) => {
-      const envelopes: Event[] = pendingEventPayloads.map(
+      const events: Event[] = pendingEventPayloads.map(
         (payload, i) => ({
           aggregateRootType: aggregateRoot.aggregateRootType as string,
           aggregateRootId: aggregateRoot.aggregateRootId,
@@ -50,7 +50,7 @@ export function createBasicAggregateRootRepository<
           payload,
         }),
       );
-      await eventStore.persist(envelopes);
+      await eventStore.persist(events);
     },
   };
 }
