@@ -12,6 +12,6 @@ export function README(): string {
     
     ----
     
-    # 
+    # Index
   `;
 }
