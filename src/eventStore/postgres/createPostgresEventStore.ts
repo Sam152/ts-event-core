@@ -1,4 +1,4 @@
-import { Envelope, EventStore } from "../EventStore.ts";
+import { Event, EventStore } from "../EventStore.ts";
 import postgres from "postgres";
 import { JSONValue } from "npm:postgres@3.4.7";
 import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersionIntegrityError.ts";
@@ -23,7 +23,7 @@ import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersio
  *   );
  * ```
  */
-export function createPostgresEventStore<TEvent extends Envelope>(
+export function createPostgresEventStore<TEvent extends Event>(
   { connection: sql }: { connection: ReturnType<typeof postgres> },
 ): EventStore<TEvent> {
   return {

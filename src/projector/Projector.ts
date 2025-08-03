@@ -1,4 +1,4 @@
-import { Envelope } from "../eventStore/EventStore.ts";
+import { Event } from "../eventStore/EventStore.ts";
 
 /**
  * Projectors take a stream of events from an event store and transform them into
@@ -21,4 +21,4 @@ import { Envelope } from "../eventStore/EventStore.ts";
  * an event sourced system needs to fulfil is providing a stream of events. How data can be
  * retrieved or accessed beyond that, is entirely dependent on the use case.
  */
-export type Projector<TEvent extends Envelope> = (event: TEvent) => void | Promise<void>;
+export type Projector<TEvent extends Event> = (event: TEvent) => void | Promise<void>;

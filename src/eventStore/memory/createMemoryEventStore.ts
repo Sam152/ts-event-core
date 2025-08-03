@@ -1,8 +1,8 @@
-import { Envelope, EventStore } from "../EventStore.ts";
+import { Event, EventStore } from "../EventStore.ts";
 import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersionIntegrityError.ts";
 
-type EventSubscriber<TEvent extends Envelope> = (event: TEvent) => Promise<void> | void;
-type EventEmitter<TEvent extends Envelope> = {
+type EventSubscriber<TEvent extends Event> = (event: TEvent) => Promise<void> | void;
+type EventEmitter<TEvent extends Event> = {
   addSubscriber: (subscriber: EventSubscriber<TEvent>) => void;
 };
 
@@ -10,7 +10,7 @@ type EventEmitter<TEvent extends Envelope> = {
  * An in-memory test store is most useful for testing purposes. Most apps would provide a
  * persistent event store.
  */
-export function createMemoryEventStore<TEvent extends Envelope>():
+export function createMemoryEventStore<TEvent extends Event>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
   const storage: Record<string, TEvent[]> = {};

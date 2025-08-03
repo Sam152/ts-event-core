@@ -1,13 +1,10 @@
-import {
-  AggregateRootDefinitionMap,
-  AggregateRootDefinitionMapTypes,
-} from "../aggregate/AggregateRootDefinition.ts";
+import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes, } from "../aggregate/AggregateRootDefinition.ts";
 
 /**
  * Events record statements of fact that occurred within a domain, while processing
  * commands. They are the single source of truth for all recorded data in the domain.
  */
-export type Envelope<TEventPayload = unknown> = {
+export type Event<TEventPayload = unknown> = {
   aggregateRootType: string;
   aggregateRootId: string;
   aggregateVersion: number;
@@ -15,19 +12,19 @@ export type Envelope<TEventPayload = unknown> = {
   payload: TEventPayload;
 };
 
-export type EventStore<TEnvelope extends Envelope = Envelope> = {
-  persist: (events: TEnvelope[]) => Promise<void>;
+export type EventStore<TEvent extends Event = Event> = {
+  persist: (events: TEvent[]) => Promise<void>;
   retrieve: (args: {
     aggregateRootType: string;
     aggregateRootId: string;
     fromVersion?: number;
-  }) => AsyncGenerator<TEnvelope>;
+  }) => AsyncGenerator<TEvent>;
 };
 
 export type EventsRaisedByAggregateRoots<
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
-> = Envelope<
+> = Event<
   Parameters<
     TAggregateRootDefinitionMap[
       keyof TAggregateRootDefinitionMap
