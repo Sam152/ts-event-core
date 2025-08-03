@@ -22,6 +22,11 @@ import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersio
  *           UNIQUE ("aggregateRootType", "aggregateRootId", "aggregateVersion")
  *   );
  * ```
+ *
+ * This implementation assumes that events are not inserted in the context of a transaction,
+ * since no effort is made to linearize the events inserted. Implementations using this event
+ * store must respond to AggregateRootVersionIntegrityError, as a means of optimistic locking
+ * on an individual aggregate root and attempt to retry commands.
  */
 export function createPostgresEventStore<TEvent extends Event>(
   { connection: sql }: { connection: ReturnType<typeof postgres> },
@@ -29,7 +34,7 @@ export function createPostgresEventStore<TEvent extends Event>(
   return {
     persist: async (events) => {
       try {
-        // @todo: batch insert these events.
+        // @todo: batch insert these events in a single query.
         for (const event of events) {
           await sql`
             INSERT INTO event_core.events 
