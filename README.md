@@ -12,17 +12,8 @@ these types can be satisfied, components can be swapped and interchanged.
 
 ----
 
-1. [Hello](#hello)
-   2. [Hello hello](#hello-hello)
-      3. [Hello hello](#hello-hello)
-4. [hello](#hello)
+
 
 ----
 
-# Hello
-
-## Hello hello
-
-### Hello hello
-
-# hello
+/Users/sam/Sites/ts-event-core/src/eventStore/EventStore.ts

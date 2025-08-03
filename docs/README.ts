@@ -1,3 +1,6 @@
+import { documentType } from "./utils/documentType.ts";
+import { EventStore } from "../src/eventStore/EventStore.ts";
+
 export function README(): string {
   return `
     ts-event-core
@@ -16,12 +19,6 @@ export function README(): string {
     
     ----
     
-    # Hello
-    
-    ## Hello hello
-    
-    ### Hello hello
-    
-    # hello
+    ${documentType<EventStore>()}
   `;
 }
