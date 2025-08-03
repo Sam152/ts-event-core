@@ -10,9 +10,9 @@ export const gateAggregateRoot = {
   state: {
     reducer: gateReducer,
     version: 1,
-    initialState: {
+    initialState: () => ({
       status: "CLOSED",
-    },
+    }),
   },
   commands: {
     openGate,

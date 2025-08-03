@@ -11,7 +11,7 @@ export const flightAggregateRoot = {
   state: {
     reducer: flightReducer,
     version: 1,
-    initialState: undefined,
+    initialState: () => undefined,
   },
   commands: {
     scheduleFlight,
