@@ -28,8 +28,8 @@ export function createPostgresEventStore<TEvent extends Envelope>(
 ): EventStore<TEvent> {
   return {
     persist: async (events) => {
-      // @todo: batch insert these events.
       try {
+        // @todo: batch insert these events.
         for (const event of events) {
           await sql`
             INSERT INTO event_core.events 
