@@ -21,7 +21,7 @@ export function buildIndex(markdown: string): string {
 
   return headings
     .map(({ level, text, anchor }, index) => {
-      const indent = "  ".repeat(level - minLevel);
+      const indent = "   ".repeat(level - minLevel);
       return `${indent}${index + 1}. [${text}](#${anchor})`;
     })
     .join("\n");
