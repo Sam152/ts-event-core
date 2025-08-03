@@ -1,9 +1,7 @@
 # ts-event-core
 
-This foo
+This project is a reference implementation for the event sourcing design pattern implemented in TypeScript
+using a functional programming style.
 
-What is the experience like writing this??
-
-aa
-
-Status: In Development / Unmaintained
+It contains a series of loosely coupled types which show how the core of an event sourced system might fit
+together and implementations of each type, useful for different circumstances.

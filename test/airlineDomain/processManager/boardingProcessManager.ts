@@ -4,7 +4,7 @@ import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoot/airlineAgg
 /**
  * A process manager facilitates coordination between aggregates, this is an example of an orchestrated
  * workflow (as opposed to a choreographed one) since the process manager acts a central decision-making
- * hub for the domain.
+ * hub for the domain, where commands issued in a process are a function of the events raised.
  *
  * Aggregates are always eventually consistent with respect to each-other, so a process manager needs to
  * account for downstream aggregates rejecting the issued command and raising unfavourable events, or
