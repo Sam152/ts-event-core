@@ -53,7 +53,7 @@ export type EventStore<TEvent extends Event = Event> = {
 would benefit from persistent storage.
 
 <details>
-<summary>:point_down: <div>function createMemoryEventStore&#60;TEvent extends Event&#62;(): &#38; EventStore&#60;TEvent&#62; &#38; EventEmitter&#60;TEvent&#62;</div></summary>
+<summary>:point_down: <span>`function createMemoryEventStore&#60;TEvent extends Event&#62;(): &#38; EventStore&#60;TEvent&#62; &#38; EventEmitter&#60;TEvent&#62;`</span></summary>
 
 
 ```typescript
@@ -117,7 +117,7 @@ This implementation depends on the following schema:
 ```
 
 <details>
-<summary>:point_down: <div>function createPostgresEventStore&#60;TEvent extends Event&#62;(...): EventStore&#60;TEvent&#62;</div></summary>
+<summary>:point_down: <span>`function createPostgresEventStore&#60;TEvent extends Event&#62;(...): EventStore&#60;TEvent&#62;`</span></summary>
 
 
 ```typescript
