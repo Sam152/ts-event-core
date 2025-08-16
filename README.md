@@ -55,7 +55,7 @@ would benefit from persistent storage.
 <details>
 <summary>
 
-`:point_down: extractFunctionDefinition(code)`
+:point_down: ` extractFunctionDefinition(code)`
 
 </summary>
 
@@ -121,7 +121,7 @@ This implementation depends on the following schema:
 <details>
 <summary>
 
-`:point_down: extractFunctionDefinition(code)`
+:point_down: ` extractFunctionDefinition(code)`
 
 </summary>
 
