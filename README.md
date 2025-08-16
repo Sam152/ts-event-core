@@ -25,11 +25,40 @@ It contains a set of loosely coupled types which show how the core components of
 
 Events are the persistence mechanism for 
 
-Event: /Users/sam/Sites/ts-event-core/src/eventStore/EventStore.ts
+/**
+ * Events record statements of fact that occurred within a domain, while processing
+ * commands. They are the single source of truth for all recorded data in the domain.
+ */
+export type Event<TEventPayload = unknown> = {
+  aggregateRootType: string;
+  aggregateRootId: string;
+  aggregateVersion: number;
+  recordedAt: Date;
+  payload: TEventPayload;
+};
 
 ### Aggregate root definition
 
-EventStore: /Users/sam/Sites/ts-event-core/src/eventStore/EventStore.ts
+/**
+ * Events record statements of fact that occurred within a domain, while processing
+ * commands. They are the single source of truth for all recorded data in the domain.
+ */
+export type Event<TEventPayload = unknown> = {
+  aggregateRootType: string;
+  aggregateRootId: string;
+  aggregateVersion: number;
+  recordedAt: Date;
+  payload: TEventPayload;
+};
+
+export type EventStore<TEvent extends Event = Event> = {
+  persist: (events: TEvent[]) => Promise<void>;
+  retrieve: (args: {
+    aggregateRootType: string;
+    aggregateRootId: string;
+    fromVersion?: number;
+  }) => AsyncGenerator<TEvent>;
+};
 
 ### Aggregate root repository
 
