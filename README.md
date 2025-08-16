@@ -59,7 +59,6 @@ function createMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> & 
 <details>
 <summary> Show full function definition :point_down:</summary>
 
-
 ```typescript
 export function createMemoryEventStore<TEvent extends Event>():
   & EventStore<TEvent>
@@ -126,7 +125,6 @@ function createPostgresEventStore<TEvent extends Event>(...): EventStore<TEvent>
     
 <details>
 <summary> Show full function definition :point_down:</summary>
-
 
 ```typescript
 export function createPostgresEventStore<TEvent extends Event>(

@@ -38,7 +38,6 @@ ${formatCode(extractFunctionDefinition(code))}
 <details>
 <summary> Show full function definition :point_down:</summary>
 
-
 ${formatCode(code)}
 
 </details>
