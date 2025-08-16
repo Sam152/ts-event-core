@@ -1,31 +1,39 @@
 export function extractSymbolAndDocString(
-  { symbolName, filePath, symbolType }: { symbolName: string; filePath: string; symbolType: string },
-): { docString: string | undefined; symbolBody: string } {
+  { symbolName, filePath, symbolType }: {
+    symbolName: string;
+    filePath: string;
+    symbolType: string;
+  },
+): { docString: string | undefined; symbolBody: string; lineNumber: number } {
   const fileContents = Deno.readTextFileSync(filePath);
   const lines = fileContents.split("\n");
 
-  const typeStartIndex = lines.findIndex((line) => line.includes(`${symbolType} ${symbolName}`));
-  if (typeStartIndex === -1) {
+  const symbolStartIndex = lines.findIndex((line) => line.includes(`${symbolType} ${symbolName}`));
+  if (symbolStartIndex === -1) {
     throw new Error(`${symbolType} ${symbolName} not found in ${filePath}`);
   }
-  const typeEndIndex = lines
-    .slice(typeStartIndex + 1)
-    .findIndex((line) => /^((\}\;)|(\>\;))/.test(line.trim())) + typeStartIndex + 1;
-  if (typeEndIndex === typeStartIndex) {
+  const symbolEndIndex = lines
+    .slice(symbolStartIndex + 1)
+    .findIndex((line) => /^((\}\;)|(\>\;))/.test(line.trim())) + symbolStartIndex + 1;
+  if (symbolEndIndex === symbolStartIndex) {
     throw new Error(`${symbolType} ${symbolName} end not found in ${filePath}`);
   }
-  const symbolBody = lines.slice(typeStartIndex, typeEndIndex + 1).join("\n");
+  const symbolBody = lines.slice(symbolStartIndex, symbolEndIndex + 1).join("\n");
 
   const reversedDocstringIndex = lines
-    .slice(0, typeStartIndex)
+    .slice(0, symbolStartIndex)
     .reverse()
     .findIndex((line) => line.trim().includes("/**") || line === "");
   const docstringStartIndex: number | undefined = reversedDocstringIndex !== -1
-    ? typeStartIndex - 1 - reversedDocstringIndex
+    ? symbolStartIndex - 1 - reversedDocstringIndex
     : undefined;
   const docString: string | undefined = docstringStartIndex
-    ? lines.slice(docstringStartIndex, typeStartIndex).join("\n")
+    ? lines.slice(docstringStartIndex, symbolStartIndex).join("\n")
     : undefined;
 
-  return { docString, symbolBody };
+  return {
+    docString,
+    symbolBody,
+    lineNumber: docstringStartIndex || symbolStartIndex,
+  };
 }
