@@ -5,12 +5,11 @@ import { dirname, resolve } from "@std/path";
  * Get the file containing a given generic type, given some callsites.
  */
 export function fileContainingGenericType(
-  callSites: CallSiteObject[],
+  { callSites, depth }: { callSites: CallSiteObject[]; depth: number },
 ): { filePath: string; typeName: string } {
-  const callingFunctionName = callSites[0].functionName;
-
-  const callingFunctionCallerFileContents = Deno.readTextFileSync(callSites[1].scriptName);
-  const callingLine = callingFunctionCallerFileContents.split("\n")[callSites[1].lineNumber - 1];
+  const callingFunctionName = callSites[depth].functionName;
+  const callingFunctionCallerFileContents = Deno.readTextFileSync(callSites[depth + 1].scriptName);
+  const callingLine = callingFunctionCallerFileContents.split("\n")[callSites[depth + 1].lineNumber - 1];
 
   const genericNameMatch = callingLine.match(
     new RegExp(`${callingFunctionName}<(?<genericName>[A-Za-z0-9]+)>`),
@@ -34,7 +33,7 @@ export function fileContainingGenericType(
   }
 
   return {
-    filePath: resolve(dirname(callSites[1].scriptName), importMatch.groups.filename),
+    filePath: resolve(dirname(callSites[depth + 1].scriptName), importMatch.groups.filename),
     typeName: genericName,
   };
 }
