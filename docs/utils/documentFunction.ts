@@ -36,7 +36,7 @@ function formatFunctionBody(code: string) {
 ${formatCode(extractFunctionDefinition(code))}
     
 <details>
-<summary>:point_down:</summary>
+<summary>Show function definition :point_down:</summary>
 
 
 ${formatCode(code)}
