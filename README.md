@@ -3,12 +3,9 @@
 ts-event-core
 ====
 
-This project is a reference implementation of event sourcing implemented in TypeScript
-using a functional programming style.
+This project is a reference implementation of event sourcing implemented in TypeScript using a functional programming style.
 
-It contains a set of loosely coupled types which show how the core components of an event
-sourced system might fit together and various implementations of each type. Provided
-these types can be satisfied, components can be swapped and interchanged.
+It contains a set of loosely coupled types which show how the core components of an event sourced system might fit together and various implementations of each type. Provided these types can be satisfied, components can be swapped and interchanged.
 
 ----
 
@@ -26,11 +23,13 @@ these types can be satisfied, components can be swapped and interchanged.
 
 ### Event store
 
-/Users/sam/Sites/ts-event-core/src/eventStore/EventStore.ts
+Events are the persistence mechanism for 
+
+Event: /Users/sam/Sites/ts-event-core/src/eventStore/EventStore.ts
 
 ### Aggregate root definition
 
-/Users/sam/Sites/ts-event-core/src/eventStore/EventStore.ts
+EventStore: /Users/sam/Sites/ts-event-core/src/eventStore/EventStore.ts
 
 ### Aggregate root repository
 

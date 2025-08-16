@@ -1,17 +1,17 @@
 import { documentType } from "./utils/documentType.ts";
-import { EventStore } from "../src/eventStore/EventStore.ts";
+import { Event, EventStore } from "../src/eventStore/EventStore.ts";
 
+/**
+ * Best edit with soft-wrap enabled.
+ */
 export function README(): string {
   return `
     ts-event-core
     ====
     
-    This project is a reference implementation of event sourcing implemented in TypeScript
-    using a functional programming style.
+    This project is a reference implementation of event sourcing implemented in TypeScript using a functional programming style.
     
-    It contains a set of loosely coupled types which show how the core components of an event
-    sourced system might fit together and various implementations of each type. Provided
-    these types can be satisfied, components can be swapped and interchanged.
+    It contains a set of loosely coupled types which show how the core components of an event sourced system might fit together and various implementations of each type. Provided these types can be satisfied, components can be swapped and interchanged.
     
     ----
     
@@ -23,7 +23,9 @@ export function README(): string {
     
     ### Event store
     
-    ${documentType<EventStore>()}
+    Events are the persistence mechanism for 
+    
+    ${documentType<Event>()}
     
     ### Aggregate root definition
     

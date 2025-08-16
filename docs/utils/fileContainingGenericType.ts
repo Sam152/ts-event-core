@@ -4,7 +4,9 @@ import { dirname, resolve } from "@std/path";
 /**
  * Get the file containing a given generic type, given some callsites.
  */
-export function fileContainingGenericType(callSites: CallSiteObject[]): string {
+export function fileContainingGenericType(
+  callSites: CallSiteObject[],
+): { fileName: string; typeName: string } {
   const callingFunctionName = callSites[0].functionName;
 
   const callingFunctionCallerFileContents = Deno.readTextFileSync(callSites[1].scriptName);
@@ -31,5 +33,8 @@ export function fileContainingGenericType(callSites: CallSiteObject[]): string {
     throw new Error();
   }
 
-  return resolve(dirname(callSites[1].scriptName), importMatch.groups.filename);
+  return {
+    fileName: resolve(dirname(callSites[1].scriptName), importMatch.groups.filename),
+    typeName: genericName,
+  };
 }
