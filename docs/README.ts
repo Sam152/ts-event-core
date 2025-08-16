@@ -19,6 +19,22 @@ export function README(): string {
     
     ----
     
+    ## Key components
+    
+    ### Event store
+    
     ${documentType<EventStore>()}
+    
+    ### Aggregate root definition
+    
+    ${documentType<EventStore>()}
+    
+    ### Aggregate root repository
+    
+    ### Command issuer
+    
+    ### Projector
+    
+    ## Example domain
   `;
 }
