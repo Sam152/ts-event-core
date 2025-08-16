@@ -6,7 +6,6 @@ import { linkTo } from "./linkTo.ts";
 import { formatDocString } from "./formatDocString.ts";
 import { formatCode } from "./formatCode.ts";
 import { padAfterFirstLine } from "./padAfterFirstLine.ts";
-import { formatInlineCode } from "./formatInlineCode.ts";
 
 export function documentFunction(func: (...args: any) => unknown): string {
   const filePath = resolve(
@@ -34,11 +33,10 @@ export function documentFunction(func: (...args: any) => unknown): string {
 
 function formatFunctionBody(code: string) {
   return `
-
-\`(inline code)\`{:.language-clojure .highlight}
-
+${formatCode(extractFunctionDefinition(code))}
+    
 <details>
-<summary>:point_down: ${formatInlineCode(extractFunctionDefinition(code))}</summary>
+<summary>:point_down:</summary>
 
 
 ${formatCode(code)}
