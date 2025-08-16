@@ -23,13 +23,11 @@ export function README(): string {
     
     ### Event store 
     
-    #### Events
-    
     ${documentType<Event>()}
     
-    ### Aggregate root definition
-    
     ${documentType<EventStore>()}
+    
+    ### Aggregate root definition
     
     ### Aggregate root repository
     

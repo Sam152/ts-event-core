@@ -19,7 +19,7 @@ export function extractSymbolAndDocString(
   const reversedDocstringIndex = lines
     .slice(0, typeStartIndex)
     .reverse()
-    .findIndex((line) => line.trim().includes("/**"));
+    .findIndex((line) => line.trim().includes("/**") || line === "");
   const docstringStartIndex: number | undefined = reversedDocstringIndex !== -1
     ? typeStartIndex - 1 - reversedDocstringIndex
     : undefined;
