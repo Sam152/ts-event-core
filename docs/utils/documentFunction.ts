@@ -35,7 +35,9 @@ function formatFunctionBody(code: string) {
   return `
 <details>
 <summary>
-thing
+
+${formatCode(extractFunctionDefinition(code))}
+
 </summary>
 
 ${formatCode(code)}
@@ -44,9 +46,11 @@ ${formatCode(code)}
 }
 
 function extractFunctionDefinition(code: string): string {
-  // Scan each line until we get a match for a line that ends with: " {"
-  // Use lines 0 to this line as the target string.
-  // Put it back into a string.
-  // Remove /^export /.
-  // Trim " {" off the end.
+  const lines = code.split("\n");
+  const endIndex = lines.findIndex((line) => line.endsWith(" {"));
+
+  return (endIndex === -1 ? lines : lines.slice(0, endIndex + 1))
+    .join("\n")
+    .replace(/^export /, "")
+    .replace(/ \{$/, "");
 }
