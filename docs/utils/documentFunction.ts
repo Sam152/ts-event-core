@@ -33,11 +33,8 @@ export function documentFunction(func: (...args: any) => unknown): string {
 
 function formatFunctionBody(code: string) {
   return `
-
-${"`"}blob${"`"}
-
 <details>
-<summary>:point_down: ${"`"}blo${"`"}</summary>
+<summary>:point_down: <code>blo</code></summary>
 
 ${formatCode(code)}
 
