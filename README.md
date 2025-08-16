@@ -91,6 +91,7 @@ export function createMemoryEventStore<TEvent extends Event>():
   };
 }
 ```
+
 </details>
 
 #### Postgres
@@ -178,6 +179,7 @@ export function createPostgresEventStore<TEvent extends Event>(
   };
 }
 ```
+
 </details>
 
 ### Aggregate root definition
