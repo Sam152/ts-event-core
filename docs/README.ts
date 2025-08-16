@@ -21,9 +21,7 @@ export function README(): string {
     
     ## Key components
     
-    ### Event store
-    
-    Events are the persistence mechanism for 
+    ### Event store 
     
     ${documentType<Event>()}
     

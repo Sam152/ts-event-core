@@ -10,7 +10,7 @@ It contains a set of loosely coupled types which show how the core components of
 ----
 
 1. [Key components](#key-components)
-   1. [Event store](#event-store)
+   1. [Event store ](#event-store-)
    2. [Aggregate root definition](#aggregate-root-definition)
    3. [Aggregate root repository](#aggregate-root-repository)
    4. [Command issuer](#command-issuer)
@@ -21,9 +21,7 @@ It contains a set of loosely coupled types which show how the core components of
 
 ## Key components
 
-### Event store
-
-Events are the persistence mechanism for 
+### Event store 
 
 `/**`
 Events record statements of fact that occurred within a domain, while processing
@@ -34,12 +32,14 @@ commands. They are the single source of truth for all recorded data in the domai
 `/**`
 Events record statements of fact that occurred within a domain, while processing
 commands. They are the single source of truth for all recorded data in the domain.
+
 ort type Event<TEventPayload = unknown> = {
 ggregateRootType: string;
 ggregateRootId: string;
 ggregateVersion: number;
 ecordedAt: Date;
 ayload: TEventPayload;
+
 
 ### Aggregate root repository
 

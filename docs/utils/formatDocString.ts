@@ -6,8 +6,7 @@ export const formatDocString = pipe(
   (str: string) =>
     str
       .split("\n")
-      .map((line) => line.trim())
-      .filter((str) => !!str)
+      .slice(1, -1)
       .join("\n"),
   (str: string) => `${"`"}/**${"`"}\n${str}`,
 );
