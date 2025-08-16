@@ -27,6 +27,9 @@ export function README(): string {
     
     ${documentType<EventStore>()}
     
+    #### In-memory
+    #### Postgres
+    
     ### Aggregate root definition
     
     ### Aggregate root repository

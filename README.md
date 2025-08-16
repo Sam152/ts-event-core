@@ -11,6 +11,8 @@ It contains a set of loosely coupled types which show how the core components of
 
 1. [Key components](#key-components)
    1. [Event store](#event-store)
+      1. [In-memory](#in-memory)
+      2. [Postgres](#postgres)
    2. [Aggregate root definition](#aggregate-root-definition)
    3. [Aggregate root repository](#aggregate-root-repository)
    4. [Command issuer](#command-issuer)
@@ -46,6 +48,9 @@ export type EventStore<TEvent extends Event = Event> = {
   }) => AsyncGenerator<TEvent>;
 };
 ```
+
+#### In-memory
+#### Postgres
 
 ### Aggregate root definition
 
