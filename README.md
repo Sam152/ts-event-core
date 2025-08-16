@@ -56,9 +56,7 @@ would benefit from persistent storage.
 <summary>
 
 ```typescript
-function createMemoryEventStore<TEvent extends Event>():
-  & EventStore<TEvent>
-  & EventEmitter<TEvent>
+function createMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> & EventEmitter<TEvent>
 ```
 
 </summary>
@@ -126,9 +124,7 @@ This implementation depends on the following schema:
 <summary>
 
 ```typescript
-function createPostgresEventStore<TEvent extends Event>(
-  { connection: sql }: { connection: ReturnType<typeof postgres> },
-): EventStore<TEvent>
+function createPostgresEventStore<TEvent extends Event>(...): EventStore<TEvent>
 ```
 
 </summary>

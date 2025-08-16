@@ -49,8 +49,14 @@ function extractFunctionDefinition(code: string): string {
   const lines = code.split("\n");
   const endIndex = lines.findIndex((line) => line.endsWith(" {"));
 
-  return (endIndex === -1 ? lines : lines.slice(0, endIndex + 1))
+  const definition = (endIndex === -1 ? lines : lines.slice(0, endIndex + 1))
     .join("\n")
     .replace(/^export /, "")
     .replace(/ \{$/, "");
+
+  return definition
+    .replace(/\n/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\([^)]*\)/g, (match) => match === "()" ? "()" : "(...)")
+    .trim();
 }
