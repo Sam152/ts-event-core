@@ -29,15 +29,15 @@ export function documentType<TType>(): string {
   }
   const typeBody = lines.slice(typeStartIndex, typeEndIndex + 1).join("\n");
 
-  const docstringStartIndex = lines
+  const reversedDocstringIndex = lines
     .slice(0, typeStartIndex)
     .reverse()
     .findIndex((line) => line.trim().includes("/**"));
-  const actualDocstringStartIndex: number | undefined = docstringStartIndex !== -1
-    ? typeStartIndex - 1 - docstringStartIndex
+  const docstringStartIndex: number | undefined = reversedDocstringIndex !== -1
+    ? typeStartIndex - 1 - reversedDocstringIndex
     : undefined;
-  const docstring: string | undefined = actualDocstringStartIndex
-    ? lines.slice(actualDocstringStartIndex, typeStartIndex).join("\n")
+  const docstring: string | undefined = docstringStartIndex
+    ? lines.slice(docstringStartIndex, typeStartIndex).join("\n")
     : undefined;
 
   const output = docstring ? `${docstring}\n${typeBody}` : typeBody;
