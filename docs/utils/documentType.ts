@@ -5,6 +5,7 @@ import { extractSymbolAndDocString } from "./extractSymbolAndDocString.ts";
 import { pipe } from "./pipe.ts";
 import { formatDocString } from "./formatDocString.ts";
 import { formatCode } from "./formatCode.ts";
+import { linkTo } from "./linkTo.ts";
 
 function doDocumentType<TType>(): string {
   const { filePath, typeName } = fileContainingGenericType({
@@ -20,7 +21,7 @@ function doDocumentType<TType>(): string {
   const components: string[] = [];
 
   if (docString) {
-    components.push(formatDocString(docString));
+    components.push(`${linkTo({ path: filePath })} ${formatDocString(docString)}`);
   }
 
   components.push(formatCode(symbolBody));
