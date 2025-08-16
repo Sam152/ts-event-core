@@ -3,5 +3,5 @@ export function formatInlineCode(code: string) {
     return "&#" + i.charCodeAt(0) + ";";
   });
   // Required instead of backticks, so that blocks work inside summary tags.
-  return `<code>${formatted}</code>`;
+  return `<code class="highlight highlight-source-ts">${formatted}</code>`;
 }
