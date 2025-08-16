@@ -1,10 +1,12 @@
+type LineRef = `L${number}-L${number}`;
+
 export function extractSymbolAndDocString(
   { symbolName, filePath, symbolType }: {
     symbolName: string;
     filePath: string;
     symbolType: string;
   },
-): { docString: string | undefined; symbolBody: string; lineNumber: number } {
+): { docString: string | undefined; symbolBody: string; lineRef: LineRef } {
   const fileContents = Deno.readTextFileSync(filePath);
   const lines = fileContents.split("\n");
 
@@ -34,6 +36,6 @@ export function extractSymbolAndDocString(
   return {
     docString,
     symbolBody,
-    lineNumber: (docstringStartIndex || symbolStartIndex) + 1,
+    lineRef: `L${(docstringStartIndex || symbolStartIndex) + 1}-L${symbolEndIndex + 1}`,
   };
 }
