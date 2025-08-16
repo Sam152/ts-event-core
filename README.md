@@ -51,7 +51,7 @@ export type EventStore<TEvent extends Event = Event> = {
 
 #### In-memory
 
-[↗️](src/eventStore/memory/createMemoryEventStore.ts#L9-L45) An in-memory test store is most useful for testing purposes. Most use cases
+[↗️](src/eventStore/memory/createMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
 
 <details>
@@ -93,6 +93,7 @@ export function createMemoryEventStore<TEvent extends Event>():
       );
     },
   };
+}
 ```
 </details>
 

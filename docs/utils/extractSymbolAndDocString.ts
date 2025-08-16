@@ -16,7 +16,7 @@ export function extractSymbolAndDocString(
   }
   const symbolEndIndex = lines
     .slice(symbolStartIndex + 1)
-    .findIndex((line) => /^((\}\;)|(\>\;))/.test(line.trim())) + symbolStartIndex + 1;
+    .findIndex((line) => /^((\}\;?)|(\>\;))/.test(line)) + symbolStartIndex + 1;
   if (symbolEndIndex === symbolStartIndex) {
     throw new Error(`${symbolType} ${symbolName} end not found in ${filePath}`);
   }
