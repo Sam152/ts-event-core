@@ -23,7 +23,7 @@ It contains a set of loosely coupled types which show how the core components of
 
 ### Event store 
 
- Events record statements of fact that occurred within a domain, while processing
+[↗️](src/eventStore/EventStore.ts) Events record statements of fact that occurred within a domain, while processing
 commands. They are the single source of truth for all recorded data in the domain.
 
 ```typescript
