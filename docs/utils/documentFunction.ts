@@ -42,3 +42,11 @@ ${formatCode(code)}
 </details>
   `.trim();
 }
+
+function extractFunctionDefinition(code: string): string {
+  // Scan each line until we get a match for a line that ends with: " {"
+  // Use lines 0 to this line as the target string.
+  // Put it back into a string.
+  // Remove /^export /.
+  // Trim " {" off the end.
+}
