@@ -5,7 +5,7 @@ import { createMemoryEventStore } from "../src/eventStore/memory/createMemoryEve
 import { createPostgresEventStore } from "../src/eventStore/postgres/createPostgresEventStore.ts";
 
 /**
- * Best edit with soft-wrap enabled.
+ * Edit with soft-wrap enabled.
  */
 export function README(): string {
   return `
