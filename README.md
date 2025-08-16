@@ -52,10 +52,8 @@ export type EventStore<TEvent extends Event = Event> = {
 [:arrow_upper_right:](src/eventStore/memory/createMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
 
-`blob`
-
 <details>
-<summary>:point_down: `blo`</summary>
+<summary>`blob`</summary>
 
 ```typescript
 export function createMemoryEventStore<TEvent extends Event>():
@@ -117,10 +115,8 @@ This implementation depends on the following schema:
   );
 ```
 
-`blob`
-
 <details>
-<summary>:point_down: `blo`</summary>
+<summary>`blob`</summary>
 
 ```typescript
 export function createPostgresEventStore<TEvent extends Event>(
