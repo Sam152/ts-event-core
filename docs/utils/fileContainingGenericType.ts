@@ -6,7 +6,7 @@ import { dirname, resolve } from "@std/path";
  */
 export function fileContainingGenericType(
   callSites: CallSiteObject[],
-): { fileName: string; typeName: string } {
+): { filePath: string; typeName: string } {
   const callingFunctionName = callSites[0].functionName;
 
   const callingFunctionCallerFileContents = Deno.readTextFileSync(callSites[1].scriptName);
@@ -34,7 +34,7 @@ export function fileContainingGenericType(
   }
 
   return {
-    fileName: resolve(dirname(callSites[1].scriptName), importMatch.groups.filename),
+    filePath: resolve(dirname(callSites[1].scriptName), importMatch.groups.filename),
     typeName: genericName,
   };
 }
