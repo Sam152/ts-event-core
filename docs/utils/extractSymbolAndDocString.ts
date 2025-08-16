@@ -34,6 +34,6 @@ export function extractSymbolAndDocString(
   return {
     docString,
     symbolBody,
-    lineNumber: docstringStartIndex || symbolStartIndex,
+    lineNumber: (docstringStartIndex || symbolStartIndex) + 1,
   };
 }
