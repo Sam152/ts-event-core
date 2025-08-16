@@ -36,7 +36,7 @@ function formatFunctionBody(code: string) {
 <details>
 <summary>
 
-${formatCode(extractFunctionDefinition(code))}
+:point_down: ${formatCode(extractFunctionDefinition(code))}
 
 </summary>
 
