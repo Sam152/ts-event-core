@@ -2,6 +2,7 @@ import { documentType } from "./utils/documentType.ts";
 import { Event, EventStore } from "../src/eventStore/EventStore.ts";
 import { documentFunction } from "./utils/documentFunction.ts";
 import { createMemoryEventStore } from "../src/eventStore/memory/createMemoryEventStore.ts";
+import { createPostgresEventStore } from "../src/eventStore/postgres/createPostgresEventStore.ts";
 
 /**
  * Best edit with soft-wrap enabled.
@@ -34,6 +35,8 @@ export function README(): string {
     ${documentFunction(createMemoryEventStore)}
     
     #### Postgres
+    
+    ${documentFunction(createPostgresEventStore)}
     
     ### Aggregate root definition
     

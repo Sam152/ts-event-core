@@ -7,7 +7,7 @@ import { formatDocString } from "./formatDocString.ts";
 import { formatCode } from "./formatCode.ts";
 import { padAfterFirstLine } from "./padAfterFirstLine.ts";
 
-export function documentFunction(func: () => unknown): string {
+export function documentFunction(func: (...args: any) => unknown): string {
   const filePath = resolve(
     dirname(getCallSites()[1].scriptName),
     filenameFromImportSymbol({

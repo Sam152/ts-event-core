@@ -22,11 +22,6 @@ import { JSONValue } from "npm:postgres@3.4.7";
  *           UNIQUE ("aggregateRootType", "aggregateRootId", "aggregateVersion")
  *   );
  * ```
- *
- * This implementation assumes that events are not inserted in the context of a transaction,
- * since no effort is made to linearize the events inserted. Implementations using this event
- * store must respond to AggregateRootVersionIntegrityError, as a means of optimistic locking
- * on an individual aggregate root and attempt to retry commands.
  */
 export function createPostgresEventStore<TEvent extends Event>(
   { connection: sql }: { connection: ReturnType<typeof postgres> },
