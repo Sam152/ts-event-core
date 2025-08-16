@@ -3,6 +3,7 @@ import { getCallSites } from "node:util";
 import { padAfterFirstLine } from "./padAfterFirstLine.ts";
 import { extractSymbolAndDocString } from "./extractSymbolAndDocString.ts";
 import { pipe } from "./pipe.ts";
+import { formatDocString } from "./formatDocString.ts";
 
 function doDocumentType<TType>(): string {
   const { filePath, typeName } = fileContainingGenericType({
@@ -15,7 +16,13 @@ function doDocumentType<TType>(): string {
     symbolType: "type",
   });
 
-  return docString ? `${docString}\n\n\n${symbolBody}` : symbolBody;
+  const components: string[] = [];
+
+  if (docString) {
+    components.push(formatDocString(docString));
+  }
+
+  return components.join("\n");
 }
 
 /**
