@@ -25,7 +25,7 @@ It contains a set of loosely coupled types which show how the core components of
 
 ### Event store
 
-[↗️](src/eventStore/EventStore.ts#L6-L16) Events record statements of fact that occurred within a domain, while processing
+[↗️](src/eventStore/EventStore.ts#L6-L16) <a href="src/eventStore/EventStore.ts#L6-L16" target="_blank">src/eventStore/EventStore.ts#L6-L16</a> Events record statements of fact that occurred within a domain, while processing
 commands. They are the single source of truth for all recorded data in the domain.
 
 ```typescript
@@ -51,7 +51,7 @@ export type EventStore<TEvent extends Event = Event> = {
 
 #### In-memory
 
-[↗️](src/eventStore/memory/createMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
+[↗️](src/eventStore/memory/createMemoryEventStore.ts#L9-L46) <a href="src/eventStore/memory/createMemoryEventStore.ts#L9-L46" target="_blank">src/eventStore/memory/createMemoryEventStore.ts#L9-L46</a> An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
 
 <details>
@@ -99,7 +99,7 @@ export function createMemoryEventStore<TEvent extends Event>():
 
 #### Postgres
 
-[↗️](src/eventStore/postgres/createPostgresEventStore.ts#L6-L84) A persistent event store backed by Postgres.
+[↗️](src/eventStore/postgres/createPostgresEventStore.ts#L6-L84) <a href="src/eventStore/postgres/createPostgresEventStore.ts#L6-L84" target="_blank">src/eventStore/postgres/createPostgresEventStore.ts#L6-L84</a> A persistent event store backed by Postgres.
 
 This implementation depends on the following schema:
 
