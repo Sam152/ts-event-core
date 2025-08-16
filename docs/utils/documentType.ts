@@ -1,6 +1,7 @@
 import { fileContainingGenericType } from "./fileContainingGenericType.ts";
 import { getCallSites } from "node:util";
 import { padAfterFirstLine } from "./padAfterFirstLine.ts";
+import { extractSymbolAndDocString } from "./extractSymbolAndDocString.ts";
 
 /**
  * This function should:
@@ -13,34 +14,12 @@ import { padAfterFirstLine } from "./padAfterFirstLine.ts";
  */
 export function documentType<TType>(): string {
   const { filePath, typeName } = fileContainingGenericType(getCallSites());
+  const { docString, symbolBody } = extractSymbolAndDocString({
+    filePath,
+    symbolName: typeName,
+    symbolType: "type",
+  });
 
-  const fileContents = Deno.readTextFileSync(filePath);
-  const lines = fileContents.split("\n");
-
-  const typeStartIndex = lines.findIndex((line) => line.includes(`type ${typeName}`));
-  if (typeStartIndex === -1) {
-    throw new Error(`Type ${typeName} not found in ${filePath}`);
-  }
-  const typeEndIndex = lines
-    .slice(typeStartIndex + 1)
-    .findIndex((line) => /^((\}\;)|(\>\;))/.test(line.trim())) + typeStartIndex + 1;
-  if (typeEndIndex === typeStartIndex) {
-    throw new Error(`Type ${typeName} end not found in ${filePath}`);
-  }
-  const typeBody = lines.slice(typeStartIndex, typeEndIndex + 1).join("\n");
-
-  const reversedDocstringIndex = lines
-    .slice(0, typeStartIndex)
-    .reverse()
-    .findIndex((line) => line.trim().includes("/**"));
-  const docstringStartIndex: number | undefined = reversedDocstringIndex !== -1
-    ? typeStartIndex - 1 - reversedDocstringIndex
-    : undefined;
-  const docstring: string | undefined = docstringStartIndex
-    ? lines.slice(docstringStartIndex, typeStartIndex).join("\n")
-    : undefined;
-
-  const output = docstring ? `${docstring}\n${typeBody}` : typeBody;
-
+  const output = docString ? `${docString}\n\n\n${symbolBody}` : symbolBody;
   return padAfterFirstLine({ count: 4, char: " " })(output);
 }
