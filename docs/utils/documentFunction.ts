@@ -34,6 +34,9 @@ export function documentFunction(func: (...args: any) => unknown): string {
 
 function formatFunctionBody(code: string) {
   return `
+
+\`(inline code)\`{:.language-clojure .highlight}
+
 <details>
 <summary>:point_down: ${formatInlineCode(extractFunctionDefinition(code))}</summary>
 
