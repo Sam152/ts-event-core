@@ -3,5 +3,5 @@ export function formatInlineCode(code: string) {
     return "&#" + i.charCodeAt(0) + ";";
   });
   // Required instead of backticks, so that blocks work inside summary tags.
-  return `<code lang="typescript">${formatted}</code>`;
+  return `<div>${formatted}</div>`;
 }
