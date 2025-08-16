@@ -36,6 +36,7 @@ function formatFunctionBody(code: string) {
 <details>
 <summary>:point_down: <code>${extractFunctionDefinition(code)}</code></summary>
 
+
 ${formatCode(code)}
 
 </details>
@@ -53,5 +54,8 @@ function extractFunctionDefinition(code: string): string {
     .replace(/\n/g, " ")
     .replace(/\s{2,}/g, " ")
     .replace(/\([^)]*\)/g, (match) => match === "()" ? "()" : "(...)")
-    .trim();
+    .trim()
+    .replace(/[\u00A0-\u9999<>\&]/g, function (i) {
+      return "&#" + i.charCodeAt(0) + ";";
+    });
 }
