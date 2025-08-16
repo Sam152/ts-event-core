@@ -35,7 +35,7 @@ function formatFunctionBody(code: string) {
   return `
 <details>
 <summary>
-Func
+thing
 </summary>
 
 ${formatCode(code)}

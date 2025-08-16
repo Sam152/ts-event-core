@@ -56,7 +56,7 @@ would benefit from persistent storage.
 
 <details>
 <summary>
-Func
+thing
 </summary>
 
 ```typescript
@@ -120,7 +120,7 @@ This implementation depends on the following schema:
 
 <details>
 <summary>
-Func
+thing
 </summary>
 
 ```typescript
