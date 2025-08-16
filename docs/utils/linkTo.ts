@@ -6,5 +6,5 @@ export function linkTo({ path, linkName = "↗️" }: { path: string; linkName?:
   const projectRoot = new URL("../..", import.meta.url).pathname;
   const relativePath = path.startsWith(projectRoot) ? path.slice(projectRoot.length) : path;
 
-  return `[${linkName}](${relativePath}) <a href="${relativePath}" target="_blank">${relativePath}</a>`;
+  return `[${linkName}](${relativePath})`;
 }
