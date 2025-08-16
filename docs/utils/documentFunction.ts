@@ -1,20 +1,24 @@
-import { fileContainingGenericType } from "./fileContainingGenericType.ts";
 import { getCallSites } from "node:util";
-import { padAfterFirstLine } from "./padAfterFirstLine.ts";
 import { extractSymbolAndDocString } from "./extractSymbolAndDocString.ts";
+import { filenameFromImportSymbol } from "./filenameFromImportSymbol.ts";
+import { dirname, resolve } from "@std/path";
+import { linkTo } from "./linkTo.ts";
 import { formatDocString } from "./formatDocString.ts";
 import { formatCode } from "./formatCode.ts";
-import { linkTo } from "./linkTo.ts";
+import { padAfterFirstLine } from "./padAfterFirstLine.ts";
 
-export function documentType<TType>(): string {
-  const { filePath, typeName } = fileContainingGenericType({
-    callSites: getCallSites(),
-    depth: 0,
-  });
+export function documentFunction(func: () => unknown): string {
+  const filePath = resolve(
+    dirname(getCallSites()[1].scriptName),
+    filenameFromImportSymbol({
+      fileContents: Deno.readTextFileSync(getCallSites()[1].scriptName),
+      symbolName: func.name,
+    }),
+  );
   const { docString, symbolBody, lineRef } = extractSymbolAndDocString({
     filePath,
-    symbolName: typeName,
-    symbolType: "type",
+    symbolName: func.name,
+    symbolType: "function",
   });
 
   const components: string[] = [];

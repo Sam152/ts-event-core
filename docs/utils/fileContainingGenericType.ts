@@ -1,5 +1,6 @@
 import { CallSiteObject } from "node:util";
 import { dirname, resolve } from "@std/path";
+import { filenameFromImportSymbol } from "./filenameFromImportSymbol.ts";
 
 /**
  * Get the file containing a given generic type, given some callsites.
@@ -22,18 +23,14 @@ export function fileContainingGenericType(
     throw new Error();
   }
 
-  const importMatch = callingFunctionCallerFileContents.match(
-    new RegExp(
-      `import\\s+{[^}]*${genericName}[^}]*}\\s+from\\s+["'](?<filename>[^"']+)["']`,
-    ),
-  );
-
-  if (!importMatch || !importMatch.groups?.filename) {
-    throw new Error();
-  }
-
   return {
-    filePath: resolve(dirname(callSites[depth + 1].scriptName), importMatch.groups.filename),
+    filePath: resolve(
+      dirname(callSites[depth + 1].scriptName),
+      filenameFromImportSymbol({
+        fileContents: callingFunctionCallerFileContents,
+        symbolName: genericName,
+      }),
+    ),
     typeName: genericName,
   };
 }
