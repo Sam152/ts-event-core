@@ -21,7 +21,7 @@ export function README(): string {
     
     ## Key components
     
-    ### Event store 
+    ### Event store
     
     ${documentType<Event>()}
     
