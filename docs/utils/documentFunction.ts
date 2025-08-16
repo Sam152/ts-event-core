@@ -6,6 +6,7 @@ import { linkTo } from "./linkTo.ts";
 import { formatDocString } from "./formatDocString.ts";
 import { formatCode } from "./formatCode.ts";
 import { padAfterFirstLine } from "./padAfterFirstLine.ts";
+import { formatInlineCode } from "./formatInlineCode.ts";
 
 export function documentFunction(func: (...args: any) => unknown): string {
   const filePath = resolve(
@@ -36,12 +37,17 @@ function formatFunctionBody(code: string) {
 ${formatCode(extractFunctionDefinition(code))}
     
 <details>
-<summary> Show full function definition :point_down:</summary>
+<summary> Show full ${formatInlineCode(extractFunctionName(code))} definition :point_down:</summary>
 
 ${formatCode(code)}
 
 </details>
   `.trim();
+}
+
+function extractFunctionName(code: string): string {
+  const functionMatch = code.match(/(?:export\s+)?(?:async\s+)?function\s+(\w+)/);
+  return functionMatch![1];
 }
 
 function extractFunctionDefinition(code: string): string {
