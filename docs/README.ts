@@ -23,6 +23,8 @@ export function README(): string {
     
     ### Event store 
     
+    #### Events
+    
     ${documentType<Event>()}
     
     ### Aggregate root definition

@@ -4,6 +4,7 @@ import { padAfterFirstLine } from "./padAfterFirstLine.ts";
 import { extractSymbolAndDocString } from "./extractSymbolAndDocString.ts";
 import { pipe } from "./pipe.ts";
 import { formatDocString } from "./formatDocString.ts";
+import { formatCode } from "./formatCode.ts";
 
 function doDocumentType<TType>(): string {
   const { filePath, typeName } = fileContainingGenericType({
@@ -22,7 +23,9 @@ function doDocumentType<TType>(): string {
     components.push(formatDocString(docString));
   }
 
-  return components.join("\n");
+  components.push(formatCode(symbolBody));
+
+  return components.join("\n\n");
 }
 
 /**

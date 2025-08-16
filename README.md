@@ -11,6 +11,7 @@ It contains a set of loosely coupled types which show how the core components of
 
 1. [Key components](#key-components)
    1. [Event store ](#event-store-)
+      1. [Events](#events)
    2. [Aggregate root definition](#aggregate-root-definition)
    3. [Aggregate root repository](#aggregate-root-repository)
    4. [Command issuer](#command-issuer)
@@ -23,9 +24,21 @@ It contains a set of loosely coupled types which show how the core components of
 
 ### Event store 
 
+#### Events
+
 `/**`
 Events record statements of fact that occurred within a domain, while processing
 commands. They are the single source of truth for all recorded data in the domain.
+
+```typescript
+export type Event<TEventPayload = unknown> = {
+  aggregateRootType: string;
+  aggregateRootId: string;
+  aggregateVersion: number;
+  recordedAt: Date;
+  payload: TEventPayload;
+};
+```
 
 ### Aggregate root definition
 
@@ -40,6 +53,17 @@ ggregateVersion: number;
 ecordedAt: Date;
 ayload: TEventPayload;
 
+
+```typescript
+export type EventStore<TEvent extends Event = Event> = {
+  persist: (events: TEvent[]) => Promise<void>;
+  retrieve: (args: {
+    aggregateRootType: string;
+    aggregateRootId: string;
+    fromVersion?: number;
+  }) => AsyncGenerator<TEvent>;
+};
+```
 
 ### Aggregate root repository
 
