@@ -13,12 +13,12 @@ these types can be satisfied, components can be swapped and interchanged.
 ----
 
 1. [Key components](#key-components)
-   2. [Event store](#event-store)
-   3. [Aggregate root definition](#aggregate-root-definition)
-   4. [Aggregate root repository](#aggregate-root-repository)
-   5. [Command issuer](#command-issuer)
-   6. [Projector](#projector)
-7. [Example domain](#example-domain)
+   1. [Event store](#event-store)
+   2. [Aggregate root definition](#aggregate-root-definition)
+   3. [Aggregate root repository](#aggregate-root-repository)
+   4. [Command issuer](#command-issuer)
+   5. [Projector](#projector)
+2. [Example domain](#example-domain)
 
 ----
 
