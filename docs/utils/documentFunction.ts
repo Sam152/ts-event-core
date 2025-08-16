@@ -22,10 +22,10 @@ export function documentFunction(func: (...args: any) => unknown): string {
   });
 
   const components: string[] = [];
+
   if (docString) {
     components.push(`${linkTo({ path: `${filePath}#${lineRef}` })} ${formatDocString(docString)}`);
   }
-
   components.push(formatFunctionBody(symbolBody));
 
   return padAfterFirstLine({ count: 4, char: " " })(components.join("\n\n"));
@@ -36,7 +36,7 @@ function formatFunctionBody(code: string) {
 <details>
 <summary>
 
-${formatCode(extractFunctionDefinition(code))}
+${"`"}:point_down: extractFunctionDefinition(code)${"`"}
 
 </summary>
 
