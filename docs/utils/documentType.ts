@@ -12,7 +12,7 @@ function doDocumentType<TType>(): string {
     callSites: getCallSites(),
     depth: 2,
   });
-  const { docString, symbolBody } = extractSymbolAndDocString({
+  const { docString, symbolBody, lineNumber } = extractSymbolAndDocString({
     filePath,
     symbolName: typeName,
     symbolType: "type",
@@ -21,7 +21,7 @@ function doDocumentType<TType>(): string {
   const components: string[] = [];
 
   if (docString) {
-    components.push(`${linkTo({ path: filePath })} ${formatDocString(docString)}`);
+    components.push(`${linkTo({ path: `${filePath}#L${lineNumber}` })} ${formatDocString(docString)}`);
   }
 
   components.push(formatCode(symbolBody));
