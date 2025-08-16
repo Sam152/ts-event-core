@@ -34,7 +34,7 @@ export function documentFunction(func: (...args: any) => unknown): string {
 function formatFunctionBody(code: string) {
   return `
 <details>
-<summary>:point_down: </summary>
+<summary>:point_down: ${"`"}a${"`"}</summary>
 
 ${formatCode(code)}
 
