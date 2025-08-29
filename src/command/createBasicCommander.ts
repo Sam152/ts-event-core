@@ -1,5 +1,8 @@
 import { Commander } from "./Commander.ts";
-import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes, } from "../aggregate/AggregateRootDefinition.ts";
+import {
+  AggregateRootDefinitionMap,
+  AggregateRootDefinitionMapTypes,
+} from "../aggregate/AggregateRootDefinition.ts";
 import { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
 
 /**
