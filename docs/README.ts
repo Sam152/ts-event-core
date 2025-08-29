@@ -1,10 +1,15 @@
 import { documentType } from "./utils/documentType.ts";
 import { EventStore } from "../src/eventStore/EventStore.ts";
 import { documentFunction } from "./utils/documentFunction.ts";
-import { createMemoryEventStore } from "../src/eventStore/createMemoryEventStore.ts";
+import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
 import { AggregateRootDefinition } from "../src/aggregate/AggregateRootDefinition.ts";
 import { Commander } from "../src/command/Commander.ts";
+import { AggregateRootRepository } from "../src/aggregate/AggregateRootRepository.ts";
+import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
+import {
+  createSnapshottingAggregateRootRepository,
+} from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
 
 /**
  * Edit with soft-wrap enabled.
@@ -30,13 +35,25 @@ export function README(): string {
     
     ${documentType<Commander<any, any>>()}
     
+    ## Aggregate root repository
+    
+    ${documentType<AggregateRootRepository<any, any>>()}
+    
+    ### Basic aggregate root repository
+    
+    ${documentFunction(createBasicAggregateRootRepository)}
+    
+    ### Snapshotting aggregate root repository
+    
+    ${documentFunction(createSnapshottingAggregateRootRepository)}
+    
     ## Event store
     
     ${documentType<EventStore>()}
     
     ### In-memory
     
-    ${documentFunction(createMemoryEventStore)}
+    ${documentFunction(createInMemoryEventStore)}
     
     ### Postgres
     

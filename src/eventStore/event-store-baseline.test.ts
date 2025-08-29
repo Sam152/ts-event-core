@@ -2,7 +2,7 @@ import { assertEquals } from "@std/assert";
 import { afterAll, beforeEach, it } from "jsr:@std/testing/bdd";
 import { describeAll } from "../../test/utils/describeAll.ts";
 import { AirlineEvent } from "../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { createMemoryEventStore } from "./createMemoryEventStore.ts";
+import { createInMemoryEventStore } from "./createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "./createPostgresEventStore.ts";
 import { prepareTestDatabaseContainer } from "../../test/utils/prepareTestDatabaseContainer.ts";
 import postgres from "postgres";
@@ -14,7 +14,7 @@ const connection = postgres(testPostgresConnectionOptions);
 
 const implementations = [
   {
-    factory: createMemoryEventStore<AirlineEvent>,
+    factory: createInMemoryEventStore<AirlineEvent>,
     beforeEachHook: () => undefined,
     afterAllHook: () => undefined,
   },

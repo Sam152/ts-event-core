@@ -1,6 +1,6 @@
 import { airlineAggregateRoots } from "../../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createMemorySnapshotStorage } from "../snapshot/createMemorySnapshotStorage.ts";
-import { createMemoryEventStore } from "../../eventStore/createMemoryEventStore.ts";
+import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { traceCalls } from "../../../test/utils/traceCalls.ts";
@@ -9,7 +9,7 @@ import { assertEquals } from "@std/assert";
 
 describe("snapshotting aggregate root repository", () => {
   const { proxy: eventStore, calls: eventStoreCalls } = traceCalls(
-    createMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>(),
+    createInMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>(),
   );
   const aggregateRootRepository = createSnapshottingAggregateRootRepository({
     eventStore: eventStore,

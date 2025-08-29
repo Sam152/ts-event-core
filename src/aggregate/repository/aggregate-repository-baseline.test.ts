@@ -1,6 +1,6 @@
 import { airlineAggregateRoots } from "../../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createMemorySnapshotStorage } from "../snapshot/createMemorySnapshotStorage.ts";
-import { createMemoryEventStore } from "../../eventStore/createMemoryEventStore.ts";
+import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { assertEquals } from "@std/assert";
@@ -8,7 +8,7 @@ import { it } from "jsr:@std/testing/bdd";
 import { describeAll } from "../../../test/utils/describeAll.ts";
 import { createBasicAggregateRootRepository } from "./createBasicAggregateRootRepository.ts";
 
-const snapshottingEventStore = createMemoryEventStore<
+const snapshottingEventStore = createInMemoryEventStore<
   EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>
 >();
 const snapshotting = createSnapshottingAggregateRootRepository({
@@ -17,7 +17,9 @@ const snapshotting = createSnapshottingAggregateRootRepository({
   snapshotStorage: createMemorySnapshotStorage(),
 });
 
-const basicEventStore = createMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>();
+const basicEventStore = createInMemoryEventStore<
+  EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>
+>();
 const basic = createBasicAggregateRootRepository({
   eventStore: basicEventStore,
   aggregateRoots: airlineAggregateRoots,

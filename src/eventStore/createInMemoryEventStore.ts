@@ -10,7 +10,7 @@ type EventEmitter<TEvent extends Event> = {
  * An in-memory test store is most useful for testing purposes. Most use cases
  * would benefit from persistent storage.
  */
-export function createMemoryEventStore<TEvent extends Event>():
+export function createInMemoryEventStore<TEvent extends Event>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
   const storage: Record<string, TEvent[]> = {};

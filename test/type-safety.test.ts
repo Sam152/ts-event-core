@@ -1,6 +1,6 @@
 import { createBasicCommander } from "../src/command/createBasicCommander.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { createMemoryEventStore } from "../src/eventStore/createMemoryEventStore.ts";
+import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
 import { describe, it } from "jsr:@std/testing/bdd";
 
@@ -8,7 +8,7 @@ const issueCommand = createBasicCommander({
   aggregateRoots: airlineAggregateRoots,
   aggregateRootRepository: createBasicAggregateRootRepository({
     aggregateRoots: airlineAggregateRoots,
-    eventStore: createMemoryEventStore<AirlineEvent>(),
+    eventStore: createInMemoryEventStore<AirlineEvent>(),
   }),
 });
 

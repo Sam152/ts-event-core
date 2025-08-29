@@ -1,7 +1,7 @@
 import { createBasicCommander } from "../src/command/createBasicCommander.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
-import { createMemoryEventStore } from "../src/eventStore/createMemoryEventStore.ts";
+import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createMemoryReducedProjector } from "../src/projector/memory/createMemoryReducedProjector.ts";
 import { assertEquals } from "@std/assert";
 import {
@@ -16,7 +16,7 @@ import {
 import { createMemorySnapshotStorage } from "../src/aggregate/snapshot/createMemorySnapshotStorage.ts";
 
 describe("event sourcing", () => {
-  const eventStore = createMemoryEventStore<AirlineEvent>();
+  const eventStore = createInMemoryEventStore<AirlineEvent>();
   const issueCommand = createBasicCommander({
     aggregateRoots: airlineAggregateRoots,
     aggregateRootRepository: createSnapshottingAggregateRootRepository({

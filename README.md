@@ -9,12 +9,15 @@ This project is a reference implementation of Event Sourcing implemented in Type
 
 1. [Aggregate root definition](#aggregate-root-definition)
 2. [Commander](#commander)
-3. [Event store](#event-store)
+3. [Aggregate root repository](#aggregate-root-repository)
+   1. [Basic aggregate root repository](#basic-aggregate-root-repository)
+   2. [Snapshotting aggregate root repository](#snapshotting-aggregate-root-repository)
+4. [Event store](#event-store)
    1. [In-memory](#in-memory)
    2. [Postgres](#postgres)
-4. [Aggregate root repository](#aggregate-root-repository)
-5. [Commander](#commander)
-6. [Projector](#projector)
+5. [Aggregate root repository](#aggregate-root-repository)
+6. [Commander](#commander)
+7. [Projector](#projector)
 
 ----
 
@@ -63,6 +66,196 @@ export type Commander<
 }) => Promise<void>;
 ```
 
+## Aggregate root repository
+
+[:arrow_upper_right:](src/aggregate/AggregateRootRepository.ts#L4-L25) Retrieve and persist aggregate roots.
+
+```typescript
+export type AggregateRootRepository<
+  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
+> = {
+  retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(
+    args: { aggregateRootType: TAggregateRootType; aggregateRootId: string },
+  ) => Promise<AggregateRootInstance<TAggregateRootType, TAggregateDefinitionMap[TAggregateRootType]>>;
+
+  persist: <
+    TAggregateRootType extends keyof TAggregateDefinitionMap,
+    TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
+    TLoadedAggregateRoot extends AggregateRootInstance<TAggregateRootType, TAggregateDefinition>,
+  >(
+    args: {
+      aggregateRoot: TLoadedAggregateRoot;
+      pendingEventPayloads: Parameters<TAggregateDefinition["state"]["reducer"]>[1][];
+    },
+  ) => Promise<void>;
+};
+```
+
+### Basic aggregate root repository
+
+[:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56) This aggregate root repository loads the whole event stream for an aggregate root,
+and reduces them on demand. This can be suitable for use cases where an aggregate
+root has a limited number of events.
+
+```typescript
+function createBasicAggregateRootRepository< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes, >( { eventStore, aggregateRoots }:
+```
+    
+<details>
+<summary> Show full <code>createBasicAggregateRootRepository</code> definition :point_down:</summary>
+
+```typescript
+export function createBasicAggregateRootRepository<
+  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
+>(
+  { eventStore, aggregateRoots }: {
+    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap, TAggregateMapTypes>>;
+    aggregateRoots: TAggregateDefinitionMap;
+  },
+): AggregateRootRepository<TAggregateDefinitionMap, TAggregateMapTypes> {
+  return {
+    retrieve: async (
+      { aggregateRootId, aggregateRootType },
+    ) => {
+      const definition = aggregateRoots[aggregateRootType];
+      const events = eventStore.retrieve({
+        aggregateRootId,
+        aggregateRootType: aggregateRootType as string,
+      });
+
+      let aggregateVersion: number | undefined = undefined;
+      let state = definition.state.initialState();
+      for await (const event of events) {
+        state = definition.state.reducer(state, event.payload);
+        aggregateVersion = event.aggregateVersion;
+      }
+
+      return {
+        aggregateRootId,
+        aggregateRootType,
+        aggregateVersion,
+        state,
+      };
+    },
+    persist: async ({ aggregateRoot, pendingEventPayloads }) => {
+      const events: Event[] = pendingEventPayloads.map(
+        (payload, i) => ({
+          aggregateRootType: aggregateRoot.aggregateRootType as string,
+          aggregateRootId: aggregateRoot.aggregateRootId,
+          recordedAt: new Date(),
+          aggregateVersion: (aggregateRoot.aggregateVersion ?? 0) + (i + 1),
+          payload,
+        }),
+      );
+      await eventStore.persist(events);
+    },
+  };
+}
+```
+
+</details>
+
+### Snapshotting aggregate root repository
+
+[:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91) Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
+a large number of events when retrieving an aggregate.
+
+```typescript
+function createSnapshottingAggregateRootRepository< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes, >( { eventStore, aggregateRoots, snapshotStorage }:
+```
+    
+<details>
+<summary> Show full <code>createSnapshottingAggregateRootRepository</code> definition :point_down:</summary>
+
+```typescript
+export function createSnapshottingAggregateRootRepository<
+  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
+>(
+  { eventStore, aggregateRoots, snapshotStorage }: {
+    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap, TAggregateMapTypes>>;
+    aggregateRoots: TAggregateDefinitionMap;
+    snapshotStorage: SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>;
+  },
+): AggregateRootRepository<TAggregateDefinitionMap, TAggregateMapTypes> {
+  return {
+    retrieve: async (
+      { aggregateRootId, aggregateRootType },
+    ) => {
+      const definition = aggregateRoots[aggregateRootType];
+
+      const snapshot = await snapshotStorage.retrieve({
+        aggregateRootId,
+        aggregateRootType,
+        aggregateRootStateVersion: definition.state.version,
+      });
+
+      const events = eventStore.retrieve({
+        aggregateRootId,
+        aggregateRootType: aggregateRootType as string,
+        fromVersion: snapshot && snapshot.aggregateVersion,
+      });
+
+      let state = snapshot ? structuredClone(snapshot.state) : definition.state.initialState();
+      let aggregateVersion = snapshot ? snapshot.aggregateVersion : undefined;
+
+      for await (const event of events) {
+        state = definition.state.reducer(state, event.payload);
+        aggregateVersion = event.aggregateVersion;
+      }
+
+      return {
+        aggregateRootId,
+        aggregateRootType,
+        aggregateVersion,
+        state,
+      };
+    },
+    persist: async ({ aggregateRoot, pendingEventPayloads }) => {
+      const events: Event[] = pendingEventPayloads.map(
+        (payload, i) => ({
+          aggregateRootType: aggregateRoot.aggregateRootType as string,
+          aggregateRootId: aggregateRoot.aggregateRootId,
+          recordedAt: new Date(),
+          aggregateVersion: (aggregateRoot.aggregateVersion ?? 0) + (i + 1),
+          payload,
+        }),
+      );
+
+      const definition = aggregateRoots[aggregateRoot.aggregateRootType];
+      let state = aggregateRoot.state;
+      for await (const event of events) {
+        state = definition.state.reducer(state, event.payload);
+      }
+
+      const aggregateRootVersion: number | undefined = events.length > 0
+        ? events.at(-1)!.aggregateVersion
+        : aggregateRoot.aggregateVersion;
+
+      // In this case we are choosing to snapshot the aggregate, each time new
+      // events are persisted. We could choose a strategy of snapshotting every
+      // N events, to find a balance between writing aggregates to storage and
+      // retrieving events from the event store.
+      await snapshotStorage.persist({
+        aggregateRootStateVersion: definition.state.version,
+        aggregateRoot: {
+          state,
+          aggregateRootId: aggregateRoot.aggregateRootId,
+          aggregateVersion: aggregateRootVersion,
+          aggregateRootType: aggregateRoot.aggregateRootType,
+        },
+      });
+
+      await eventStore.persist(events);
+    },
+  };
+}
+```
+
+</details>
+
 ## Event store
 
 ```typescript
@@ -78,18 +271,18 @@ export type EventStore<TEvent extends Event = Event> = {
 
 ### In-memory
 
-[:arrow_upper_right:](src/eventStore/createMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
+[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
 
 ```typescript
-function createMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> & EventEmitter<TEvent>
+function createInMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> & EventEmitter<TEvent>
 ```
     
 <details>
-<summary> Show full <code>createMemoryEventStore</code> definition :point_down:</summary>
+<summary> Show full <code>createInMemoryEventStore</code> definition :point_down:</summary>
 
 ```typescript
-export function createMemoryEventStore<TEvent extends Event>():
+export function createInMemoryEventStore<TEvent extends Event>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
   const storage: Record<string, TEvent[]> = {};
