@@ -34,7 +34,7 @@ describeAll(
     repository: basic,
     eventStore: basicEventStore,
   }],
-  ({repository, eventStore}) => {
+  ({ repository, eventStore }) => {
     it("can persist and retrieve an aggregate", async () => {
       await repository.persist({
         aggregateRoot: {
@@ -67,7 +67,7 @@ describeAll(
         state: {
           totalSeats: 100,
           totalBoardedPassengers: 1,
-          passengerManifest: {PA1234567: "Harold Gribble"},
+          passengerManifest: { PA1234567: "Harold Gribble" },
           status: "ON_THE_GROUND",
         },
       });
@@ -102,7 +102,7 @@ describeAll(
         state: {
           totalSeats: 100,
           totalBoardedPassengers: 2,
-          passengerManifest: {PA1234567: "Harold Gribble", PA78965: "Sally Gribble"},
+          passengerManifest: { PA1234567: "Harold Gribble", PA78965: "Sally Gribble" },
           status: "ON_THE_GROUND",
         },
       });

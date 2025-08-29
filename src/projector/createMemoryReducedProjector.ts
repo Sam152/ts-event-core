@@ -6,7 +6,7 @@ import { Event } from "../eventStore/EventStore.ts";
  * memory.
  */
 export function createMemoryReducedProjector<TEvent extends Event, TState>(
-  {initialState, reducer}: {
+  { initialState, reducer }: {
     initialState: TState;
     reducer: (state: TState, event: TEvent) => TState;
   },

@@ -25,7 +25,7 @@ describe("event sourcing", () => {
       snapshotStorage: createInMemorySnapshotStorage(),
     }),
   });
-  eventStore.addSubscriber((event) => boardingProcessManager({event, issueCommand}));
+  eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
 
   const passengerActivity = createMemoryReducedProjector({
     initialState: passengerActivityInitialState,

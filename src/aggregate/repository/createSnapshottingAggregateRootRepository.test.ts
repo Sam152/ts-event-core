@@ -8,7 +8,7 @@ import { describe, it } from "jsr:@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 
 describe("snapshotting aggregate root repository", () => {
-  const {proxy: eventStore, calls: eventStoreCalls} = traceCalls(
+  const { proxy: eventStore, calls: eventStoreCalls } = traceCalls(
     createInMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>(),
   );
   const aggregateRootRepository = createSnapshottingAggregateRootRepository({
@@ -72,7 +72,7 @@ describe("snapshotting aggregate root repository", () => {
     assertEquals(aggregate.state, {
       totalSeats: 100,
       totalBoardedPassengers: 2,
-      passengerManifest: {PA1234567: "Harold Gribble", PA4567: "Fred Gribble"},
+      passengerManifest: { PA1234567: "Harold Gribble", PA4567: "Fred Gribble" },
       status: "ON_THE_GROUND",
     });
   });
