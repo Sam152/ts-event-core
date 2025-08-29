@@ -19,7 +19,7 @@ import { AggregateRootInstance } from "../AggregateRootInstance.ts";
  * For cases where too many events exist to replay and reduce on demand, persistent snapshot
  * storage can be used.
  */
-export function createMemorySnapshotStorage<
+export function createInMemorySnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes> {
@@ -28,9 +28,9 @@ export function createMemorySnapshotStorage<
 
   return {
     persist: async ({
-      aggregateRoot,
-      aggregateRootStateVersion,
-    }) => {
+                      aggregateRoot,
+                      aggregateRootStateVersion,
+                    }) => {
       const key = snapshotKey(
         aggregateRoot.aggregateRootType as string,
         aggregateRoot.aggregateRootId,
@@ -39,10 +39,10 @@ export function createMemorySnapshotStorage<
       storage[key] = aggregateRoot;
     },
     retrieve: async ({
-      aggregateRootType,
-      aggregateRootId,
-      aggregateRootStateVersion,
-    }) => {
+                       aggregateRootType,
+                       aggregateRootId,
+                       aggregateRootStateVersion,
+                     }) => {
       const key = snapshotKey(aggregateRootType as string, aggregateRootId, aggregateRootStateVersion);
       return storage[key] as AggregateRootInstance<
         typeof aggregateRootType,

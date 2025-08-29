@@ -258,7 +258,7 @@ export function createSnapshottingAggregateRootRepository<
 
 #### In-memory
 
-[:arrow_upper_right:](src/aggregate/snapshot/createMemorySnapshotStorage.ts#L10-L56) An in-memory implementation of snapshot storage.
+[:arrow_upper_right:](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) An in-memory implementation of snapshot storage.
 
 Unlike an event store, in-memory snapshot storage can be a useful concept in production
 because having snapshots stored in memory for the duration of the process saves a lot
@@ -270,14 +270,14 @@ For cases where too many events exist to replay and reduce on demand, persistent
 storage can be used.
 
 ```typescript
-function createMemorySnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
+function createInMemorySnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
 ```
     
 <details>
-<summary> Show full <code>createMemorySnapshotStorage</code> definition :point_down:</summary>
+<summary> Show full <code>createInMemorySnapshotStorage</code> definition :point_down:</summary>
 
 ```typescript
-export function createMemorySnapshotStorage<
+export function createInMemorySnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes> {

@@ -11,7 +11,7 @@ import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
 import { Projector } from "../src/projector/Projector.ts";
-import { createMemorySnapshotStorage } from "../src/aggregate/snapshot/createMemorySnapshotStorage.ts";
+import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 import { createPostgresSnapshotStorage } from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 
 /**
@@ -52,7 +52,7 @@ export function README(): string {
     
     #### In-memory
     
-    ${documentFunction(createMemorySnapshotStorage)}
+    ${documentFunction(createInMemorySnapshotStorage)}
     
     #### Postgres
     

@@ -1,5 +1,5 @@
 import { airlineAggregateRoots } from "../../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { createMemorySnapshotStorage } from "../snapshot/createMemorySnapshotStorage.ts";
+import { createInMemorySnapshotStorage } from "../snapshot/createInMemorySnapshotStorage.ts";
 import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
@@ -14,7 +14,7 @@ const snapshottingEventStore = createInMemoryEventStore<
 const snapshotting = createSnapshottingAggregateRootRepository({
   eventStore: snapshottingEventStore,
   aggregateRoots: airlineAggregateRoots,
-  snapshotStorage: createMemorySnapshotStorage(),
+  snapshotStorage: createInMemorySnapshotStorage(),
 });
 
 const basicEventStore = createInMemoryEventStore<
@@ -34,7 +34,7 @@ describeAll(
     repository: basic,
     eventStore: basicEventStore,
   }],
-  ({ repository, eventStore }) => {
+  ({repository, eventStore}) => {
     it("can persist and retrieve an aggregate", async () => {
       await repository.persist({
         aggregateRoot: {
@@ -67,7 +67,7 @@ describeAll(
         state: {
           totalSeats: 100,
           totalBoardedPassengers: 1,
-          passengerManifest: { PA1234567: "Harold Gribble" },
+          passengerManifest: {PA1234567: "Harold Gribble"},
           status: "ON_THE_GROUND",
         },
       });
@@ -102,7 +102,7 @@ describeAll(
         state: {
           totalSeats: 100,
           totalBoardedPassengers: 2,
-          passengerManifest: { PA1234567: "Harold Gribble", PA78965: "Sally Gribble" },
+          passengerManifest: {PA1234567: "Harold Gribble", PA78965: "Sally Gribble"},
           status: "ON_THE_GROUND",
         },
       });

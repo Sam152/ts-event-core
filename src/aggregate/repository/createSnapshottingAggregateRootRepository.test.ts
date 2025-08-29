@@ -1,5 +1,5 @@
 import { airlineAggregateRoots } from "../../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { createMemorySnapshotStorage } from "../snapshot/createMemorySnapshotStorage.ts";
+import { createInMemorySnapshotStorage } from "../snapshot/createInMemorySnapshotStorage.ts";
 import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
@@ -8,13 +8,13 @@ import { describe, it } from "jsr:@std/testing/bdd";
 import { assertEquals } from "@std/assert";
 
 describe("snapshotting aggregate root repository", () => {
-  const { proxy: eventStore, calls: eventStoreCalls } = traceCalls(
+  const {proxy: eventStore, calls: eventStoreCalls} = traceCalls(
     createInMemoryEventStore<EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>>(),
   );
   const aggregateRootRepository = createSnapshottingAggregateRootRepository({
     eventStore: eventStore,
     aggregateRoots: airlineAggregateRoots,
-    snapshotStorage: createMemorySnapshotStorage(),
+    snapshotStorage: createInMemorySnapshotStorage(),
   });
 
   it("can avoid loading the full event stream", async () => {
@@ -72,7 +72,7 @@ describe("snapshotting aggregate root repository", () => {
     assertEquals(aggregate.state, {
       totalSeats: 100,
       totalBoardedPassengers: 2,
-      passengerManifest: { PA1234567: "Harold Gribble", PA4567: "Fred Gribble" },
+      passengerManifest: {PA1234567: "Harold Gribble", PA4567: "Fred Gribble"},
       status: "ON_THE_GROUND",
     });
   });

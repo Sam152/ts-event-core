@@ -2,7 +2,7 @@ import { createBasicCommander } from "../src/command/createBasicCommander.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
-import { createMemoryReducedProjector } from "../src/projector/memory/createMemoryReducedProjector.ts";
+import { createMemoryReducedProjector } from "../src/projector/createMemoryReducedProjector.ts";
 import { assertEquals } from "@std/assert";
 import {
   passengerActivityInitialState,
@@ -13,7 +13,7 @@ import { describe, it } from "jsr:@std/testing/bdd";
 import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
-import { createMemorySnapshotStorage } from "../src/aggregate/snapshot/createMemorySnapshotStorage.ts";
+import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 
 describe("event sourcing", () => {
   const eventStore = createInMemoryEventStore<AirlineEvent>();
@@ -22,10 +22,10 @@ describe("event sourcing", () => {
     aggregateRootRepository: createSnapshottingAggregateRootRepository({
       aggregateRoots: airlineAggregateRoots,
       eventStore,
-      snapshotStorage: createMemorySnapshotStorage(),
+      snapshotStorage: createInMemorySnapshotStorage(),
     }),
   });
-  eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
+  eventStore.addSubscriber((event) => boardingProcessManager({event, issueCommand}));
 
   const passengerActivity = createMemoryReducedProjector({
     initialState: passengerActivityInitialState,
