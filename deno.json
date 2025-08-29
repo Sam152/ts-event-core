@@ -9,7 +9,8 @@
     "@std/assert": "jsr:@std/assert@1",
     "@std/path": "jsr:@std/path@^1.1.1",
     "postgres": "npm:postgres@^3.4.7",
-    "@types/node": "npm:@types/node@^22"
+    "@types/node": "npm:@types/node@^22",
+    "@std/testing/bdd": "jsr:@std/testing/bdd"
   },
   "fmt": {
     "lineWidth": 110,
