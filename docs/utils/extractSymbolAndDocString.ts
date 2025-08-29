@@ -15,11 +15,11 @@ export function extractSymbolAndDocString(
     throw new Error(`${symbolType} ${symbolName} not found in ${filePath}`);
   }
   const symbolEndIndex = lines
-    .slice(symbolStartIndex + 1)
+    .slice(symbolStartIndex)
     .findIndex((line) => /^((\}\;?)|(\>\;))/.test(line)) + symbolStartIndex + 1;
-  if (symbolEndIndex === symbolStartIndex) {
-    throw new Error(`${symbolType} ${symbolName} end not found in ${filePath}`);
-  }
+  // if (symbolEndIndex === symbolStartIndex) {
+  //   throw new Error(`${symbolType} ${symbolName} end not found in ${filePath}`);
+  // }
   const symbolBody = lines.slice(symbolStartIndex, symbolEndIndex + 1).join("\n");
 
   const reversedDocstringIndex = lines

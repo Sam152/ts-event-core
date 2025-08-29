@@ -10,6 +10,7 @@ import { createBasicAggregateRootRepository } from "../src/aggregate/repository/
 import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
+import { Projector } from "../src/projector/Projector.ts";
 
 /**
  * Edit with soft-wrap enabled.
@@ -58,12 +59,10 @@ export function README(): string {
     ### Postgres
     
     ${documentFunction(createPostgresEventStore)}
-    
-    ## Aggregate root repository
-    
-    ## Commander
-    
+ 
     ## Projector
+    
+    ${documentType<Projector<any>>()}
 
   `;
 }
