@@ -21,7 +21,7 @@ This project is a reference implementation of Event Sourcing implemented in Type
 
 ## Aggregate root definition
 
-[:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L5-L23) An aggregate root definition, the state and commands used to power
+[:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L5-L22) An aggregate root definition, the state and commands used to power
 writes in an event sourced system.
 
 ```typescript
@@ -47,7 +47,7 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 
 ## Commander
 
-[:arrow_upper_right:](src/command/Commander.ts#L6-L21) When issuing a command...
+[:arrow_upper_right:](src/command/Commander.ts#L6-L20) When issuing a command...
 
 ```typescript
 export type Commander<
@@ -66,7 +66,7 @@ export type Commander<
 
 ## Aggregate root repository
 
-[:arrow_upper_right:](src/aggregate/AggregateRootRepository.ts#L4-L26) Retrieve and persist aggregate roots.
+[:arrow_upper_right:](src/aggregate/AggregateRootRepository.ts#L4-L25) Retrieve and persist aggregate roots.
 
 ```typescript
 export type AggregateRootRepository<
@@ -92,7 +92,7 @@ export type AggregateRootRepository<
 
 ### Basic aggregate root repository
 
-[:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L57) This aggregate root repository loads the whole event stream for an aggregate root,
+[:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56) This aggregate root repository loads the whole event stream for an aggregate root,
 and reduces them on demand. This can be suitable for use cases where an aggregate
 root has a limited number of events.
 
@@ -157,7 +157,7 @@ export function createBasicAggregateRootRepository<
 
 ### Snapshotting aggregate root repository
 
-[:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L92) Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
+[:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91) Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
 a large number of events when retrieving an aggregate.
 
 ```typescript
@@ -269,7 +269,7 @@ export type EventStore<TEvent extends Event = Event> = {
 
 ### In-memory
 
-[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L47) An in-memory test store is most useful for testing purposes. Most use cases
+[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
 
 ```typescript
@@ -320,7 +320,7 @@ export function createInMemoryEventStore<TEvent extends Event>():
 
 ### Postgres
 
-[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L84) A persistent event store backed by Postgres.
+[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L83) A persistent event store backed by Postgres.
 
 This implementation depends on the following schema:
 
@@ -412,7 +412,7 @@ export function createPostgresEventStore<TEvent extends Event>(
 
 ## Projector
 
-[:arrow_upper_right:](src/projector/Projector.ts#L3-L25) Projectors take a stream of events from an event store and transform them into
+[:arrow_upper_right:](src/projector/Projector.ts#L3-L24) Projectors take a stream of events from an event store and transform them into
 useful data structures. These are often called read models.
 
 Read models are typically eventually consistent and thus are not required to

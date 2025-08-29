@@ -37,6 +37,6 @@ export function extractSymbolAndDocString(
   return {
     docString,
     symbolBody,
-    lineRef: `L${(docstringStartIndex || symbolStartIndex) + 1}-L${symbolEndIndex + 1}`,
+    lineRef: `L${(docstringStartIndex || symbolStartIndex) + 1}-L${symbolEndIndex}`,
   };
 }
