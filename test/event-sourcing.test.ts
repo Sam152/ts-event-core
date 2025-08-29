@@ -15,6 +15,9 @@ import {
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 
+/**
+ * @todo get a proper event subscriber going, and describeAll a few configurations.
+ */
 describe("event sourcing", () => {
   const eventStore = createInMemoryEventStore<AirlineEvent>();
   const issueCommand = createBasicCommander({
