@@ -11,6 +11,7 @@ import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
 import { Projector } from "../src/projector/Projector.ts";
+import { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
 
 /**
  * Edit with soft-wrap enabled.
@@ -47,6 +48,10 @@ export function README(): string {
     ### Snapshotting
     
     ${documentFunction(createSnapshottingAggregateRootRepository)}
+    
+    #### Snapshot storage
+    
+    ${documentType<SnapshotStorage<any, any>>()}
     
     ## Event store
     

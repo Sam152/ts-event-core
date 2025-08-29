@@ -12,6 +12,7 @@ This project is a reference implementation of Event Sourcing implemented in Type
 3. [Aggregate root repository](#aggregate-root-repository)
    1. [Basic](#basic)
    2. [Snapshotting](#snapshotting)
+      1. [Snapshot storage](#snapshot-storage)
 4. [Event store](#event-store)
    1. [In-memory](#in-memory)
    2. [Postgres](#postgres)
@@ -253,6 +254,38 @@ export function createSnapshottingAggregateRootRepository<
 ```
 
 </details>
+
+#### Snapshot storage
+
+[:arrow_upper_right:](src/aggregate/SnapshotStorage.ts#L8-L35) The storage used for snapshots can be...
+
+```typescript
+export type SnapshotStorage<
+  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
+> = {
+  retrieve: <
+    TAggregateRootType extends keyof TAggregateDefinitionMap,
+    TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
+  >(
+    args: {
+      aggregateRootType: TAggregateRootType;
+      aggregateRootId: string;
+      aggregateRootStateVersion: AggregateStateVersion;
+    },
+  ) => Promise<undefined | AggregateRootInstance<TAggregateRootType, TAggregateDefinition>>;
+
+  persist: <
+    TAggregateRootType extends keyof TAggregateDefinitionMap,
+    TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
+  >(
+    args: {
+      aggregateRoot: AggregateRootInstance<TAggregateRootType, TAggregateDefinition>;
+      aggregateRootStateVersion: AggregateStateVersion;
+    },
+  ) => Promise<void>;
+};
+```
 
 ## Event store
 
