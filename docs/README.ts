@@ -1,9 +1,10 @@
 import { documentType } from "./utils/documentType.ts";
-import { Event, EventStore } from "../src/eventStore/EventStore.ts";
+import { EventStore } from "../src/eventStore/EventStore.ts";
 import { documentFunction } from "./utils/documentFunction.ts";
 import { createMemoryEventStore } from "../src/eventStore/createMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
 import { AggregateRootDefinition } from "../src/aggregate/AggregateRootDefinition.ts";
+import { Commander } from "../src/command/Commander.ts";
 
 /**
  * Edit with soft-wrap enabled.
@@ -20,15 +21,16 @@ export function README(): string {
     {{ index }}
     
     ----
-
     
     ## Aggregate root definition
     
-    ${documentType<AggregateRootDefinition<unknown, unknown>>()}
+    ${documentType<AggregateRootDefinition<any, any>>()}
+    
+    ## Commander
+    
+    ${documentType<Commander<any, any>>()}
     
     ## Event store
-    
-    ${documentType<Event>()}
     
     ${documentType<EventStore>()}
     

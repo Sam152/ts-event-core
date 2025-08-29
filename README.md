@@ -8,15 +8,15 @@ This project is a reference implementation of Event Sourcing implemented in Type
 ----
 
 1. [Aggregate root definition](#aggregate-root-definition)
-2. [Event store](#event-store)
+2. [Commander](#commander)
+3. [Event store](#event-store)
    1. [In-memory](#in-memory)
    2. [Postgres](#postgres)
-3. [Aggregate root repository](#aggregate-root-repository)
-4. [Commander](#commander)
-5. [Projector](#projector)
+4. [Aggregate root repository](#aggregate-root-repository)
+5. [Commander](#commander)
+6. [Projector](#projector)
 
 ----
-
 
 ## Aggregate root definition
 
@@ -44,20 +44,26 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 };
 ```
 
-## Event store
+## Commander
 
-[:arrow_upper_right:](src/eventStore/EventStore.ts#L6-L16) Events record statements of fact that occurred within a domain, while processing
-commands. They are the single source of truth for all recorded data in the domain.
+[:arrow_upper_right:](src/command/Commander.ts#L6-L20) When issuing a command...
 
 ```typescript
-export type Event<TEventPayload = unknown> = {
-  aggregateRootType: string;
+export type Commander<
+  TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
+> = <
+  TAggregateRootType extends keyof TAggregateRootDefinitionMap,
+  TCommandName extends keyof TAggregateRootDefinitionMap[TAggregateRootType]["commands"],
+>(args: {
+  aggregateRootType: TAggregateRootType;
   aggregateRootId: string;
-  aggregateVersion: number;
-  recordedAt: Date;
-  payload: TEventPayload;
-};
+  command: TCommandName;
+  data: Parameters<TAggregateRootDefinitionMap[TAggregateRootType]["commands"][TCommandName]>[1];
+}) => Promise<void>;
 ```
+
+## Event store
 
 ```typescript
 export type EventStore<TEvent extends Event = Event> = {
