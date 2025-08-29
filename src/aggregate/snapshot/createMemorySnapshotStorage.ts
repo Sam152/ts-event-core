@@ -5,7 +5,7 @@ import {
   AggregateStateVersion,
 } from "../AggregateRootDefinition.ts";
 import { SnapshotStorage } from "../SnapshotStorage.ts";
-import { LoadedAggregateRoot } from "../LoadedAggregateRoot.ts";
+import { AggregateRootInstance } from "../AggregateRootInstance.ts";
 
 /**
  * An in-memory implementation of snapshot storage.
@@ -23,7 +23,8 @@ export function createMemorySnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes> {
-  const storage: Record<string, LoadedAggregateRoot<unknown, AggregateRootDefinition<unknown, unknown>>> = {};
+  const storage: Record<string, AggregateRootInstance<unknown, AggregateRootDefinition<unknown, unknown>>> =
+    {};
 
   return {
     persist: async ({
@@ -43,7 +44,7 @@ export function createMemorySnapshotStorage<
       aggregateRootStateVersion,
     }) => {
       const key = snapshotKey(aggregateRootType as string, aggregateRootId, aggregateRootStateVersion);
-      return storage[key] as LoadedAggregateRoot<
+      return storage[key] as AggregateRootInstance<
         typeof aggregateRootType,
         AggregateRootDefinition<
           unknown,

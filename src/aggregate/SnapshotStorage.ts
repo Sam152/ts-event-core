@@ -3,7 +3,7 @@ import {
   AggregateRootDefinitionMapTypes,
   AggregateStateVersion,
 } from "./AggregateRootDefinition.ts";
-import { LoadedAggregateRoot } from "./LoadedAggregateRoot.ts";
+import { AggregateRootInstance } from "./AggregateRootInstance.ts";
 
 export type SnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
@@ -18,14 +18,14 @@ export type SnapshotStorage<
       aggregateRootId: string;
       aggregateRootStateVersion: AggregateStateVersion;
     },
-  ) => Promise<undefined | LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>>;
+  ) => Promise<undefined | AggregateRootInstance<TAggregateRootType, TAggregateDefinition>>;
 
   persist: <
     TAggregateRootType extends keyof TAggregateDefinitionMap,
     TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
   >(
     args: {
-      aggregateRoot: LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>;
+      aggregateRoot: AggregateRootInstance<TAggregateRootType, TAggregateDefinition>;
       aggregateRootStateVersion: AggregateStateVersion;
     },
   ) => Promise<void>;

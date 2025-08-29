@@ -1,4 +1,4 @@
-import { LoadedAggregateRoot } from "./LoadedAggregateRoot.ts";
+import { AggregateRootInstance } from "./AggregateRootInstance.ts";
 import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "./AggregateRootDefinition.ts";
 
 /**
@@ -10,12 +10,12 @@ export type AggregateRootRepository<
 > = {
   retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(
     args: { aggregateRootType: TAggregateRootType; aggregateRootId: string },
-  ) => Promise<LoadedAggregateRoot<TAggregateRootType, TAggregateDefinitionMap[TAggregateRootType]>>;
+  ) => Promise<AggregateRootInstance<TAggregateRootType, TAggregateDefinitionMap[TAggregateRootType]>>;
 
   persist: <
     TAggregateRootType extends keyof TAggregateDefinitionMap,
     TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
-    TLoadedAggregateRoot extends LoadedAggregateRoot<TAggregateRootType, TAggregateDefinition>,
+    TLoadedAggregateRoot extends AggregateRootInstance<TAggregateRootType, TAggregateDefinition>,
   >(
     args: {
       aggregateRoot: TLoadedAggregateRoot;
