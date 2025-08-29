@@ -29,7 +29,7 @@ export function extractSymbolAndDocString(
   const docstringStartIndex: number | undefined = reversedDocstringIndex !== -1
     ? symbolStartIndex - 1 - reversedDocstringIndex
     : undefined;
-  const docString: string | undefined = docstringStartIndex
+  const docString: string | undefined = docstringStartIndex !== undefined
     ? lines.slice(docstringStartIndex, symbolStartIndex).join("\n")
     : undefined;
 

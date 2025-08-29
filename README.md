@@ -23,6 +23,9 @@ This project is a reference implementation of Event Sourcing implemented in Type
 
 ### Aggregate root definition
 
+[:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L5-L22) An aggregate root definition, the state and commands used to power
+writes in an event sourced system.
+
 ```typescript
 export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
   commands: {
