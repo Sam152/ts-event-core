@@ -4,13 +4,13 @@ import { testPostgresConnectionOptions } from "./infra/testPostgresConnectionOpt
 
 export async function prepareTestDatabaseContainer() {
   const infraPath = join(import.meta.dirname!, "infra");
-  const upCommand = new Deno.Command("docker-compose", {
-    args: ["up", "-d"],
+  const upCommand = new Deno.Command("docker", {
+    args: ["compose", "up", "-d"],
     cwd: infraPath,
   });
   const upResult = await upCommand.output();
   if (!upResult.success) {
-    throw new Error(`docker-compose up failed: ${new TextDecoder().decode(upResult.stderr)}`);
+    throw new Error(`docker compose up failed: ${new TextDecoder().decode(upResult.stderr)}`);
   }
 
   // Ensure the database can be connected to before resolving.
