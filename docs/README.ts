@@ -11,7 +11,8 @@ import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
 import { Projector } from "../src/projector/Projector.ts";
-import { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
+import { createMemorySnapshotStorage } from "../src/aggregate/snapshot/createMemorySnapshotStorage.ts";
+import { createPostgresSnapshotStorage } from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 
 /**
  * Edit with soft-wrap enabled.
@@ -49,9 +50,13 @@ export function README(): string {
     
     ${documentFunction(createSnapshottingAggregateRootRepository)}
     
-    #### Snapshot storage
+    #### In-memory
     
-    ${documentType<SnapshotStorage<any, any>>()}
+    ${documentFunction(createMemorySnapshotStorage)}
+    
+    #### Postgres
+    
+    ${documentFunction(createPostgresSnapshotStorage)}
     
     ## Event store
     

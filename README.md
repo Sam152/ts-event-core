@@ -12,7 +12,8 @@ This project is a reference implementation of Event Sourcing implemented in Type
 3. [Aggregate root repository](#aggregate-root-repository)
    1. [Basic](#basic)
    2. [Snapshotting](#snapshotting)
-      1. [Snapshot storage](#snapshot-storage)
+      1. [In-memory](#in-memory)
+      2. [Postgres](#postgres)
 4. [Event store](#event-store)
    1. [In-memory](#in-memory)
    2. [Postgres](#postgres)
@@ -255,37 +256,106 @@ export function createSnapshottingAggregateRootRepository<
 
 </details>
 
-#### Snapshot storage
+#### In-memory
 
-[:arrow_upper_right:](src/aggregate/SnapshotStorage.ts#L8-L35) The storage used for snapshots can be...
+[:arrow_upper_right:](src/aggregate/snapshot/createMemorySnapshotStorage.ts#L10-L56) An in-memory implementation of snapshot storage.
+
+Unlike an event store, in-memory snapshot storage can be a useful concept in production
+because having snapshots stored in memory for the duration of the process saves a lot
+of traffic to the database over the lifetime of the process. This is provided the application
+can tolerate a "warm up" for each aggregate root, where on first load, all events will still
+be loaded and reduced.
+
+For cases where too many events exist to replay and reduce on demand, persistent snapshot
+storage can be used.
 
 ```typescript
-export type SnapshotStorage<
+function createMemorySnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
+```
+    
+<details>
+<summary> Show full <code>createMemorySnapshotStorage</code> definition :point_down:</summary>
+
+```typescript
+export function createMemorySnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
-> = {
-  retrieve: <
-    TAggregateRootType extends keyof TAggregateDefinitionMap,
-    TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
-  >(
-    args: {
-      aggregateRootType: TAggregateRootType;
-      aggregateRootId: string;
-      aggregateRootStateVersion: AggregateStateVersion;
-    },
-  ) => Promise<undefined | AggregateRootInstance<TAggregateRootType, TAggregateDefinition>>;
+>(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes> {
+  const storage: Record<string, AggregateRootInstance<unknown, AggregateRootDefinition<unknown, unknown>>> =
+    {};
 
-  persist: <
-    TAggregateRootType extends keyof TAggregateDefinitionMap,
-    TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
-  >(
-    args: {
-      aggregateRoot: AggregateRootInstance<TAggregateRootType, TAggregateDefinition>;
-      aggregateRootStateVersion: AggregateStateVersion;
+  return {
+    persist: async ({
+      aggregateRoot,
+      aggregateRootStateVersion,
+    }) => {
+      const key = snapshotKey(
+        aggregateRoot.aggregateRootType as string,
+        aggregateRoot.aggregateRootId,
+        aggregateRootStateVersion,
+      );
+      storage[key] = aggregateRoot;
     },
-  ) => Promise<void>;
-};
+    retrieve: async ({
+      aggregateRootType,
+      aggregateRootId,
+      aggregateRootStateVersion,
+    }) => {
+      const key = snapshotKey(aggregateRootType as string, aggregateRootId, aggregateRootStateVersion);
+      return storage[key] as AggregateRootInstance<
+        typeof aggregateRootType,
+        AggregateRootDefinition<
+          unknown,
+          unknown
+        >
+      >;
+    },
+  };
+}
 ```
+
+</details>
+
+#### Postgres
+
+[:arrow_upper_right:](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L32) A Postgres implementation of snapshot storage.
+
+This may be useful for aggregates whose event streams get very long and whose projections
+do not change frequently. Having persistent snapshot storage may
+
+```typescript
+function createPostgresSnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(...): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
+```
+    
+<details>
+<summary> Show full <code>createPostgresSnapshotStorage</code> definition :point_down:</summary>
+
+```typescript
+export function createPostgresSnapshotStorage<
+  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
+  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
+>(
+  { connection: sql }: { connection: ReturnType<typeof postgres> },
+): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes> {
+  return {
+    persist: async ({
+      aggregateRoot,
+      aggregateRootStateVersion,
+    }) => {
+      // @todo
+    },
+    // @ts-ignore @todo
+    retrieve: async ({
+      aggregateRootType,
+      aggregateRootId,
+      aggregateRootStateVersion,
+    }) => {
+    },
+  };
+}
+```
+
+</details>
 
 ## Event store
 
