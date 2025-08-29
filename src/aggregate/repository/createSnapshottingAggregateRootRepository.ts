@@ -26,7 +26,7 @@ export function createSnapshottingAggregateRootRepository<
       const snapshot = await snapshotStorage.retrieve({
         aggregateRootId,
         aggregateRootType,
-        aggregateRootStateVersion: definition.state.version,
+        stateVersion: definition.state.version,
       });
 
       const events = eventStore.retrieve({
@@ -76,7 +76,7 @@ export function createSnapshottingAggregateRootRepository<
       // N events, to find a balance between writing aggregates to storage and
       // retrieving events from the event store.
       await snapshotStorage.persist({
-        aggregateRootStateVersion: definition.state.version,
+        stateVersion: definition.state.version,
         aggregateRoot: {
           state,
           aggregateRootId: aggregateRoot.aggregateRootId,

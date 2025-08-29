@@ -13,11 +13,11 @@ import postgres, { JSONValue } from "postgres";
  *     id                          BIGSERIAL PRIMARY KEY,
  *     "aggregateRootType"         TEXT        NOT NULL,
  *     "aggregateRootId"           TEXT        NOT NULL,
- *     "aggregateRootStateVersion" TEXT        NOT NULL,
+ *     "stateVersion" TEXT        NOT NULL,
  *     "aggregateVersion"          INT,
  *     "recordedAt"                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
  *     state                       JSONB       NOT NULL,
- *     CONSTRAINT "snapshotAccess" UNIQUE ("aggregateRootType", "aggregateRootId", "aggregateRootStateVersion")
+ *     CONSTRAINT "snapshotAccess" UNIQUE ("aggregateRootType", "aggregateRootId", "stateVersion")
  * );
  * ```
  */
@@ -30,18 +30,18 @@ export function createPostgresSnapshotStorage<
   return {
     persist: async ({
       aggregateRoot,
-      aggregateRootStateVersion,
+      stateVersion,
     }) => {
       await sql`
         INSERT INTO event_core.snapshots ${
         sql({
           aggregateRootType: aggregateRoot.aggregateRootType.toString(),
           aggregateRootId: aggregateRoot.aggregateRootId,
-          aggregateRootStateVersion: aggregateRootStateVersion,
+          stateVersion: stateVersion,
           aggregateVersion: aggregateRoot.aggregateVersion,
           state: aggregateRoot.state as JSONValue,
         })
-      } ON CONFLICT ("aggregateRootType", "aggregateRootId", "aggregateRootStateVersion") 
+      } ON CONFLICT ("aggregateRootType", "aggregateRootId", "stateVersion") 
         DO UPDATE SET
           "aggregateVersion" = EXCLUDED."aggregateVersion",
           state = EXCLUDED.state,
@@ -51,14 +51,14 @@ export function createPostgresSnapshotStorage<
     retrieve: async ({
       aggregateRootType,
       aggregateRootId,
-      aggregateRootStateVersion,
+      stateVersion,
     }) => {
       const result = await sql`
         SELECT "aggregateRootType", "aggregateRootId", "aggregateVersion", state
         FROM "event_core"."snapshots"
         WHERE "aggregateRootType" = ${aggregateRootType as string}
           AND "aggregateRootId" = ${aggregateRootId}
-          AND "aggregateRootStateVersion" = ${aggregateRootStateVersion}
+          AND "stateVersion" = ${stateVersion}
       `;
       return result[0]
         ? {

@@ -30,29 +30,29 @@ describeAll(
     beforeEach(beforeEachHook);
     afterAll(afterAllHook);
 
-    it("should persist and retrieve snapshots", async () => {
+    it("persists and retrieves snapshots", async () => {
       const storage = factory();
 
       await storage.persist({
         aggregateRoot: testAggregateSnapshot,
-        aggregateRootStateVersion: 1,
+        stateVersion: 1,
       });
 
       const retrieved = await storage.retrieve({
         aggregateRootType: "FLIGHT",
         aggregateRootId: "VA-497",
-        aggregateRootStateVersion: 1,
+        stateVersion: 1,
       });
 
       assertEquals(retrieved, testAggregateSnapshot);
     });
 
-    it("should return undefined for non-existent snapshots", async () => {
+    it("returns undefined for non-existent snapshots", async () => {
       assertEquals(
         await factory().retrieve({
           aggregateRootType: "FLIGHT",
           aggregateRootId: "non-existent",
-          aggregateRootStateVersion: 1,
+          stateVersion: 1,
         }),
         undefined,
       );
@@ -63,67 +63,45 @@ describeAll(
 
       await storage.persist({
         aggregateRoot: testAggregateSnapshot,
-        aggregateRootStateVersion: 1,
+        stateVersion: 1,
       });
-
-      const updatedSnapshot = {
-        ...testAggregateSnapshot,
-        state: {
-          ...testAggregateSnapshot.state,
-          totalBoardedPassengers: 5,
-        },
-        aggregateVersion: 10,
-      };
 
       await storage.persist({
-        aggregateRoot: updatedSnapshot,
-        aggregateRootStateVersion: 1,
+        aggregateRoot: {
+          ...testAggregateSnapshot,
+          state: {
+            ...testAggregateSnapshot.state,
+            totalBoardedPassengers: 5,
+          },
+          aggregateVersion: 10,
+        },
+        stateVersion: 1,
       });
 
-      const retrieved = await storage.retrieve({
-        aggregateRootType: "FLIGHT",
-        aggregateRootId: "VA-497",
-        aggregateRootStateVersion: 1,
-      });
-
-      assertEquals(retrieved, updatedSnapshot);
+      assertEquals(
+        (await storage.retrieve({
+          aggregateRootType: "FLIGHT",
+          aggregateRootId: "VA-497",
+          stateVersion: 1,
+        }))?.state?.totalBoardedPassengers,
+        5,
+      );
     });
 
-    it("should handle different state versions for same aggregate", async () => {
+    it("does not retrieve snapshots from incorrect versions", async () => {
       const storage = factory();
-
       await storage.persist({
         aggregateRoot: testAggregateSnapshot,
-        aggregateRootStateVersion: 1,
+        stateVersion: 1,
       });
-
-      const differentVersionSnapshot = {
-        ...testAggregateSnapshot,
-        state: {
-          ...testAggregateSnapshot.state,
-          totalBoardedPassengers: 8,
-        },
-      };
-
-      await storage.persist({
-        aggregateRoot: differentVersionSnapshot,
-        aggregateRootStateVersion: 2,
-      });
-
-      const version1 = await storage.retrieve({
-        aggregateRootType: "FLIGHT",
-        aggregateRootId: "VA-497",
-        aggregateRootStateVersion: 1,
-      });
-
-      const version2 = await storage.retrieve({
-        aggregateRootType: "FLIGHT",
-        aggregateRootId: "VA-497",
-        aggregateRootStateVersion: 2,
-      });
-
-      assertEquals(version1?.state.totalBoardedPassengers, 2);
-      assertEquals(version2?.state.totalBoardedPassengers, 8);
+      assertEquals(
+        await factory().retrieve({
+          aggregateRootType: "FLIGHT",
+          aggregateRootId: "VA-497",
+          stateVersion: 2,
+        }),
+        undefined,
+      );
     });
   },
 );

@@ -29,21 +29,21 @@ export function createInMemorySnapshotStorage<
   return {
     persist: async ({
       aggregateRoot,
-      aggregateRootStateVersion,
+      stateVersion,
     }) => {
       const key = snapshotKey(
         aggregateRoot.aggregateRootType as string,
         aggregateRoot.aggregateRootId,
-        aggregateRootStateVersion,
+        stateVersion,
       );
       storage[key] = aggregateRoot;
     },
     retrieve: async ({
       aggregateRootType,
       aggregateRootId,
-      aggregateRootStateVersion,
+      stateVersion,
     }) => {
-      const key = snapshotKey(aggregateRootType as string, aggregateRootId, aggregateRootStateVersion);
+      const key = snapshotKey(aggregateRootType as string, aggregateRootId, stateVersion);
       return storage[key] as AggregateRootInstance<
         typeof aggregateRootType,
         AggregateRootDefinition<

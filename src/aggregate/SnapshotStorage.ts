@@ -19,7 +19,7 @@ export type SnapshotStorage<
     args: {
       aggregateRootType: TAggregateRootType;
       aggregateRootId: string;
-      aggregateRootStateVersion: AggregateStateVersion;
+      stateVersion: AggregateStateVersion;
     },
   ) => Promise<undefined | AggregateRootInstance<TAggregateRootType, TAggregateDefinition>>;
 
@@ -29,7 +29,7 @@ export type SnapshotStorage<
   >(
     args: {
       aggregateRoot: AggregateRootInstance<TAggregateRootType, TAggregateDefinition>;
-      aggregateRootStateVersion: AggregateStateVersion;
+      stateVersion: AggregateStateVersion;
     },
   ) => Promise<void>;
 };
