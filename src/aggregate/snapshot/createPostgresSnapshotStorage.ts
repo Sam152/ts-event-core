@@ -60,12 +60,14 @@ export function createPostgresSnapshotStorage<
           AND "aggregateRootId" = ${aggregateRootId}
           AND "aggregateRootStateVersion" = ${aggregateRootStateVersion}
       `;
-      return result[0] ? {
-        aggregateRootType,
-        aggregateRootId: result[0].aggregateRootId,
-        aggregateVersion: result[0].aggregateVersion,
-        state: result[0].state,
-      } : undefined;
+      return result[0]
+        ? {
+          aggregateRootType,
+          aggregateRootId: result[0].aggregateRootId,
+          aggregateVersion: result[0].aggregateVersion,
+          state: result[0].state,
+        }
+        : undefined;
     },
   };
 }

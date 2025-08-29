@@ -48,11 +48,14 @@ describeAll(
     });
 
     it("should return undefined for non-existent snapshots", async () => {
-      assertEquals(await factory().retrieve({
-        aggregateRootType: "FLIGHT",
-        aggregateRootId: "non-existent",
-        aggregateRootStateVersion: 1,
-      }), undefined);
+      assertEquals(
+        await factory().retrieve({
+          aggregateRootType: "FLIGHT",
+          aggregateRootId: "non-existent",
+          aggregateRootStateVersion: 1,
+        }),
+        undefined,
+      );
     });
 
     it("should overwrite existing snapshots with same key", async () => {
@@ -138,4 +141,4 @@ const testAggregateSnapshot = {
     },
     status: "ON_THE_GROUND",
   },
-}  as const satisfies AggregateRootInstance<"FLIGHT", any>;
+} as const satisfies AggregateRootInstance<"FLIGHT", any>;
