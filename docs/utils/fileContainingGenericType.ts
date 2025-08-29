@@ -13,7 +13,7 @@ export function fileContainingGenericType(
   const callingLine = callingFunctionCallerFileContents.split("\n")[callSites[depth + 1].lineNumber - 1];
 
   const genericNameMatch = callingLine.match(
-    new RegExp(`${callingFunctionName}<(?<genericName>[A-Za-z0-9]+)>`),
+    new RegExp(`${callingFunctionName}<(?<genericName>[A-Za-z0-9]+)>?<?`),
   );
   if (!genericNameMatch) {
     throw new Error();

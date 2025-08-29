@@ -3,7 +3,12 @@
  * writes in an event sourced system.
  */
 export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
-  commands: CommandMap<TAggregateRootState, TEvent>;
+  commands: {
+    [key: string]: <TCommandData extends never>(
+      aggregate: TAggregateRootState,
+      commandData: TCommandData,
+    ) => TEvent | TEvent[];
+  };
   state: {
     reducer: AggregateReducer<TAggregateRootState, TEvent>;
     initialState: () => TAggregateRootState;
@@ -24,13 +29,6 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 export type AggregateStateVersion = string | number;
 
 export type AggregateReducer<TState, TEvent> = (state: TState, event: TEvent) => TState;
-
-type CommandMap<TAggregateRootState, TEvent> = {
-  [key: string]: <TCommandData extends never>(
-    aggregate: TAggregateRootState,
-    commandData: TCommandData,
-  ) => TEvent | TEvent[];
-};
 
 /**
  * Typescript cannot define a record of generics, without additional inference

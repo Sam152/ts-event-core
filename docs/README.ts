@@ -3,6 +3,7 @@ import { Event, EventStore } from "../src/eventStore/EventStore.ts";
 import { documentFunction } from "./utils/documentFunction.ts";
 import { createMemoryEventStore } from "../src/eventStore/createMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
+import { AggregateRootDefinition } from "../src/aggregate/AggregateRootDefinition.ts";
 
 /**
  * Edit with soft-wrap enabled.
@@ -22,6 +23,10 @@ export function README(): string {
     
     ## Key components
     
+    ### Aggregate root definition
+    
+    ${documentType<AggregateRootDefinition<unknown, unknown>>()}
+    
     ### Event store
     
     ${documentType<Event>()}
@@ -36,11 +41,9 @@ export function README(): string {
     
     ${documentFunction(createPostgresEventStore)}
     
-    ### Aggregate root definition
-    
     ### Aggregate root repository
     
-    ### Command issuer
+    ### Commander
     
     ### Projector
     

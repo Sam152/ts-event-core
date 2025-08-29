@@ -8,18 +8,41 @@ This project is a reference implementation of Event Sourcing implemented in Type
 ----
 
 1. [Key components](#key-components)
-   1. [Event store](#event-store)
+   1. [Aggregate root definition](#aggregate-root-definition)
+   2. [Event store](#event-store)
       1. [In-memory](#in-memory)
       2. [Postgres](#postgres)
-   2. [Aggregate root definition](#aggregate-root-definition)
    3. [Aggregate root repository](#aggregate-root-repository)
-   4. [Command issuer](#command-issuer)
+   4. [Commander](#commander)
    5. [Projector](#projector)
 2. [Example domain](#example-domain)
 
 ----
 
 ## Key components
+
+### Aggregate root definition
+
+```typescript
+export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
+  commands: {
+    [key: string]: <TCommandData extends never>(
+      aggregate: TAggregateRootState,
+      commandData: TCommandData,
+    ) => TEvent | TEvent[];
+  };
+  state: {
+    reducer: AggregateReducer<TAggregateRootState, TEvent>;
+    initialState: () => TAggregateRootState;
+
+    /**
+     * Reducers can change, so when state is reduced and persisted, by way of a snapshot, we need to be able to
+     * identify a version of the state.
+     */
+    version: AggregateStateVersion;
+  };
+};
+```
 
 ### Event store
 
@@ -190,11 +213,9 @@ export function createPostgresEventStore<TEvent extends Event>(
 
 </details>
 
-### Aggregate root definition
-
 ### Aggregate root repository
 
-### Command issuer
+### Commander
 
 ### Projector
 
