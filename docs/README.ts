@@ -40,11 +40,11 @@ export function README(): string {
     
     ${documentType<AggregateRootRepository<any, any>>()}
     
-    ### Basic aggregate root repository
+    ### Basic
     
     ${documentFunction(createBasicAggregateRootRepository)}
     
-    ### Snapshotting aggregate root repository
+    ### Snapshotting
     
     ${documentFunction(createSnapshottingAggregateRootRepository)}
     
@@ -63,6 +63,6 @@ export function README(): string {
     ## Projector
     
     ${documentType<Projector<any>>()}
-
+    
   `;
 }

@@ -10,8 +10,8 @@ This project is a reference implementation of Event Sourcing implemented in Type
 1. [Aggregate root definition](#aggregate-root-definition)
 2. [Commander](#commander)
 3. [Aggregate root repository](#aggregate-root-repository)
-   1. [Basic aggregate root repository](#basic-aggregate-root-repository)
-   2. [Snapshotting aggregate root repository](#snapshotting-aggregate-root-repository)
+   1. [Basic](#basic)
+   2. [Snapshotting](#snapshotting)
 4. [Event store](#event-store)
    1. [In-memory](#in-memory)
    2. [Postgres](#postgres)
@@ -90,7 +90,7 @@ export type AggregateRootRepository<
 };
 ```
 
-### Basic aggregate root repository
+### Basic
 
 [:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56) This aggregate root repository loads the whole event stream for an aggregate root,
 and reduces them on demand. This can be suitable for use cases where an aggregate
@@ -155,7 +155,7 @@ export function createBasicAggregateRootRepository<
 
 </details>
 
-### Snapshotting aggregate root repository
+### Snapshotting
 
 [:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91) Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
 a large number of events when retrieving an aggregate.
