@@ -1,6 +1,6 @@
 import { airlineAggregateRoots } from "../../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createMemorySnapshotStorage } from "../snapshot/createMemorySnapshotStorage.ts";
-import { createMemoryEventStore } from "../../eventStore/memory/createMemoryEventStore.ts";
+import { createMemoryEventStore } from "../../eventStore/createMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { traceCalls } from "../../../test/utils/traceCalls.ts";

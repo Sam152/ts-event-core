@@ -3,18 +3,20 @@
 ts-event-core
 ====
 
-This project is a reference implementation of Event Sourcing implemented in TypeScript using a functional programming style. It contains a set of loosely coupled types (and implementations of these types) which can be interchanged depending on the use case.
+This project is a reference implementation of Event Sourcing implemented in TypeScript using a functional programming
+style. It contains a set of loosely coupled types (and implementations of these types) which can be interchanged
+depending on the use case.
 
 ----
 
 1. [Key components](#key-components)
-   1. [Event store](#event-store)
-      1. [In-memory](#in-memory)
-      2. [Postgres](#postgres)
-   2. [Aggregate root definition](#aggregate-root-definition)
-   3. [Aggregate root repository](#aggregate-root-repository)
-   4. [Command issuer](#command-issuer)
-   5. [Projector](#projector)
+    1. [Event store](#event-store)
+        1. [In-memory](#in-memory)
+        2. [Postgres](#postgres)
+    2. [Aggregate root definition](#aggregate-root-definition)
+    3. [Aggregate root repository](#aggregate-root-repository)
+    4. [Command issuer](#command-issuer)
+    5. [Projector](#projector)
 2. [Example domain](#example-domain)
 
 ----
@@ -23,7 +25,8 @@ This project is a reference implementation of Event Sourcing implemented in Type
 
 ### Event store
 
-[:arrow_upper_right:](src/eventStore/EventStore.ts#L6-L16) Events record statements of fact that occurred within a domain, while processing
+[:arrow_upper_right:](src/eventStore/EventStore.ts#L6-L16) Events record statements of fact that occurred within a
+domain, while processing
 commands. They are the single source of truth for all recorded data in the domain.
 
 ```typescript
@@ -49,19 +52,20 @@ export type EventStore<TEvent extends Event = Event> = {
 
 #### In-memory
 
-[:arrow_upper_right:](src/eventStore/memory/createMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
+[:arrow_upper_right:](src/eventStore/createMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for
+testing purposes. Most use cases
 would benefit from persistent storage.
 
 ```typescript
 function createMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> & EventEmitter<TEvent>
 ```
-    
+
 <details>
 <summary> Show full <code>createMemoryEventStore</code> definition :point_down:</summary>
 
 ```typescript
 export function createMemoryEventStore<TEvent extends Event>():
-  & EventStore<TEvent>
+& EventStore<TEvent>
   & EventEmitter<TEvent> {
   const storage: Record<string, TEvent[]> = {};
   const subscribers: EventSubscriber<TEvent>[] = [];
@@ -82,10 +86,10 @@ export function createMemoryEventStore<TEvent extends Event>():
       }));
     },
     retrieve: async function* ({
-      aggregateRootType,
-      aggregateRootId,
-      fromVersion,
-    }) {
+                                 aggregateRootType,
+                                 aggregateRootId,
+                                 fromVersion,
+                               }) {
       const key = streamKey(aggregateRootType, aggregateRootId);
       const events = storage[key] || [];
       yield* (
@@ -100,7 +104,7 @@ export function createMemoryEventStore<TEvent extends Event>():
 
 #### Postgres
 
-[:arrow_upper_right:](src/eventStore/postgres/createPostgresEventStore.ts#L6-L84) A persistent event store backed by Postgres.
+[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L6-L84) A persistent event store backed by Postgres.
 
 This implementation depends on the following schema:
 
@@ -122,13 +126,13 @@ This implementation depends on the following schema:
 ```typescript
 function createPostgresEventStore<TEvent extends Event>(...): EventStore<TEvent>
 ```
-    
+
 <details>
 <summary> Show full <code>createPostgresEventStore</code> definition :point_down:</summary>
 
 ```typescript
 export function createPostgresEventStore<TEvent extends Event>(
-  { connection: sql }: { connection: ReturnType<typeof postgres> },
+  {connection: sql}: { connection: ReturnType<typeof postgres> },
 ): EventStore<TEvent> {
   return {
     persist: async (events) => {
@@ -163,10 +167,10 @@ export function createPostgresEventStore<TEvent extends Event>(
     },
 
     retrieve: async function* ({
-      aggregateRootType,
-      aggregateRootId,
-      fromVersion = 0,
-    }: {
+                                 aggregateRootType,
+                                 aggregateRootId,
+                                 fromVersion = 0,
+                               }: {
       aggregateRootType: string;
       aggregateRootId: string;
       fromVersion?: number;

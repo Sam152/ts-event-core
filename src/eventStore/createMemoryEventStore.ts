@@ -1,5 +1,5 @@
-import { Event, EventStore } from "../EventStore.ts";
-import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersionIntegrityError.ts";
+import { Event, EventStore } from "./EventStore.ts";
+import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 
 type EventSubscriber<TEvent extends Event> = (event: TEvent) => Promise<void> | void;
 type EventEmitter<TEvent extends Event> = {

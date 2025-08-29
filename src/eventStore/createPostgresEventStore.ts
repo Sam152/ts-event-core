@@ -1,7 +1,6 @@
-import { Event, EventStore } from "../EventStore.ts";
-import postgres from "postgres";
-import { AggregateRootVersionIntegrityError } from "../error/AggregateRootVersionIntegrityError.ts";
-import { JSONValue } from "npm:postgres@3.4.7";
+import { Event, EventStore } from "./EventStore.ts";
+import postgres, { JSONValue } from "postgres";
+import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 
 /**
  * A persistent event store backed by Postgres.
