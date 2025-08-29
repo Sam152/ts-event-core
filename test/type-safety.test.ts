@@ -1,10 +1,10 @@
-import { createImmediateCommandIssuer } from "../src/command/immediate/createImmediateCommandIssuer.ts";
+import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createMemoryEventStore } from "../src/eventStore/createMemoryEventStore.ts";
 import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
 import { describe, it } from "jsr:@std/testing/bdd";
 
-const issueCommand = createImmediateCommandIssuer({
+const issueCommand = createBasicCommandIssuer({
   aggregateRoots: airlineAggregateRoots,
   aggregateRootRepository: createBasicAggregateRootRepository({
     aggregateRoots: airlineAggregateRoots,

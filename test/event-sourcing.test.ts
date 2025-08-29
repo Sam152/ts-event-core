@@ -1,4 +1,4 @@
-import { createImmediateCommandIssuer } from "../src/command/immediate/createImmediateCommandIssuer.ts";
+import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
 import { createMemoryEventStore } from "../src/eventStore/createMemoryEventStore.ts";
@@ -17,7 +17,7 @@ import { createMemorySnapshotStorage } from "../src/aggregate/snapshot/createMem
 
 describe("event sourcing", () => {
   const eventStore = createMemoryEventStore<AirlineEvent>();
-  const issueCommand = createImmediateCommandIssuer({
+  const issueCommand = createBasicCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
     aggregateRootRepository: createSnapshottingAggregateRootRepository({
       aggregateRoots: airlineAggregateRoots,

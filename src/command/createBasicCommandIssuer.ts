@@ -1,16 +1,13 @@
-import { CommandIssuer } from "../CommandIssuer.ts";
-import {
-  AggregateRootDefinitionMap,
-  AggregateRootDefinitionMapTypes,
-} from "../../aggregate/AggregateRootDefinition.ts";
-import { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
+import { CommandIssuer } from "./CommandIssuer.ts";
+import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes, } from "../aggregate/AggregateRootDefinition.ts";
+import { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
 
 /**
  * An immediate command issuer processes commands right away. This is in contrast to other kinds
  * of command issuers which may acknowledge commands to be processed later or provide additional
  * features.
  */
-export function createImmediateCommandIssuer<
+export function createBasicCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 >(
