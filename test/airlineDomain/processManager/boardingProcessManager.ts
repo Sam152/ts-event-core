@@ -1,4 +1,4 @@
-import { Commander } from "../../../src/command/Commander.ts";
+import { CommandIssuer } from "../../../src/command/CommandIssuer.ts";
 import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
 
 /**
@@ -16,7 +16,7 @@ import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoot/airlineAgg
 export async function boardingProcessManager(
   { event, issueCommand }: {
     event: AirlineEvent;
-    issueCommand: Commander<typeof airlineAggregateRoots>;
+    issueCommand: CommandIssuer<typeof airlineAggregateRoots>;
   },
 ) {
   if (event.payload.type === "BOARDING_PASS_SCANNED") {

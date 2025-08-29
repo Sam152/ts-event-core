@@ -6,7 +6,7 @@ import {
 /**
  * When issuing a command...
  */
-export type Commander<
+export type CommandIssuer<
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
 > = <

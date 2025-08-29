@@ -51,10 +51,10 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 
 ## Commander
 
-[:arrow_upper_right:](src/command/Commander.ts#L6-L20) When issuing a command...
+[:arrow_upper_right:](src/command/CommandIssuer.ts#L6-L20) When issuing a command...
 
 ```typescript
-export type Commander<
+export type CommandIssuer<
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
 > = <

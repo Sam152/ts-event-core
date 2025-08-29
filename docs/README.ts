@@ -4,7 +4,7 @@ import { documentFunction } from "./utils/documentFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
 import { AggregateRootDefinition } from "../src/aggregate/AggregateRootDefinition.ts";
-import { Commander } from "../src/command/Commander.ts";
+import { CommandIssuer } from "../src/command/CommandIssuer.ts";
 import { AggregateRootRepository } from "../src/aggregate/AggregateRootRepository.ts";
 import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
 import {
@@ -38,7 +38,7 @@ export function README(): string {
     
     ## Commander
     
-    ${documentType<Commander<any, any>>()}
+    ${documentType<CommandIssuer<any, any>>()}
     
     ## Aggregate root repository
     
