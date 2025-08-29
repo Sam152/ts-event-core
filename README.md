@@ -43,7 +43,6 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
     version: AggregateStateVersion;
   };
 };
-
 ```
 
 ## Commander
@@ -63,7 +62,6 @@ export type Commander<
   command: TCommandName;
   data: Parameters<TAggregateRootDefinitionMap[TAggregateRootType]["commands"][TCommandName]>[1];
 }) => Promise<void>;
-
 ```
 
 ## Aggregate root repository
@@ -90,7 +88,6 @@ export type AggregateRootRepository<
     },
   ) => Promise<void>;
 };
-
 ```
 
 ### Basic aggregate root repository
@@ -154,7 +151,6 @@ export function createBasicAggregateRootRepository<
     },
   };
 }
-
 ```
 
 </details>
@@ -254,7 +250,6 @@ export function createSnapshottingAggregateRootRepository<
     },
   };
 }
-
 ```
 
 </details>
@@ -270,7 +265,6 @@ export type EventStore<TEvent extends Event = Event> = {
     fromVersion?: number;
   }) => AsyncGenerator<TEvent>;
 };
-
 ```
 
 ### In-memory
@@ -320,7 +314,6 @@ export function createInMemoryEventStore<TEvent extends Event>():
     },
   };
 }
-
 ```
 
 </details>
@@ -413,14 +406,13 @@ export function createPostgresEventStore<TEvent extends Event>(
     },
   };
 }
-
 ```
 
 </details>
 
 ## Projector
 
-[:arrow_upper_right:](src/projector/Projector.ts#L3-L24) Projectors take a stream of events from an event store and transform them into
+[:arrow_upper_right:](src/projector/Projector.ts#L3-L25) Projectors take a stream of events from an event store and transform them into
 useful data structures. These are often called read models.
 
 Read models are typically eventually consistent and thus are not required to

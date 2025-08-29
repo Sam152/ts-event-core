@@ -14,13 +14,14 @@ export function extractSymbolAndDocString(
   if (symbolStartIndex === -1) {
     throw new Error(`${symbolType} ${symbolName} not found in ${filePath}`);
   }
-  const symbolEndIndex = lines
+  const symbolEndIndexLookup = lines
     .slice(symbolStartIndex)
     .findIndex((line) => /^((\}\;?)|(\>\;))/.test(line)) + symbolStartIndex + 1;
-  // if (symbolEndIndex === symbolStartIndex) {
-  //   throw new Error(`${symbolType} ${symbolName} end not found in ${filePath}`);
-  // }
-  const symbolBody = lines.slice(symbolStartIndex, symbolEndIndex + 1).join("\n");
+  const symbolEndIndex = symbolEndIndexLookup === symbolStartIndex
+    ? symbolStartIndex + 1
+    : symbolEndIndexLookup;
+
+  const symbolBody = lines.slice(symbolStartIndex, symbolEndIndex + 1).join("\n").trim();
 
   const reversedDocstringIndex = lines
     .slice(0, symbolStartIndex)
