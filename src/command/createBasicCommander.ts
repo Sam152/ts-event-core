@@ -1,5 +1,8 @@
 import { Commander } from "./Commander.ts";
-import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes, } from "../aggregate/AggregateRootDefinition.ts";
+import {
+  AggregateRootDefinitionMap,
+  AggregateRootDefinitionMapTypes,
+} from "../aggregate/AggregateRootDefinition.ts";
 import { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
 
 /**
@@ -11,12 +14,12 @@ export function createBasicCommander<
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 >(
-  {aggregateRootRepository, aggregateRoots}: {
+  { aggregateRootRepository, aggregateRoots }: {
     aggregateRoots: TAggregateMap;
     aggregateRootRepository: AggregateRootRepository<TAggregateMap, TAggregateMapTypes>;
   },
 ): Commander<TAggregateMap, TAggregateMapTypes> {
-  return async ({aggregateRootType, aggregateRootId, command, data}) => {
+  return async ({ aggregateRootType, aggregateRootId, command, data }) => {
     const aggregate = await aggregateRootRepository.retrieve({
       aggregateRootId,
       aggregateRootType,
