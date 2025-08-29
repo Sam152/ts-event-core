@@ -20,33 +20,31 @@ export function README(): string {
     {{ index }}
     
     ----
+
     
-    ## Key components
-    
-    ### Aggregate root definition
+    ## Aggregate root definition
     
     ${documentType<AggregateRootDefinition<unknown, unknown>>()}
     
-    ### Event store
+    ## Event store
     
     ${documentType<Event>()}
     
     ${documentType<EventStore>()}
     
-    #### In-memory
+    ### In-memory
     
     ${documentFunction(createMemoryEventStore)}
     
-    #### Postgres
+    ### Postgres
     
     ${documentFunction(createPostgresEventStore)}
     
-    ### Aggregate root repository
+    ## Aggregate root repository
     
-    ### Commander
+    ## Commander
     
-    ### Projector
-    
-    ## Example domain
+    ## Projector
+
   `;
 }

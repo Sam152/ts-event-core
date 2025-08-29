@@ -7,21 +7,18 @@ This project is a reference implementation of Event Sourcing implemented in Type
 
 ----
 
-1. [Key components](#key-components)
-   1. [Aggregate root definition](#aggregate-root-definition)
-   2. [Event store](#event-store)
-      1. [In-memory](#in-memory)
-      2. [Postgres](#postgres)
-   3. [Aggregate root repository](#aggregate-root-repository)
-   4. [Commander](#commander)
-   5. [Projector](#projector)
-2. [Example domain](#example-domain)
+1. [Aggregate root definition](#aggregate-root-definition)
+2. [Event store](#event-store)
+   1. [In-memory](#in-memory)
+   2. [Postgres](#postgres)
+3. [Aggregate root repository](#aggregate-root-repository)
+4. [Commander](#commander)
+5. [Projector](#projector)
 
 ----
 
-## Key components
 
-### Aggregate root definition
+## Aggregate root definition
 
 [:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L5-L22) An aggregate root definition, the state and commands used to power
 writes in an event sourced system.
@@ -47,7 +44,7 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 };
 ```
 
-### Event store
+## Event store
 
 [:arrow_upper_right:](src/eventStore/EventStore.ts#L6-L16) Events record statements of fact that occurred within a domain, while processing
 commands. They are the single source of truth for all recorded data in the domain.
@@ -73,7 +70,7 @@ export type EventStore<TEvent extends Event = Event> = {
 };
 ```
 
-#### In-memory
+### In-memory
 
 [:arrow_upper_right:](src/eventStore/createMemoryEventStore.ts#L9-L46) An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
@@ -124,7 +121,7 @@ export function createMemoryEventStore<TEvent extends Event>():
 
 </details>
 
-#### Postgres
+### Postgres
 
 [:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L83) A persistent event store backed by Postgres.
 
@@ -216,10 +213,8 @@ export function createPostgresEventStore<TEvent extends Event>(
 
 </details>
 
-### Aggregate root repository
+## Aggregate root repository
 
-### Commander
+## Commander
 
-### Projector
-
-## Example domain
+## Projector
