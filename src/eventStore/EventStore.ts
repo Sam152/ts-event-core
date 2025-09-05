@@ -1,4 +1,5 @@
 import {
+  AggregateRootDefinition,
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
 } from "../aggregate/AggregateRootDefinition.ts";
@@ -42,4 +43,10 @@ export type EventsRaisedByAggregateRoots<
       keyof TAggregateRootDefinitionMap
     ]["state"]["reducer"]
   >[1]
+>;
+
+export type EventsRaisedByAggregateRoot<
+  TAggregateType extends AggregateRootDefinition<unknown, unknown>,
+> = Event<
+  Parameters<TAggregateType["state"]["reducer"]>[1]
 >;
