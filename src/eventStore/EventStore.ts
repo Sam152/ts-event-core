@@ -22,6 +22,11 @@ export type EventStore<TEvent extends Event = Event> = {
     aggregateRootId: string;
     fromVersion?: number;
   }) => AsyncGenerator<TEvent>;
+
+  retrieveAll: (args: {
+    idGt: number;
+    limit: string;
+  }) => AsyncGenerator<TEvent>;
 };
 
 export type EventsRaisedByAggregateRoots<

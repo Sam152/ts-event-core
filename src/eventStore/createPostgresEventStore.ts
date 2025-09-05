@@ -79,5 +79,12 @@ export function createPostgresEventStore<TEvent extends Event>(
         yield* rows;
       }
     },
+
+    retrieveAll: async function* ({
+      idGt,
+      limit,
+    }) {
+      // Select and return the right events.
+    },
   };
 }

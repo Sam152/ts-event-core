@@ -13,7 +13,8 @@ type EventEmitter<TEvent extends Event> = {
 export function createInMemoryEventStore<TEvent extends Event>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
-  const storage: Record<string, TEvent[]> = {};
+  const storageByAggregate: Record<string, TEvent[]> = {};
+  const storageByInsertOrder: TEvent[] = [];
   const subscribers: EventSubscriber<TEvent>[] = [];
 
   return {
@@ -21,13 +22,17 @@ export function createInMemoryEventStore<TEvent extends Event>():
     persist: async (events) => {
       await Promise.all(events.map(async (event) => {
         const key = streamKey(event.aggregateRootType, event.aggregateRootId);
-        storage[key] = storage[key] ?? [];
+        storageByAggregate[key] = storageByAggregate[key] ?? [];
 
-        if (storage[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)) {
+        if (
+          storageByAggregate[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)
+        ) {
           throw new AggregateRootVersionIntegrityError();
         }
 
-        storage[key].push(event);
+        storageByAggregate[key].push(event);
+        storageByInsertOrder.push(event);
+
         await Promise.all(subscribers?.map((subscriber) => subscriber(event)) ?? []);
       }));
     },
@@ -37,10 +42,16 @@ export function createInMemoryEventStore<TEvent extends Event>():
       fromVersion,
     }) {
       const key = streamKey(aggregateRootType, aggregateRootId);
-      const events = storage[key] || [];
+      const events = storageByAggregate[key] || [];
       yield* (
         fromVersion !== undefined ? events.filter((event) => event.aggregateVersion > fromVersion) : events
       );
+    },
+    retrieveAll: async function* ({
+      idGt,
+      limit,
+    }) {
+      // Slice by storageByInsertOrder and yield results.
     },
   };
 }
