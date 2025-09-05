@@ -51,7 +51,7 @@ export function createInMemoryEventStore<TEvent extends Event>():
       idGt,
       limit,
     }) {
-      // Slice by storageByInsertOrder and yield results.
+      yield* storageByInsertOrder.slice(idGt, idGt + limit);
     },
   };
 }

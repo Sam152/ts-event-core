@@ -84,7 +84,16 @@ export function createPostgresEventStore<TEvent extends Event>(
       idGt,
       limit,
     }) {
-      // Select and return the right events.
+      const cursor = sql<TEvent[]>`
+        SELECT *
+        FROM "event_core"."events"
+        WHERE id > ${idGt}
+        ORDER BY id ASC
+        LIMIT ${limit}
+      `.cursor(1000);
+      for await (const rows of cursor) {
+        yield* rows;
+      }
     },
   };
 }

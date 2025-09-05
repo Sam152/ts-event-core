@@ -25,7 +25,7 @@ export type EventStore<TEvent extends Event = Event> = {
 
   retrieveAll: (args: {
     idGt: number;
-    limit: string;
+    limit: number;
   }) => AsyncGenerator<TEvent>;
 };
 

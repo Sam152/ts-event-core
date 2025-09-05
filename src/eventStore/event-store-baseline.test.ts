@@ -79,6 +79,21 @@ describeAll(
         AggregateRootVersionIntegrityError,
       );
     });
+
+    it("should retrieve all events in insertion order with pagination", async () => {
+      const eventStore = factory();
+      await eventStore.persist(testEventStream);
+      assertEquals(
+        (await Array.fromAsync(eventStore.retrieveAll({
+          idGt: 1,
+          limit: 2,
+        }))).map((e) => e.payload.type),
+        [
+          "PASSENGER_BOARDED",
+          "FLIGHT_DEPARTED",
+        ],
+      );
+    });
   },
 );
 

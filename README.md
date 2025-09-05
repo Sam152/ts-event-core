@@ -413,7 +413,7 @@ export type EventStore<TEvent extends Event = Event> = {
 
   retrieveAll: (args: {
     idGt: number;
-    limit: string;
+    limit: number;
   }) => AsyncGenerator<TEvent>;
 };
 ```
@@ -472,7 +472,7 @@ export function createInMemoryEventStore<TEvent extends Event>():
       idGt,
       limit,
     }) {
-      // Slice by storageByInsertOrder and yield results.
+      yield* storageByInsertOrder.slice(idGt, idGt + limit);
     },
   };
 }
@@ -482,7 +482,7 @@ export function createInMemoryEventStore<TEvent extends Event>():
 
 ### Postgres
 
-[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L90) A persistent event store backed by Postgres.
+[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L99) A persistent event store backed by Postgres.
 
 This implementation depends on the following schema:
 
@@ -571,7 +571,16 @@ export function createPostgresEventStore<TEvent extends Event>(
       idGt,
       limit,
     }) {
-      // Select and return the right events.
+      const cursor = sql<TEvent[]>`
+        SELECT *
+        FROM "event_core"."events"
+        WHERE id > ${idGt}
+        ORDER BY id ASC
+        LIMIT ${limit}
+      `.cursor(1000);
+      for await (const rows of cursor) {
+        yield* rows;
+      }
     },
   };
 }
