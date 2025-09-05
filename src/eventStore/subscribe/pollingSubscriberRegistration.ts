@@ -9,7 +9,7 @@ export function pollingSubscriberRegistration<TEvent extends Event = Event>(
     subscribers: Array<(event: TEvent) => Promise<void>>;
   },
 ) {
-  const pollAndProcessEvents = () => {
+  const pollAndProcessEvents = async () => {
     // const events = eventStore.retrieve();
   };
 
