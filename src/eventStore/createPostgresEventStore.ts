@@ -1,4 +1,4 @@
-import { Event, EventStore } from "./EventStore.ts";
+import { Event, EventStore, PersistedEvent } from "./EventStore.ts";
 import postgres, { JSONValue } from "postgres";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 
@@ -66,7 +66,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       aggregateRootId: string;
       fromVersion?: number;
     }) {
-      const cursor = sql<TEvent[]>`
+      const cursor = sql<PersistedEvent<TEvent>[]>`
         SELECT *
         FROM "event_core"."events"
         WHERE "aggregateRootType" = ${aggregateRootType}
@@ -84,7 +84,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       idGt,
       limit,
     }) {
-      const cursor = sql<TEvent[]>`
+      const cursor = sql<PersistedEvent<TEvent>[]>`
         SELECT *
         FROM "event_core"."events"
         WHERE id > ${idGt}

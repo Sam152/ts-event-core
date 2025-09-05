@@ -409,18 +409,18 @@ export type EventStore<TEvent extends Event = Event> = {
     aggregateRootType: string;
     aggregateRootId: string;
     fromVersion?: number;
-  }) => AsyncGenerator<TEvent>;
+  }) => AsyncGenerator<PersistedEvent<TEvent>>;
 
   retrieveAll: (args: {
     idGt: number;
     limit: number;
-  }) => AsyncGenerator<TEvent>;
+  }) => AsyncGenerator<PersistedEvent<TEvent>>;
 };
 ```
 
 ### In-memory
 
-[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L57) An in-memory test store is most useful for testing purposes. Most use cases
+[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L65) An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
 
 ```typescript
@@ -434,9 +434,11 @@ function createInMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> 
 export function createInMemoryEventStore<TEvent extends Event>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
-  const storageByAggregate: Record<string, TEvent[]> = {};
-  const storageByInsertOrder: TEvent[] = [];
+  const storageByAggregate: Record<string, PersistedEvent<TEvent>[]> = {};
+  const storageByInsertOrder: PersistedEvent<TEvent>[] = [];
   const subscribers: EventSubscriber<TEvent>[] = [];
+
+  let idSequence = 0;
 
   return {
     addSubscriber: subscribers.push.bind(subscribers),
@@ -451,8 +453,14 @@ export function createInMemoryEventStore<TEvent extends Event>():
           throw new AggregateRootVersionIntegrityError();
         }
 
-        storageByAggregate[key].push(event);
-        storageByInsertOrder.push(event);
+        const id = idSequence++;
+        const persistedEvent = {
+          id,
+          ...event,
+        };
+
+        storageByAggregate[key].push(persistedEvent);
+        storageByInsertOrder.push(persistedEvent);
 
         await Promise.all(subscribers?.map((subscriber) => subscriber(event)) ?? []);
       }));
@@ -553,7 +561,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       aggregateRootId: string;
       fromVersion?: number;
     }) {
-      const cursor = sql<TEvent[]>`
+      const cursor = sql<PersistedEvent<TEvent>[]>`
         SELECT *
         FROM "event_core"."events"
         WHERE "aggregateRootType" = ${aggregateRootType}
@@ -571,7 +579,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       idGt,
       limit,
     }) {
-      const cursor = sql<TEvent[]>`
+      const cursor = sql<PersistedEvent<TEvent>[]>`
         SELECT *
         FROM "event_core"."events"
         WHERE id > ${idGt}

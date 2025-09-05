@@ -1,4 +1,4 @@
-import { Event, EventStore } from "./EventStore.ts";
+import { Event, EventStore, PersistedEvent } from "./EventStore.ts";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 
 type EventSubscriber<TEvent extends Event> = (event: TEvent) => Promise<void> | void;
@@ -13,9 +13,11 @@ type EventEmitter<TEvent extends Event> = {
 export function createInMemoryEventStore<TEvent extends Event>():
   & EventStore<TEvent>
   & EventEmitter<TEvent> {
-  const storageByAggregate: Record<string, TEvent[]> = {};
-  const storageByInsertOrder: TEvent[] = [];
+  const storageByAggregate: Record<string, PersistedEvent<TEvent>[]> = {};
+  const storageByInsertOrder: PersistedEvent<TEvent>[] = [];
   const subscribers: EventSubscriber<TEvent>[] = [];
+
+  let idSequence = 0;
 
   return {
     addSubscriber: subscribers.push.bind(subscribers),
@@ -30,8 +32,14 @@ export function createInMemoryEventStore<TEvent extends Event>():
           throw new AggregateRootVersionIntegrityError();
         }
 
-        storageByAggregate[key].push(event);
-        storageByInsertOrder.push(event);
+        const id = idSequence++;
+        const persistedEvent = {
+          id,
+          ...event,
+        };
+
+        storageByAggregate[key].push(persistedEvent);
+        storageByInsertOrder.push(persistedEvent);
 
         await Promise.all(subscribers?.map((subscriber) => subscriber(event)) ?? []);
       }));

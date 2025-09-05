@@ -15,18 +15,22 @@ export type Event<TEventPayload = unknown> = {
   payload: TEventPayload;
 };
 
+export type PersistedEvent<TEvent = Event> = TEvent & {
+  id: number;
+};
+
 export type EventStore<TEvent extends Event = Event> = {
   persist: (events: TEvent[]) => Promise<void>;
   retrieve: (args: {
     aggregateRootType: string;
     aggregateRootId: string;
     fromVersion?: number;
-  }) => AsyncGenerator<TEvent>;
+  }) => AsyncGenerator<PersistedEvent<TEvent>>;
 
   retrieveAll: (args: {
     idGt: number;
     limit: number;
-  }) => AsyncGenerator<TEvent>;
+  }) => AsyncGenerator<PersistedEvent<TEvent>>;
 };
 
 export type EventsRaisedByAggregateRoots<
