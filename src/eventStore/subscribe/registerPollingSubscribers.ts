@@ -1,17 +1,27 @@
 import { Cursor } from "./Cursor.ts";
 import { Event, EventStore, PersistedEvent } from "../EventStore.ts";
 import { wait } from "../../util/wait.ts";
+import stat = Deno.stat;
+
+type Subscribers<TEvent extends Event> = Array<(event: TEvent) => Promise<void> | void>;
 
 export function registerPollingSubscribers<TEvent extends Event = Event>(
   { cursor, eventStore, pollIntervalMs = 50, subscribers }: {
     cursor: Cursor;
     eventStore: EventStore<TEvent>;
     pollIntervalMs?: number;
-    subscribers: Array<(event: TEvent) => Promise<void>>;
+    subscribers: Subscribers<TEvent>;
   },
 ): { halt: () => void } {
+  let status: "ACTIVE" | "HALTED" = "ACTIVE";
+
   const processBatch = async () => {
+    if (status !== "ACTIVE") {
+      return;
+    }
+
     const position = await cursor.position();
+    console.log(position);
     const events = eventStore.retrieveAll({
       idGt: position,
       limit: 1000,
@@ -21,20 +31,32 @@ export function registerPollingSubscribers<TEvent extends Event = Event>(
       events,
     });
 
-    await cursor.update(result.outcome === "PROCESSED_BATCH" ? result.newPosition : position);
-    await wait(pollIntervalMs);
+    if (result.outcome === "PROCESSED_BATCH") {
+      await cursor.update(result.newPosition);
+      // Immediately poll for the next batch in cases where we processed a batch, such that
+      // if we are processing a long stream of events, we aren't held up by the interval.
+      setTimeout(processBatch, 0);
+    }
+
+    if (result.outcome === "NO_EVENTS_PROCESSED") {
+      await cursor.update(position);
+      setTimeout(processBatch, pollIntervalMs);
+    }
   };
 
-  const interval = setInterval(processBatch, 0);
+  processBatch();
+
   return {
-    halt: () => clearInterval(interval),
+    halt: () => {
+      status = "HALTED";
+    },
   };
 }
 
 async function callSubscribersSerial<TEvent extends Event = Event>(
   { events, subscribers }: {
     events: AsyncGenerator<PersistedEvent<TEvent>>;
-    subscribers: Array<(event: TEvent) => Promise<void>>;
+    subscribers: Subscribers<TEvent>;
   },
 ): Promise<{ outcome: "NO_EVENTS_PROCESSED" } | { outcome: "PROCESSED_BATCH"; newPosition: number }> {
   let newPosition = -1;

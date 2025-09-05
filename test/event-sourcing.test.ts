@@ -1,4 +1,4 @@
-import { createBasicCommander } from "../src/command/createBasicCommander.ts";
+import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
@@ -9,18 +9,21 @@ import {
   passengerActivityReducer,
 } from "./airlineDomain/readModels/passengerActivity.ts";
 import { eventLogInitialState, eventLogReducer } from "./airlineDomain/readModels/eventLog.ts";
-import { describe, it } from "jsr:@std/testing/bdd";
+import { afterAll, describe, it } from "jsr:@std/testing/bdd";
 import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
+import { registerPollingSubscribers } from "../src/eventStore/subscribe/registerPollingSubscribers.ts";
+import { createMemoryCursor } from "../src/eventStore/subscribe/createMemoryCursor.ts";
+import { wait } from "../src/util/wait.ts";
 
 /**
  * @todo get a proper event subscriber going, and describeAll a few configurations.
  */
 describe("event sourcing", () => {
   const eventStore = createInMemoryEventStore<AirlineEvent>();
-  const issueCommand = createBasicCommander({
+  const issueCommand = createBasicCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
     aggregateRootRepository: createSnapshottingAggregateRootRepository({
       aggregateRoots: airlineAggregateRoots,
@@ -28,19 +31,37 @@ describe("event sourcing", () => {
       snapshotStorage: createInMemorySnapshotStorage(),
     }),
   });
-  eventStore.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
 
   const passengerActivity = createMemoryReducedProjector({
     initialState: passengerActivityInitialState,
     reducer: passengerActivityReducer,
   });
-  eventStore.addSubscriber(passengerActivity.projector);
 
   const eventLog = createMemoryReducedProjector({
     initialState: eventLogInitialState,
     reducer: eventLogReducer,
   });
-  eventStore.addSubscriber(eventLog.projector);
+
+  const { halt: haltProjectionBuilder } = registerPollingSubscribers({
+    cursor: createMemoryCursor(),
+    eventStore,
+    subscribers: [
+      eventLog.projector,
+      passengerActivity.projector,
+    ],
+  });
+  const { halt: haltProcessManager } = registerPollingSubscribers({
+    cursor: createMemoryCursor(),
+    eventStore,
+    subscribers: [
+      (event) => boardingProcessManager({ event, issueCommand }),
+    ],
+  });
+
+  afterAll(() => {
+    haltProcessManager();
+    haltProjectionBuilder();
+  });
 
   it("allows commands to be issued", async () => {
     await issueCommand({
@@ -91,6 +112,7 @@ describe("event sourcing", () => {
   });
 
   it("produces projections from the resulting event stream", async () => {
+    await wait(1000);
     assertEquals(passengerActivity.data, {
       "Waldo Mcdaniel": {
         flightsTaken: 1,

@@ -10,7 +10,7 @@ import { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts
  * of command issuers which may acknowledge commands to be processed later or provide additional
  * features.
  */
-export function createBasicCommander<
+export function createQueuedCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 >(
@@ -20,21 +20,6 @@ export function createBasicCommander<
   },
 ): CommandIssuer<TAggregateMap, TAggregateMapTypes> {
   return async ({ aggregateRootType, aggregateRootId, command, data }) => {
-    const aggregate = await aggregateRootRepository.retrieve({
-      aggregateRootId,
-      aggregateRootType,
-    });
-
-    const commandMap = aggregateRoots[aggregateRootType].commands;
-    const commandFunction = commandMap[command as keyof typeof commandMap];
-
-    const commandResult = commandFunction(aggregate.state, data);
-    const raisedEvents = Array.isArray(commandResult) ? commandResult : [commandResult];
-
-    // @todo catch AggregateRootVersionIntegrityError and retry the command.
-    await aggregateRootRepository.persist({
-      aggregateRoot: aggregate,
-      pendingEventPayloads: raisedEvents,
-    });
+    // @todo find a suitable queue implementation.
   };
 }

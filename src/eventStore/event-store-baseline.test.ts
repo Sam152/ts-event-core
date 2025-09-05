@@ -94,6 +94,17 @@ describeAll(
         ],
       );
     });
+    it("should retrieve no events if filtering on an ID greater than the last", async () => {
+      const eventStore = factory();
+      await eventStore.persist(testEventStream);
+      assertEquals(
+        (await Array.fromAsync(eventStore.retrieveAll({
+          idGt: 4,
+          limit: 1000,
+        }))).map((e) => e.payload.type),
+        [],
+      );
+    });
   },
 );
 
