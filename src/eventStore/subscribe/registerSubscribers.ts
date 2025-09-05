@@ -8,8 +8,4 @@ export function pollingEventStoreSubscriberRegistration<TEvent extends Event = E
     pollIntervalMs: number;
   },
 ) {
-
-  
-
-
 }
