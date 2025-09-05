@@ -22,48 +22,43 @@ import { wait } from "../src/util/wait.ts";
  * @todo get a proper event subscriber going, and describeAll a few configurations.
  */
 describe("event sourcing", () => {
-  const eventStore = createInMemoryEventStore<AirlineEvent>();
-  const issueCommand = createBasicCommandIssuer({
-    aggregateRoots: airlineAggregateRoots,
-    aggregateRootRepository: createSnapshottingAggregateRootRepository({
-      aggregateRoots: airlineAggregateRoots,
-      eventStore,
-      snapshotStorage: createInMemorySnapshotStorage(),
-    }),
-  });
-
-  const passengerActivity = createMemoryReducedProjector({
-    initialState: passengerActivityInitialState,
-    reducer: passengerActivityReducer,
-  });
-
-  const eventLog = createMemoryReducedProjector({
-    initialState: eventLogInitialState,
-    reducer: eventLogReducer,
-  });
-
-  const { halt: haltProjectionBuilder } = registerPollingSubscribers({
-    cursor: createMemoryCursor(),
-    eventStore,
-    subscribers: [
-      eventLog.projector,
-      passengerActivity.projector,
-    ],
-  });
-  const { halt: haltProcessManager } = registerPollingSubscribers({
-    cursor: createMemoryCursor(),
-    eventStore,
-    subscribers: [
-      (event) => boardingProcessManager({ event, issueCommand }),
-    ],
-  });
-
-  afterAll(() => {
-    haltProcessManager();
-    haltProjectionBuilder();
-  });
-
   it("allows commands to be issued", async () => {
+    const eventStore = createInMemoryEventStore<AirlineEvent>();
+    const issueCommand = createBasicCommandIssuer({
+      aggregateRoots: airlineAggregateRoots,
+      aggregateRootRepository: createSnapshottingAggregateRootRepository({
+        aggregateRoots: airlineAggregateRoots,
+        eventStore,
+        snapshotStorage: createInMemorySnapshotStorage(),
+      }),
+    });
+
+    const passengerActivity = createMemoryReducedProjector({
+      initialState: passengerActivityInitialState,
+      reducer: passengerActivityReducer,
+    });
+
+    const eventLog = createMemoryReducedProjector({
+      initialState: eventLogInitialState,
+      reducer: eventLogReducer,
+    });
+
+    const { halt: haltProjectionBuilder } = registerPollingSubscribers({
+      cursor: createMemoryCursor(),
+      eventStore,
+      subscribers: [
+        eventLog.projector,
+        passengerActivity.projector,
+      ],
+    });
+    const { halt: haltProcessManager } = registerPollingSubscribers({
+      cursor: createMemoryCursor(),
+      eventStore,
+      subscribers: [
+        (event) => boardingProcessManager({ event, issueCommand }),
+      ],
+    });
+
     await issueCommand({
       aggregateRootType: "FLIGHT",
       command: "scheduleFlight",
@@ -109,10 +104,9 @@ describe("event sourcing", () => {
       command: "confirmLanding",
       data: undefined,
     });
-  });
 
-  it("produces projections from the resulting event stream", async () => {
-    await wait(1000);
+    // Give the projections a chance to catch up.
+    await wait(100);
     assertEquals(passengerActivity.data, {
       "Waldo Mcdaniel": {
         flightsTaken: 1,
@@ -122,10 +116,13 @@ describe("event sourcing", () => {
       "FLIGHT: NEW_FLIGHT_SCHEDULED",
       "GATE: GATE_OPENED",
       "GATE: BOARDING_PASS_SCANNED",
-      "FLIGHT: PASSENGER_BOARDED",
       "GATE: GATE_CLOSED",
       "FLIGHT: FLIGHT_DEPARTED",
       "FLIGHT: FLIGHT_LANDED",
+      "FLIGHT: PASSENGER_BOARDED",
     ]);
+
+    await haltProcessManager();
+    await haltProjectionBuilder();
   });
 });

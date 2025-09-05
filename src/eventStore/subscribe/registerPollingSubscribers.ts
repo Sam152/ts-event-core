@@ -12,8 +12,10 @@ export function registerPollingSubscribers<TEvent extends Event = Event>(
     pollIntervalMs?: number;
     subscribers: Subscribers<TEvent>;
   },
-): { halt: () => void } {
+): { halt: () => Promise<void> } {
   let status: "ACTIVE" | "HALTED" = "ACTIVE";
+  let lastTimer: number;
+  let lastInvocation: Promise<void>;
 
   const processBatch = async () => {
     if (status !== "ACTIVE") {
@@ -21,7 +23,6 @@ export function registerPollingSubscribers<TEvent extends Event = Event>(
     }
 
     const position = await cursor.position();
-    console.log(position);
     const events = eventStore.retrieveAll({
       idGt: position,
       limit: 1000,
@@ -35,20 +36,26 @@ export function registerPollingSubscribers<TEvent extends Event = Event>(
       await cursor.update(result.newPosition);
       // Immediately poll for the next batch in cases where we processed a batch, such that
       // if we are processing a long stream of events, we aren't held up by the interval.
-      setTimeout(processBatch, 0);
+      lastTimer = setTimeout(() => {
+        lastInvocation = processBatch();
+      }, 0);
     }
 
     if (result.outcome === "NO_EVENTS_PROCESSED") {
       await cursor.update(position);
-      setTimeout(processBatch, pollIntervalMs);
+      lastTimer = setTimeout(() => {
+        lastInvocation = processBatch();
+      }, pollIntervalMs);
     }
   };
 
-  processBatch();
+  lastInvocation = processBatch();
 
   return {
-    halt: () => {
+    halt: async () => {
       status = "HALTED";
+      await lastInvocation;
+      clearTimeout(lastTimer);
     },
   };
 }

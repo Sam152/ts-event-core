@@ -32,7 +32,7 @@ export function createInMemoryEventStore<TEvent extends Event>():
           throw new AggregateRootVersionIntegrityError();
         }
 
-        const id = idSequence++;
+        const id = ++idSequence;
         const persistedEvent = {
           id,
           ...event,
