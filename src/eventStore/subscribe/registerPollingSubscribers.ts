@@ -1,7 +1,5 @@
 import { Cursor } from "./Cursor.ts";
 import { Event, EventStore, PersistedEvent } from "../EventStore.ts";
-import { wait } from "../../util/wait.ts";
-import stat = Deno.stat;
 
 type Subscribers<TEvent extends Event> = Array<(event: TEvent) => Promise<void> | void>;
 
@@ -13,12 +11,12 @@ export function registerPollingSubscribers<TEvent extends Event = Event>(
     subscribers: Subscribers<TEvent>;
   },
 ): { halt: () => Promise<void> } {
-  let status: "ACTIVE" | "HALTED" = "ACTIVE";
+  let status: "POLLING" | "HALTED" = "POLLING";
   let lastTimer: number;
   let lastInvocation: Promise<void>;
 
   const processBatch = async () => {
-    if (status !== "ACTIVE") {
+    if (status !== "POLLING") {
       return;
     }
 
@@ -54,8 +52,8 @@ export function registerPollingSubscribers<TEvent extends Event = Event>(
   return {
     halt: async () => {
       status = "HALTED";
-      await lastInvocation;
       clearTimeout(lastTimer);
+      await lastInvocation;
     },
   };
 }
