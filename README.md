@@ -3,9 +3,9 @@
 ts-event-core
 ====
 
-This project is an Event Sourcing implementation, written TypeScript using functional programming.
+This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm.
 
-It contains a set of loosely coupled types (and various implementations of these types) which can be composed and interchanged depending on the use case.
+It contains a set of loosely coupled types (and various implementations of these types) which can be composed and interchanged.
 
 ----
 
