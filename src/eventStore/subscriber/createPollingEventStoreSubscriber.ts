@@ -1,17 +1,24 @@
 import { CursorPosition } from "../cursor/CursorPosition.ts";
 import { Event, EventStore, PersistedEvent } from "../EventStore.ts";
+import { EventStoreSubscriber, Subscriber } from "./EventStoreSubscriber.ts";
 
 type Subscribers<TEvent extends Event> = Array<(event: TEvent) => Promise<void> | void>;
 
+/**
+ * Subscribe to events in the event store.
+ *
+ * The cursor argument defines the semantics around which events will be processed.
+ */
 export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
   { cursor, eventStore, pollIntervalMs = 50, subscribers }: {
     cursor: CursorPosition;
     eventStore: EventStore<TEvent>;
     pollIntervalMs?: number;
-    subscribers: Subscribers<TEvent>;
   },
-): { halt: () => Promise<void> } {
-  let status: "POLLING" | "HALTED" = "POLLING";
+): EventStoreSubscriber {
+  const subscribers: Subscriber[] = [];
+  let status: "POLLING" | "HALTED" | "HALTING" = "POLLING";
+
   let lastTimer: number;
   let lastInvocation: Promise<void>;
 
@@ -50,10 +57,12 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
   lastInvocation = processBatch();
 
   return {
+    addSubscriber: subscribers.push,
     halt: async () => {
-      status = "HALTED";
+      status = "HALTING";
       clearTimeout(lastTimer);
       await lastInvocation;
+      status = "HALTED";
     },
   };
 }
