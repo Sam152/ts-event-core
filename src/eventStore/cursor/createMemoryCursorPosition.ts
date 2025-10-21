@@ -1,10 +1,10 @@
-import { Cursor } from "./Cursor.ts";
+import { CursorPosition } from "./CursorPosition.ts";
 
 /**
  * A memory cursor is useful for testing, or use cases where starting
  * a container some processing of the entire event store.
  */
-export function createMemoryCursor(): Cursor {
+export function createMemoryCursorPosition(): CursorPosition {
   let positionStorage = 0;
   return {
     position: async () => positionStorage,

@@ -1,11 +1,11 @@
-import { Cursor } from "./Cursor.ts";
+import { CursorPosition } from "../cursor/CursorPosition.ts";
 import { Event, EventStore, PersistedEvent } from "../EventStore.ts";
 
 type Subscribers<TEvent extends Event> = Array<(event: TEvent) => Promise<void> | void>;
 
-export function registerPollingSubscribers<TEvent extends Event = Event>(
+export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
   { cursor, eventStore, pollIntervalMs = 50, subscribers }: {
-    cursor: Cursor;
+    cursor: CursorPosition;
     eventStore: EventStore<TEvent>;
     pollIntervalMs?: number;
     subscribers: Subscribers<TEvent>;

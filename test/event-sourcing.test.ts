@@ -14,8 +14,8 @@ import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
-import { registerPollingSubscribers } from "../src/eventStore/subscribe/registerPollingSubscribers.ts";
-import { createMemoryCursor } from "../src/eventStore/subscribe/createMemoryCursor.ts";
+import { createPollingEventStoreSubscriber } from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
+import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
 import { wait } from "../src/util/wait.ts";
 
 /**
@@ -43,16 +43,16 @@ describe("event sourcing", () => {
       reducer: eventLogReducer,
     });
 
-    const { halt: haltProjectionBuilder } = registerPollingSubscribers({
-      cursor: createMemoryCursor(),
+    const { halt: haltProjectionBuilder } = createPollingEventStoreSubscriber({
+      cursor: createMemoryCursorPosition(),
       eventStore,
       subscribers: [
         eventLog.projector,
         passengerActivity.projector,
       ],
     });
-    const { halt: haltProcessManager } = registerPollingSubscribers({
-      cursor: createMemoryCursor(),
+    const { halt: haltProcessManager } = createPollingEventStoreSubscriber({
+      cursor: createMemoryCursorPosition(),
       eventStore,
       subscribers: [
         (event) => boardingProcessManager({ event, issueCommand }),

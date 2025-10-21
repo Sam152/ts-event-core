@@ -1,4 +1,4 @@
-import { Cursor } from "./Cursor.ts";
+import { CursorPosition } from "./CursorPosition.ts";
 import postgres, { JSONValue } from "postgres";
 
 /**
@@ -8,9 +8,9 @@ import postgres, { JSONValue } from "postgres";
  *  - When we update the position, we set the position, then commit the transaction.
  *  - If the row doesn't exist, it is upserted with a default position of 0.
  */
-export function createPersistentLockingCursor(
+export function createPersistentLockingCursorPosition(
   { connection: sql, id }: { connection: ReturnType<typeof postgres>; id: string },
-): Cursor {
+): CursorPosition {
   return {
     position: async () => {
       return 0;
