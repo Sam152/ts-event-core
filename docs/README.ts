@@ -39,11 +39,16 @@ export function README(): string {
     
     ## Key components
     
-    ### Aggregate root definition
+    ### (AggregateRootDefinition link to type)
     
-    ${documentType<AggregateRootDefinition<any, any>>()}
+    ${documentType<AggregateRootDefinition<any, any>>()} (just the doc string)
     
-    ### Command issuer
+    #### Implementations
+    
+    * Foo
+    * Bar
+    
+    ### (CommandIssuer link to type)
     
     ${documentType<CommandIssuer<any, any>>()}
     

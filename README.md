@@ -13,8 +13,9 @@ It contains a set of loosely coupled types (and various implementations of these
    1. [Aggregate roots](#aggregate-roots)
    2. [Process manager](#process-manager)
 2. [Key components](#key-components)
-   1. [Aggregate root definition](#aggregate-root-definition)
-   2. [Command issuer](#command-issuer)
+   1. [(AggregateRootDefinition link to type)](#aggregaterootdefinition-link-to-type)
+      1. [Implementations](#implementations)
+   2. [(CommandIssuer link to type)](#commandissuer-link-to-type)
    3. [Aggregate root repository](#aggregate-root-repository)
       1. [Basic](#basic)
       2. [Snapshotting](#snapshotting)
@@ -35,7 +36,7 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ## Key components
 
-### Aggregate root definition
+### (AggregateRootDefinition link to type)
 
 [:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L4-L21) A thing.
 
@@ -58,9 +59,14 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
     version: AggregateStateVersion;
   };
 };
-```
+``` (just the doc string)
 
-### Command issuer
+#### Implementations
+
+* Foo
+* Bar
+
+### (CommandIssuer link to type)
 
 [:arrow_upper_right:](src/command/CommandIssuer.ts#L6-L20) When issuing a command...
 
