@@ -10,7 +10,7 @@ It contains a set of loosely coupled types (and various implementations of these
 ----
 
 1. [Aggregate root definition](#aggregate-root-definition)
-2. [Commander](#commander)
+2. [Command](#command)
 3. [Aggregate root repository](#aggregate-root-repository)
    1. [Basic](#basic)
    2. [Snapshotting](#snapshotting)
@@ -48,7 +48,7 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 };
 ```
 
-## Commander
+## Command
 
 [:arrow_upper_right:](src/command/CommandIssuer.ts#L6-L20) When issuing a command...
 
