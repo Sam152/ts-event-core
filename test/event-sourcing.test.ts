@@ -17,7 +17,7 @@ import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createI
 import { createPollingEventStoreSubscriber } from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
 import { wait } from "../src/util/wait.ts";
-import { tryAssertEquals } from "./utils/tryAssertEquals.ts";
+import { tryAssertEquals, tryThing } from "./utils/tryAssertEquals.ts";
 
 /**
  * @todo get a proper event subscriber going, and describeAll a few configurations.
@@ -107,20 +107,25 @@ describe("event sourcing", () => {
 
     // Give the projections a chance to catch up.
 
-    await tryAssertEquals(passengerActivity.data, {
-      "Waldo Mcdaniel": {
-        flightsTaken: 1,
-      },
-    });
-    await tryAssertEquals(eventLog.data, [
-      "FLIGHT: NEW_FLIGHT_SCHEDULED",
-      "GATE: GATE_OPENED",
-      "GATE: BOARDING_PASS_SCANNED",
-      "GATE: GATE_CLOSED",
-      "FLIGHT: FLIGHT_DEPARTED",
-      "FLIGHT: FLIGHT_LANDED",
-      "FLIGHT: PASSENGER_BOARDED",
-    ]);
+    await tryThing(() =>
+      assertEquals(passengerActivity.data, {
+        "Waldo Mcdaniel": {
+          flightsTaken: 1,
+        },
+      })
+    );
+
+    await tryThing(() =>
+      assertEquals(eventLog.data, [
+        "FLIGHT: NEW_FLIGHT_SCHEDULED",
+        "GATE: GATE_OPENED",
+        "GATE: BOARDING_PASS_SCANNED",
+        "GATE: GATE_CLOSED",
+        "FLIGHT: FLIGHT_DEPARTED",
+        "FLIGHT: FLIGHT_LANDED",
+        "FLIGHT: PASSENGER_BOARDED",
+      ])
+    );
 
     await processManager.halt();
     await projections.halt();
