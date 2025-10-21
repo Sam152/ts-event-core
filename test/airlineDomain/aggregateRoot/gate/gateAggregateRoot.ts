@@ -11,7 +11,7 @@ export const gateAggregateRoot = {
     version: 1,
     reducer: gateReducer,
     initialState: {
-        status: "CLOSED",
+      status: "CLOSED",
     },
   },
   commands: {

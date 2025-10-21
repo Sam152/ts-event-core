@@ -26,7 +26,6 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
       return;
     }
 
-
     const position = await cursor.acquire();
     const events = eventStore.retrieveAll({
       idGt: position,
