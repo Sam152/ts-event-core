@@ -9,7 +9,10 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ----
 
-1. [Key components](#key-components)
+1. [Example domain](#example-domain)
+   1. [Aggregate roots](#aggregate-roots)
+   2. [Process manager](#process-manager)
+2. [Key components](#key-components)
    1. [Aggregate root definition](#aggregate-root-definition)
    2. [Command](#command)
    3. [Aggregate root repository](#aggregate-root-repository)
@@ -21,10 +24,14 @@ It contains a set of loosely coupled types (and various implementations of these
       1. [In-memory](#in-memory)
       2. [Postgres](#postgres)
    5. [Projector](#projector)
+3. [Component compositions](#component-compositions)
 
 ----
 
-## 
+## Example domain
+
+### Aggregate roots
+### Process manager
 
 ## Key components
 
@@ -625,3 +632,5 @@ retrieved or accessed beyond that, is entirely dependent on the use case.
 ```typescript
 export type Projector<TEvent extends Event> = (event: TEvent) => void | Promise<void>;
 ```
+
+## Component compositions

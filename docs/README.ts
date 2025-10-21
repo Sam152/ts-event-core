@@ -32,7 +32,10 @@ export function README(): string {
     
     ----
     
-    ## 
+    ## Example domain
+    
+    ### Aggregate roots
+    ### Process manager
     
     ## Key components
     
@@ -79,6 +82,8 @@ export function README(): string {
     ### Projector
     
     ${documentType<Projector<any>>()}
+    
+    ## Component compositions
     
   `;
 }
