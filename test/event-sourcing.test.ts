@@ -106,13 +106,13 @@ describe("event sourcing", () => {
     });
 
     // Give the projections a chance to catch up.
-    await wait(200);
-    tryAssertEquals(passengerActivity.data, {
-      "Waldo Mcdanaiel": {
+
+    await tryAssertEquals(passengerActivity.data, {
+      "Waldo Mcdaniel": {
         flightsTaken: 1,
       },
     });
-    tryAssertEquals(eventLog.data, [
+    await tryAssertEquals(eventLog.data, [
       "FLIGHT: NEW_FLIGHT_SCHEDULED",
       "GATE: GATE_OPENED",
       "GATE: BOARDING_PASS_SCANNED",
