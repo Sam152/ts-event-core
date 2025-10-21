@@ -43,7 +43,7 @@ export function README(): string {
     
     ${documentType<AggregateRootDefinition<any, any>>()}
     
-    ### Command
+    ### Command issuer
     
     ${documentType<CommandIssuer<any, any>>()}
     
