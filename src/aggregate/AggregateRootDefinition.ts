@@ -1,6 +1,5 @@
 /**
- * An aggregate root definition, the state and commands used to power
- * writes in an event sourced system.
+ * A thing.
  */
 export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
   commands: {

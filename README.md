@@ -1,14 +1,13 @@
 <!--- This file was automatically generated from ./docs/README.ts -->
 
-# ts-event-core
+ts-event-core
+====
 
-This project is an implementation of Event Sourcing, written TypeScript using a functional programming
-paradigm.
+This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm.
 
-It contains a set of loosely coupled types (and various implementations of these types) which can be composed
-and interchanged.
+It contains a set of loosely coupled types (and various implementations of these types) which can be composed and interchanged.
 
----
+----
 
 1. [Aggregate root definition](#aggregate-root-definition)
 2. [Commander](#commander)
@@ -22,12 +21,11 @@ and interchanged.
    2. [Postgres](#postgres)
 5. [Projector](#projector)
 
----
+----
 
 ## Aggregate root definition
 
-[:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L5-L22) An aggregate root definition, the state
-and commands used to power writes in an event sourced system.
+[:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L4-L21) A thing.
 
 ```typescript
 export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
@@ -39,7 +37,7 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
   };
   state: {
     reducer: AggregateReducer<TAggregateRootState, TEvent>;
-    initialState: () => TAggregateRootState;
+    initialState: TAggregateRootState;
 
     /**
      * Reducers can change, so when state is reduced and persisted, by way of a snapshot, we need to be able to
@@ -97,14 +95,14 @@ export type AggregateRootRepository<
 
 ### Basic
 
-[:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56) This aggregate
-root repository loads the whole event stream for an aggregate root, and reduces them on demand. This can be
-suitable for use cases where an aggregate root has a limited number of events.
+[:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56) This aggregate root repository loads the whole event stream for an aggregate root,
+and reduces them on demand. This can be suitable for use cases where an aggregate
+root has a limited number of events.
 
 ```typescript
 function createBasicAggregateRootRepository< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes, >( { eventStore, aggregateRoots }:
 ```
-
+    
 <details>
 <summary> Show full <code>createBasicAggregateRootRepository</code> definition :point_down:</summary>
 
@@ -129,7 +127,7 @@ export function createBasicAggregateRootRepository<
       });
 
       let aggregateVersion: number | undefined = undefined;
-      let state = definition.state.initialState();
+      let state = structuredClone(definition.state.initialState);
       for await (const event of events) {
         state = definition.state.reducer(state, event.payload);
         aggregateVersion = event.aggregateVersion;
@@ -162,14 +160,13 @@ export function createBasicAggregateRootRepository<
 
 ### Snapshotting
 
-[:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91) Some
-aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid
-loading a large number of events when retrieving an aggregate.
+[:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91) Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
+a large number of events when retrieving an aggregate.
 
 ```typescript
 function createSnapshottingAggregateRootRepository< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes, >( { eventStore, aggregateRoots, snapshotStorage }:
 ```
-
+    
 <details>
 <summary> Show full <code>createSnapshottingAggregateRootRepository</code> definition :point_down:</summary>
 
@@ -202,7 +199,7 @@ export function createSnapshottingAggregateRootRepository<
         fromVersion: snapshot && snapshot.aggregateVersion,
       });
 
-      let state = snapshot ? structuredClone(snapshot.state) : definition.state.initialState();
+      let state = structuredClone(snapshot ? snapshot.state : definition.state.initialState);
       let aggregateVersion = snapshot ? snapshot.aggregateVersion : undefined;
 
       for await (const event of events) {
@@ -262,23 +259,21 @@ export function createSnapshottingAggregateRootRepository<
 
 #### In-memory
 
-[:arrow_upper_right:](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) An in-memory
-implementation of snapshot storage.
+[:arrow_upper_right:](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) An in-memory implementation of snapshot storage.
 
-Unlike an event store, in-memory snapshot storage can be a useful concept in production because having
-snapshots stored in memory for the duration of the process saves a lot of traffic to the database over the
-lifetime of the process. This is provided the application can tolerate a "warm up" for each aggregate root,
-where on first load, all events will still be loaded and reduced.
+Unlike an event store, in-memory snapshot storage can be a useful concept in production
+because having snapshots stored in memory for the duration of the process saves a lot
+of traffic to the database over the lifetime of the process. This is provided the application
+can tolerate a "warm up" for each aggregate root, where on first load, all events will still
+be loaded and reduced.
 
-For cases where too many events exist to replay and reduce on demand, persistent snapshot storage can be used.
+For cases where too many events exist to replay and reduce on demand, persistent snapshot
+storage can be used.
 
 ```typescript
-function createInMemorySnapshotStorage<
-  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
->(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>;
+function createInMemorySnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
 ```
-
+    
 <details>
 <summary> Show full <code>createInMemorySnapshotStorage</code> definition :point_down:</summary>
 
@@ -324,8 +319,7 @@ export function createInMemorySnapshotStorage<
 
 #### Postgres
 
-[:arrow_upper_right:](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L73) A persistent snapshot
-storage backed by Postgres.
+[:arrow_upper_right:](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L73) A persistent snapshot storage backed by Postgres.
 
 This implementation depends on the following schema:
 
@@ -346,7 +340,7 @@ This implementation depends on the following schema:
 ```typescript
 function createPostgresSnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(...): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
 ```
-
+    
 <details>
 <summary> Show full <code>createPostgresSnapshotStorage</code> definition :point_down:</summary>
 
@@ -425,13 +419,13 @@ export type EventStore<TEvent extends Event = Event> = {
 
 ### In-memory
 
-[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L65) An in-memory test store is most
-useful for testing purposes. Most use cases would benefit from persistent storage.
+[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L65) An in-memory test store is most useful for testing purposes. Most use cases
+would benefit from persistent storage.
 
 ```typescript
-function createInMemoryEventStore<TEvent extends Event>(): EventStore<TEvent> & EventEmitter<TEvent>;
+function createInMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> & EventEmitter<TEvent>
 ```
-
+    
 <details>
 <summary> Show full <code>createInMemoryEventStore</code> definition :point_down:</summary>
 
@@ -495,8 +489,7 @@ export function createInMemoryEventStore<TEvent extends Event>():
 
 ### Postgres
 
-[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L99) A persistent event store backed by
-Postgres.
+[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L99) A persistent event store backed by Postgres.
 
 This implementation depends on the following schema:
 
@@ -518,7 +511,7 @@ This implementation depends on the following schema:
 ```typescript
 function createPostgresEventStore<TEvent extends Event>(...): EventStore<TEvent>
 ```
-
+    
 <details>
 <summary> Show full <code>createPostgresEventStore</code> definition :point_down:</summary>
 
@@ -604,23 +597,25 @@ export function createPostgresEventStore<TEvent extends Event>(
 
 ## Projector
 
-[:arrow_upper_right:](src/projection/Projector.ts#L3-L24) Projectors take a stream of events from an event
-store and transform them into useful data structures. These are often called read models.
+[:arrow_upper_right:](src/projection/Projector.ts#L3-L24) Projectors take a stream of events from an event store and transform them into
+useful data structures. These are often called read models.
 
-Read models are typically eventually consistent and thus are not required to adhere to any of the boundaries
-defined by the aggregate roots.
+Read models are typically eventually consistent and thus are not required to
+adhere to any of the boundaries defined by the aggregate roots.
 
-New read models can be added at any point in time and can then be deleted after they are no longer useful.
+New read models can be added at any point in time and can then be deleted after
+they are no longer useful.
 
-They may deal with data structures that describe all the events in the system as a whole or selectively choose
-to build smaller structures out of individual aggregates or other relations found within the event payload.
+They may deal with data structures that describe all the events in the system as
+a whole or selectively choose to build smaller structures out of individual aggregates
+or other relations found within the event payload.
 
-These data structures can be stored in memory, relational databases, speciality databases or any other system
-that provides utility and value to the application.
+These data structures can be stored in memory, relational databases, speciality
+databases or any other system that provides utility and value to the application.
 
-For these reasons, the signature of a projector is extremely simple, the only contract an event sourced system
-needs to fulfil is providing a stream of events. How data can be retrieved or accessed beyond that, is
-entirely dependent on the use case.
+For these reasons, the signature of a projection is extremely simple, the only contract
+an event sourced system needs to fulfil is providing a stream of events. How data can be
+retrieved or accessed beyond that, is entirely dependent on the use case.
 
 ```typescript
 export type Projector<TEvent extends Event> = (event: TEvent) => void | Promise<void>;
