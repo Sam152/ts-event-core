@@ -5,14 +5,14 @@ import { Event } from "../eventStore/EventStore.ts";
  * Create a projection which uses a reducer and stores the resulting data in
  * memory.
  */
-export function createMemoryReducedProjector<TEvent extends Event, TState>(
+export function createMemoryReducedProjector<TEvent extends Event, TData>(
   { initialState, reducer }: {
-    initialState: TState;
-    reducer: (state: TState, event: TEvent) => TState;
+    initialState: TData;
+    reducer: (state: TData, event: TEvent) => TData;
   },
 ): {
   projector: Projector<TEvent>;
-  data: TState;
+  data: TData;
 } {
   const reducedProjector = {
     data: initialState,
