@@ -24,6 +24,8 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ----
 
+## 
+
 ## Key components
 
 ### Aggregate root definition

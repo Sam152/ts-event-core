@@ -32,6 +32,8 @@ export function README(): string {
     
     ----
     
+    ## 
+    
     ## Key components
     
     ### Aggregate root definition
