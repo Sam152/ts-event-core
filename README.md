@@ -9,21 +9,24 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ----
 
-1. [Aggregate root definition](#aggregate-root-definition)
-2. [Command](#command)
-3. [Aggregate root repository](#aggregate-root-repository)
-   1. [Basic](#basic)
-   2. [Snapshotting](#snapshotting)
+1. [Key components](#key-components)
+   1. [Aggregate root definition](#aggregate-root-definition)
+   2. [Command](#command)
+   3. [Aggregate root repository](#aggregate-root-repository)
+      1. [Basic](#basic)
+      2. [Snapshotting](#snapshotting)
+         1. [In-memory](#in-memory)
+         2. [Postgres](#postgres)
+   4. [Event store](#event-store)
       1. [In-memory](#in-memory)
       2. [Postgres](#postgres)
-4. [Event store](#event-store)
-   1. [In-memory](#in-memory)
-   2. [Postgres](#postgres)
-5. [Projector](#projector)
+   5. [Projector](#projector)
 
 ----
 
-## Aggregate root definition
+## Key components
+
+### Aggregate root definition
 
 [:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L4-L21) A thing.
 
@@ -48,7 +51,7 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 };
 ```
 
-## Command
+### Command
 
 [:arrow_upper_right:](src/command/CommandIssuer.ts#L6-L20) When issuing a command...
 
@@ -67,7 +70,7 @@ export type CommandIssuer<
 }) => Promise<void>;
 ```
 
-## Aggregate root repository
+### Aggregate root repository
 
 [:arrow_upper_right:](src/aggregate/AggregateRootRepository.ts#L4-L25) Retrieve and persist aggregate roots.
 
@@ -93,7 +96,7 @@ export type AggregateRootRepository<
 };
 ```
 
-### Basic
+#### Basic
 
 [:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56) This aggregate root repository loads the whole event stream for an aggregate root,
 and reduces them on demand. This can be suitable for use cases where an aggregate
@@ -158,7 +161,7 @@ export function createBasicAggregateRootRepository<
 
 </details>
 
-### Snapshotting
+#### Snapshotting
 
 [:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91) Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
 a large number of events when retrieving an aggregate.
@@ -257,7 +260,7 @@ export function createSnapshottingAggregateRootRepository<
 
 </details>
 
-#### In-memory
+##### In-memory
 
 [:arrow_upper_right:](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) An in-memory implementation of snapshot storage.
 
@@ -317,7 +320,7 @@ export function createInMemorySnapshotStorage<
 
 </details>
 
-#### Postgres
+##### Postgres
 
 [:arrow_upper_right:](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L73) A persistent snapshot storage backed by Postgres.
 
@@ -399,7 +402,7 @@ export function createPostgresSnapshotStorage<
 
 </details>
 
-## Event store
+### Event store
 
 ```typescript
 export type EventStore<TEvent extends Event = Event> = {
@@ -417,7 +420,7 @@ export type EventStore<TEvent extends Event = Event> = {
 };
 ```
 
-### In-memory
+#### In-memory
 
 [:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L65) An in-memory test store is most useful for testing purposes. Most use cases
 would benefit from persistent storage.
@@ -487,7 +490,7 @@ export function createInMemoryEventStore<TEvent extends Event>():
 
 </details>
 
-### Postgres
+#### Postgres
 
 [:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L99) A persistent event store backed by Postgres.
 
@@ -595,7 +598,7 @@ export function createPostgresEventStore<TEvent extends Event>(
 
 </details>
 
-## Projector
+### Projector
 
 [:arrow_upper_right:](src/projection/Projector.ts#L3-L24) Projectors take a stream of events from an event store and transform them into
 useful data structures. These are often called read models.

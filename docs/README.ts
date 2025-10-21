@@ -32,47 +32,49 @@ export function README(): string {
     
     ----
     
-    ## Aggregate root definition
+    ## Key components
+    
+    ### Aggregate root definition
     
     ${documentType<AggregateRootDefinition<any, any>>()}
     
-    ## Command
+    ### Command
     
     ${documentType<CommandIssuer<any, any>>()}
     
-    ## Aggregate root repository
+    ### Aggregate root repository
     
     ${documentType<AggregateRootRepository<any, any>>()}
     
-    ### Basic
+    #### Basic
     
     ${documentFunction(createBasicAggregateRootRepository)}
     
-    ### Snapshotting
+    #### Snapshotting
     
     ${documentFunction(createSnapshottingAggregateRootRepository)}
     
-    #### In-memory
+    ##### In-memory
     
     ${documentFunction(createInMemorySnapshotStorage)}
     
-    #### Postgres
+    ##### Postgres
     
     ${documentFunction(createPostgresSnapshotStorage)}
     
-    ## Event store
+    ### Event store
     
     ${documentType<EventStore>()}
     
-    ### In-memory
+    #### In-memory
     
     ${documentFunction(createInMemoryEventStore)}
     
-    ### Postgres
+    #### Postgres
     
     ${documentFunction(createPostgresEventStore)}
  
-    ## Projector
+    ### Projector
     
     ${documentType<Projector<any>>()}
     
