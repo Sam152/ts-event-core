@@ -27,7 +27,7 @@ export function createBasicAggregateRootRepository<
       });
 
       let aggregateVersion: number | undefined = undefined;
-      let state = definition.state.initialState();
+      let state = structuredClone(definition.state.initialState);
       for await (const event of events) {
         state = definition.state.reducer(state, event.payload);
         aggregateVersion = event.aggregateVersion;

@@ -35,7 +35,7 @@ export function createSnapshottingAggregateRootRepository<
         fromVersion: snapshot && snapshot.aggregateVersion,
       });
 
-      let state = snapshot ? structuredClone(snapshot.state) : definition.state.initialState();
+      let state = structuredClone(snapshot ? snapshot.state : definition.state.initialState);
       let aggregateVersion = snapshot ? snapshot.aggregateVersion : undefined;
 
       for await (const event of events) {

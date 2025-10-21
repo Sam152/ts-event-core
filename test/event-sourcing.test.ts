@@ -19,9 +19,6 @@ import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemor
 import { wait } from "../src/util/wait.ts";
 import { tryAssertEquals, tryThing } from "./utils/tryAssertEquals.ts";
 
-/**
- * @todo get a proper event subscriber going, and describeAll a few configurations.
- */
 describe("event sourcing", () => {
   it("allows commands to be issued", async () => {
     const eventStore = createInMemoryEventStore<AirlineEvent>();

@@ -9,9 +9,9 @@ import { scheduleFlight } from "./commands/scheduleFlight.ts";
 
 export const flightAggregateRoot = {
   state: {
-    reducer: flightReducer,
     version: 1,
-    initialState: () => undefined,
+    initialState: undefined,
+    reducer: flightReducer,
   },
   commands: {
     scheduleFlight,
