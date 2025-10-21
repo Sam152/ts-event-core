@@ -17,6 +17,7 @@ import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createI
 import { createPollingEventStoreSubscriber } from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
 import { wait } from "../src/util/wait.ts";
+import * as process from "process";
 
 /**
  * @todo get a proper event subscriber going, and describeAll a few configurations.
@@ -43,21 +44,20 @@ describe("event sourcing", () => {
       reducer: eventLogReducer,
     });
 
-    const { halt: haltProjectionBuilder } = createPollingEventStoreSubscriber({
+    const projections = createPollingEventStoreSubscriber({
       cursor: createMemoryCursorPosition(),
       eventStore,
-      subscribers: [
-        eventLog.projector,
-        passengerActivity.projector,
-      ],
     });
-    const { halt: haltProcessManager } = createPollingEventStoreSubscriber({
+    projections.addSubscriber(eventLog.projector);
+    projections.addSubscriber(passengerActivity.projector);
+    await projections.start();
+
+    const processManager = createPollingEventStoreSubscriber({
       cursor: createMemoryCursorPosition(),
       eventStore,
-      subscribers: [
-        (event) => boardingProcessManager({ event, issueCommand }),
-      ],
     });
+    processManager.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
+    await processManager.start();
 
     await issueCommand({
       aggregateRootType: "FLIGHT",
@@ -122,7 +122,7 @@ describe("event sourcing", () => {
       "FLIGHT: PASSENGER_BOARDED",
     ]);
 
-    await haltProcessManager();
-    await haltProjectionBuilder();
+    await processManager.halt();
+    await projections.halt();
   });
 });

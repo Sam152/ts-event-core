@@ -15,7 +15,7 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
     pollIntervalMs?: number;
   },
 ): EventStoreSubscriber<TEvent> {
-  const subscribers: Subscriber[] = [];
+  const subscribers: Subscriber<TEvent>[] = [];
   let status: "POLLING" | "HALTED" | "HALTING" = "POLLING";
 
   let lastTimer: number;
@@ -25,8 +25,6 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
     if (status !== "POLLING") {
       return;
     }
-
-    Math.ceil('foo');
 
     const position = await cursor.acquire();
     const events = eventStore.retrieveAll({
@@ -55,10 +53,11 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
     }
   };
 
-  lastInvocation = processBatch();
-
   return {
     addSubscriber: subscribers.push,
+    start: async () => {
+      lastInvocation = processBatch();
+    },
     halt: async () => {
       status = "HALTING";
       clearTimeout(lastTimer);
