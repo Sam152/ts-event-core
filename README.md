@@ -59,7 +59,7 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
     version: AggregateStateVersion;
   };
 };
-``` (just the doc string)
+```
 
 #### Implementations
 

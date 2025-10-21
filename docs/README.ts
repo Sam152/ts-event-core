@@ -41,7 +41,7 @@ export function README(): string {
     
     ### (AggregateRootDefinition link to type)
     
-    ${documentType<AggregateRootDefinition<any, any>>()} (just the doc string)
+    ${documentType<AggregateRootDefinition<any, any>>()}
     
     #### Implementations
     
