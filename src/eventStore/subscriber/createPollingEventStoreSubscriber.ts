@@ -5,17 +5,16 @@ import { EventStoreSubscriber, Subscriber } from "./EventStoreSubscriber.ts";
 type Subscribers<TEvent extends Event> = Array<(event: TEvent) => Promise<void> | void>;
 
 /**
- * Subscribe to events in the event store.
- *
- * The cursor argument defines the semantics around which events will be processed.
+ * Subscribe to events in the event store, using polling, according to the semantics
+ * of the provided cursor.
  */
 export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
-  { cursor, eventStore, pollIntervalMs = 50, subscribers }: {
+  { cursor, eventStore, pollIntervalMs = 50 }: {
     cursor: CursorPosition;
     eventStore: EventStore<TEvent>;
     pollIntervalMs?: number;
   },
-): EventStoreSubscriber {
+): EventStoreSubscriber<TEvent> {
   const subscribers: Subscriber[] = [];
   let status: "POLLING" | "HALTED" | "HALTING" = "POLLING";
 
@@ -27,7 +26,9 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
       return;
     }
 
-    const position = await cursor.position();
+    Math.ceil('foo');
+
+    const position = await cursor.acquire();
     const events = eventStore.retrieveAll({
       idGt: position,
       limit: 1000,
@@ -67,12 +68,18 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
   };
 }
 
+type CallSubscribersSerialOutcome =
+  | { outcome: "NO_EVENTS_PROCESSED" }
+  | { outcome: "PROCESSED_BATCH"; newPosition: number }
+  | { outcome: "CRASHED_WITH_POSITION"; newPosition: number }
+  | { outcome: "CRASHED_NO_EVENTS_PROCESSED"; newPosition: number };
+
 async function callSubscribersSerial<TEvent extends Event = Event>(
   { events, subscribers }: {
     events: AsyncGenerator<PersistedEvent<TEvent>>;
     subscribers: Subscribers<TEvent>;
   },
-): Promise<{ outcome: "NO_EVENTS_PROCESSED" } | { outcome: "PROCESSED_BATCH"; newPosition: number }> {
+): Promise<CallSubscribersSerialOutcome> {
   let newPosition = -1;
   for await (const event of events) {
     await subscribers.reduce(async (acc, subscriber) => {

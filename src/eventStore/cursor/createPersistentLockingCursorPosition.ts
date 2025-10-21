@@ -12,7 +12,7 @@ export function createPersistentLockingCursorPosition(
   { connection: sql, id }: { connection: ReturnType<typeof postgres>; id: string },
 ): CursorPosition {
   return {
-    position: async () => {
+    acquire: async () => {
       return 0;
     },
     update: async (position) => {

@@ -7,7 +7,7 @@ import { CursorPosition } from "./CursorPosition.ts";
 export function createMemoryCursorPosition(): CursorPosition {
   let positionStorage = 0;
   return {
-    position: async () => positionStorage,
+    acquire: async () => positionStorage,
     update: async (position) => {
       positionStorage = position;
     },

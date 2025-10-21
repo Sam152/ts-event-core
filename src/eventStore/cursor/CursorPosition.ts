@@ -4,6 +4,11 @@
  * to keep track of where in the workload we are up to.
  */
 export type CursorPosition = {
-  position: () => Promise<number>;
+  /**
+   * Positions can be considered to be "acquired", in the sense that some implementations
+   * may choose to hold a lock on the position, to prevent multiple containers processing
+   * a workload, which requires exactly-once processing.
+   */
+  acquire: () => Promise<number>;
   update: (position: number) => Promise<void>;
 };
