@@ -17,7 +17,7 @@ import { Event } from "../eventStore/EventStore.ts";
  * These data structures can be stored in memory, relational databases, speciality
  * databases or any other system that provides utility and value to the application.
  *
- * For these reasons, the signature of a projector is extremely simple, the only contract
+ * For these reasons, the signature of a projection is extremely simple, the only contract
  * an event sourced system needs to fulfil is providing a stream of events. How data can be
  * retrieved or accessed beyond that, is entirely dependent on the use case.
  */

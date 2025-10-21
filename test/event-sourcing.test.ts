@@ -2,7 +2,7 @@ import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssue
 import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
-import { createMemoryReducedProjector } from "../src/projector/createMemoryReducedProjector.ts";
+import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
 import { assertEquals } from "@std/assert";
 import {
   passengerActivityInitialState,
@@ -17,7 +17,6 @@ import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createI
 import { createPollingEventStoreSubscriber } from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
 import { wait } from "../src/util/wait.ts";
-import * as process from "process";
 
 /**
  * @todo get a proper event subscriber going, and describeAll a few configurations.
@@ -106,7 +105,7 @@ describe("event sourcing", () => {
     });
 
     // Give the projections a chance to catch up.
-    await wait(100);
+    await wait(200);
     assertEquals(passengerActivity.data, {
       "Waldo Mcdaniel": {
         flightsTaken: 1,

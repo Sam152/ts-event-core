@@ -10,7 +10,7 @@ import { createBasicAggregateRootRepository } from "../src/aggregate/repository/
 import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
-import { Projector } from "../src/projector/Projector.ts";
+import { Projector } from "../src/projection/Projector.ts";
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 import { createPostgresSnapshotStorage } from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 

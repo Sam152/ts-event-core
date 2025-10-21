@@ -604,7 +604,7 @@ export function createPostgresEventStore<TEvent extends Event>(
 
 ## Projector
 
-[:arrow_upper_right:](src/projector/Projector.ts#L3-L24) Projectors take a stream of events from an event
+[:arrow_upper_right:](src/projection/Projector.ts#L3-L24) Projectors take a stream of events from an event
 store and transform them into useful data structures. These are often called read models.
 
 Read models are typically eventually consistent and thus are not required to adhere to any of the boundaries

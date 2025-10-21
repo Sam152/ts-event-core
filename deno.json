@@ -2,6 +2,7 @@
   "tasks": {
     "init:git-hooks": "git config core.hooksPath .githooks",
     "test": "deno test --allow-run --allow-env --allow-net",
+    "test:debug": "deno test --inspect-brk --allow-run --allow-env --allow-net",
     "test:db-reset": "docker compose -f test/utils/infra/docker-compose.yml down -v",
     "readme": "deno --allow-write --allow-read ./docs/generateReadme.ts"
   },
