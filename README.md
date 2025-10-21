@@ -38,6 +38,8 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ### (AggregateRootDefinition link to type)
 
+(just make this the doc string):.......
+
 [:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L4-L21) A thing.
 
 ```typescript
