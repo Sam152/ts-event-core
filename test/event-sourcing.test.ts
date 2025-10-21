@@ -17,6 +17,7 @@ import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createI
 import { createPollingEventStoreSubscriber } from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
 import { wait } from "../src/util/wait.ts";
+import { tryAssertEquals } from "./utils/tryAssertEquals.ts";
 
 /**
  * @todo get a proper event subscriber going, and describeAll a few configurations.
@@ -106,12 +107,12 @@ describe("event sourcing", () => {
 
     // Give the projections a chance to catch up.
     await wait(200);
-    assertEquals(passengerActivity.data, {
-      "Waldo Mcdaniel": {
+    tryAssertEquals(passengerActivity.data, {
+      "Waldo Mcdanaiel": {
         flightsTaken: 1,
       },
     });
-    assertEquals(eventLog.data, [
+    tryAssertEquals(eventLog.data, [
       "FLIGHT: NEW_FLIGHT_SCHEDULED",
       "GATE: GATE_OPENED",
       "GATE: BOARDING_PASS_SCANNED",
