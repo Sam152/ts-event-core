@@ -80,6 +80,7 @@ export function bootstrapProduction() {
     halt: async () => {
       await processManager.halt();
       await projections.halt();
+      await connection.end();
     },
   };
 }

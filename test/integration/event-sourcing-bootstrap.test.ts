@@ -2,9 +2,13 @@ import { assertEquals } from "@std/assert";
 import { describe, it } from "jsr:@std/testing/bdd";
 import { tryThing } from "./utils/tryThing.ts";
 import { bootstrapInMemory } from "./bootstrap/bootstrapInMemory.ts";
-import {bootstrapProduction} from "./bootstrap/bootstrapProduction.ts";
+import { bootstrapProduction } from "./bootstrap/bootstrapProduction.ts";
+import { afterAll, beforeEach } from "@std/testing/bdd";
+import {prepareTestDatabaseContainer} from "./utils/prepareTestDatabaseContainer.ts";
 
 describe("event sourcing bootstrap", () => {
+  beforeEach(prepareTestDatabaseContainer);
+
   it("allows commands to be issued", async () => {
     const { issueCommand, readModels, ...bootstrap } = bootstrapProduction();
     await bootstrap.start();
