@@ -1,4 +1,4 @@
-import { CommandIssuer } from "../../../src/command/CommandIssuer.ts";
+import { CommandIssuer } from "@ts-event-core/framework";
 import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
 
 /**

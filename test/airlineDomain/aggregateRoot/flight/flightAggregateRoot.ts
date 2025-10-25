@@ -1,4 +1,4 @@
-import { AggregateRootDefinition } from "../../../../src/aggregate/AggregateRootDefinition.ts";
+import { AggregateRootDefinition } from "@ts-event-core/framework";
 import { confirmLanding } from "./commands/confirmLanding.ts";
 import { registerPassengerBoarded } from "./commands/registerPassengerBoarded.ts";
 import { confirmTakeoff } from "./commands/confirmTakeoff.ts";

@@ -1,3 +1,13 @@
+/**
+ * Exported types.
+ */
+export type { AggregateRootDefinition } from "./aggregate/AggregateRootDefinition.ts";
+export type { EventsRaisedByAggregateRoots } from "./eventStore/EventStore.ts";
+export type { CommandIssuer } from "./command/CommandIssuer.ts";
+
+/**
+ * Exported functions.
+ */
 export { createMemoryCursorPosition } from "./eventStore/cursor/createMemoryCursorPosition.ts";
 export { createPollingEventStoreSubscriber } from "./eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 export { createInMemorySnapshotStorage } from "./aggregate/snapshot/createInMemorySnapshotStorage.ts";

@@ -1,6 +1,6 @@
 import { gateAggregateRoot } from "./gate/gateAggregateRoot.ts";
 import { flightAggregateRoot } from "./flight/flightAggregateRoot.ts";
-import { EventsRaisedByAggregateRoots } from "../../../src/eventStore/EventStore.ts";
+import { EventsRaisedByAggregateRoots } from "@ts-event-core/framework";
 
 /**
  * Each aggregate root forms a logical grouping of events and commands in an event
