@@ -14,9 +14,8 @@ export function createMemoryReducedProjector<TEvent extends Event, TData>(
   projector: Projector<TEvent>;
   data: TData;
 } {
-  const data = structuredClone(initialState);
   const reducedProjector = {
-    data,
+    data: structuredClone(initialState),
     projector: (event: TEvent) => {
       reducedProjector.data = reducer(reducedProjector.data, event);
     },

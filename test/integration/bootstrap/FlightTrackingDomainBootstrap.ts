@@ -15,8 +15,12 @@ import { airlineAggregateRoots, EventLog, PassengerActivity } from "@ts-event-co
 export type FlightTrackingDomainBootstrap = {
   issueCommand: CommandIssuer<typeof airlineAggregateRoots>;
   readModels: {
-    eventLog: EventLog;
-    passengerActivity: PassengerActivity;
+    eventLog: {
+      data: EventLog;
+    };
+    passengerActivity: {
+      data: PassengerActivity;
+    };
   };
   start: () => Promise<void>;
   halt: () => Promise<void>;

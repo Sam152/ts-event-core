@@ -55,7 +55,7 @@ describe("event sourcing bootstrap", () => {
     });
 
     await tryThing(() =>
-      assertEquals(readModels.passengerActivity, {
+      assertEquals(readModels.passengerActivity.data, {
         "Waldo Mcdaniel": {
           flightsTaken: 1,
         },
@@ -63,7 +63,7 @@ describe("event sourcing bootstrap", () => {
     );
 
     await tryThing(() =>
-      assertEquals(readModels.eventLog, [
+      assertEquals(readModels.eventLog.data, [
         "FLIGHT: NEW_FLIGHT_SCHEDULED",
         "GATE: GATE_OPENED",
         "GATE: BOARDING_PASS_SCANNED",

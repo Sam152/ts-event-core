@@ -59,8 +59,8 @@ export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
   return {
     issueCommand,
     readModels: {
-      eventLog: eventLog.data,
-      passengerActivity: passengerActivity.data,
+      eventLog: eventLog,
+      passengerActivity: passengerActivity,
     },
     start: async () => {
       await projections.start();
