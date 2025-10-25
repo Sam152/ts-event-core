@@ -16,6 +16,11 @@ export function documentType<TType>(): string {
     symbolName: typeName,
     symbolType: "type",
   });
+
+  if (!docString) {
+    throw new Error(`Could not extract doc string for type ${typeName} in ${filePath}`);
+  }
+
   return formatDocString(docString);
 }
 

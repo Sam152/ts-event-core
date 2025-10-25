@@ -16,7 +16,7 @@ import {
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 import { createPollingEventStoreSubscriber } from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
-import { tryThing } from "./utils/tryAssertEquals.ts";
+import { tryThing } from "./utils/tryThing.ts";
 
 describe("event sourcing", () => {
   it("allows commands to be issued", async () => {

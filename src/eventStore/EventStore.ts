@@ -1,7 +1,4 @@
-import {
-  AggregateRootDefinitionMap,
-  AggregateRootDefinitionMapTypes,
-} from "../aggregate/AggregateRootDefinition.ts";
+import {AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes,} from "../aggregate/AggregateRootDefinition.ts";
 
 /**
  * Events record statements of fact that occurred within a domain, while processing
@@ -19,6 +16,9 @@ export type PersistedEvent<TEvent = Event> = TEvent & {
   id: number;
 };
 
+/**
+ * It's where we store events...
+ */
 export type EventStore<TEvent extends Event = Event> = {
   persist: (events: TEvent[]) => Promise<void>;
   retrieve: (args: {

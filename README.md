@@ -65,7 +65,7 @@ The storage used for snapshots can be.
 
 ### [`EventStore`](src/eventStore/EventStore.ts)
 
-
+It's where we store events...
 
 #### Implementations
 
