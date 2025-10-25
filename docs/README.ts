@@ -1,21 +1,21 @@
-import { documentType, linkType } from "./utils/documentType.ts";
-import { EventStore } from "../src/eventStore/EventStore.ts";
-import { linkFunction } from "./utils/documentFunction.ts";
-import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
-import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
-import { CommandIssuer } from "../src/command/CommandIssuer.ts";
-import { AggregateRootRepository } from "../src/aggregate/AggregateRootRepository.ts";
-import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
+import {documentType, linkType} from "./utils/documentType.ts";
+import {EventStore} from "../src/eventStore/EventStore.ts";
+import {linkFunction} from "./utils/documentFunction.ts";
+import {createInMemoryEventStore} from "../src/eventStore/createInMemoryEventStore.ts";
+import {createPostgresEventStore} from "../src/eventStore/createPostgresEventStore.ts";
+import {CommandIssuer} from "../src/command/CommandIssuer.ts";
+import {AggregateRootRepository} from "../src/aggregate/AggregateRootRepository.ts";
+import {createBasicAggregateRootRepository} from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
 import {
-  createSnapshottingAggregateRootRepository,
+    createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
-import { Projector } from "../src/projection/Projector.ts";
-import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
-import { createPostgresSnapshotStorage } from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
-import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
-import { createQueuedCommandIssuer } from "../src/command/createQueuedCommandIssuer.ts";
-import { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
-import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
+import {Projector} from "../src/projection/Projector.ts";
+import {createInMemorySnapshotStorage} from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
+import {createPostgresSnapshotStorage} from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
+import {createBasicCommandIssuer} from "../src/command/createBasicCommandIssuer.ts";
+import {createQueuedCommandIssuer} from "../src/command/createQueuedCommandIssuer.ts";
+import {SnapshotStorage} from "../src/aggregate/SnapshotStorage.ts";
+import {createMemoryReducedProjector} from "../src/projection/createMemoryReducedProjector.ts";
 
 /**
  * Add `README.ts` to soft-wraps configuration before editing.
@@ -88,7 +88,7 @@ export function README(): string {
     
     ## Component compositions
     
-    ## Limitations and trade-offs
+    ## Limitations, trade-offs & gaps
     
   `;
 }

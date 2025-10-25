@@ -24,7 +24,7 @@ It contains a set of loosely coupled types (and various implementations of these
    5. [`Projector`](#projectorsrcprojectionprojectorts)
       1. [Implementations](#implementations)
 3. [Component compositions](#component-compositions)
-4. [Limitations and trade-offs](#limitations-and-trade-offs)
+4. [Limitations, trade-offs & gaps](#limitations-trade-offs-gaps)
 
 ----
 
@@ -99,4 +99,4 @@ ieved or accessed beyond that, is entirely dependent on the use case.
 
 ## Component compositions
 
-## Limitations and trade-offs
+## Limitations, trade-offs & gaps
