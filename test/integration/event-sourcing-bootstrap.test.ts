@@ -5,80 +5,99 @@ import { bootstrapInMemory } from "./bootstrap/bootstrapInMemory.ts";
 import { bootstrapProduction } from "./bootstrap/bootstrapProduction.ts";
 import { afterAll, beforeEach } from "@std/testing/bdd";
 import { prepareTestDatabaseContainer } from "./utils/prepareTestDatabaseContainer.ts";
+import { describeAll } from "./utils/describeAll.ts";
+import { FlightTrackingDomainBootstrap } from "./bootstrap/FlightTrackingDomainBootstrap.ts";
+import { createInMemorySnapshotStorage } from "@ts-event-core/framework";
+import { createPostgresSnapshotStorage } from "../../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 
-describe("event sourcing bootstrap", () => {
-  beforeEach(prepareTestDatabaseContainer);
+const implementations = [
+  {
+    bootstrapFn: bootstrapInMemory,
+    beforeEachHook: () => undefined,
+  },
+  {
+    bootstrapFn: bootstrapProduction,
+    beforeEachHook: prepareTestDatabaseContainer,
+  },
+];
 
-  it("allows commands to be issued", async () => {
-    const { issueCommand, readModels, ...bootstrap } = bootstrapProduction();
-    await bootstrap.start();
+describeAll(
+  "event sourcing bootstrap",
+  implementations,
+  ({ bootstrapFn, beforeEachHook }) => {
+    beforeEach(beforeEachHook);
 
-    await issueCommand({
-      aggregateRootType: "FLIGHT",
-      command: "scheduleFlight",
-      aggregateRootId: "VA-497",
-      data: {
-        seatingCapacity: 32,
-      },
-    });
+    it("allows commands to be issued", async () => {
+      const { issueCommand, readModels, ...bootstrap } = bootstrapFn();
+      await bootstrap.start();
 
-    await issueCommand({
-      aggregateRootType: "GATE",
-      command: "openGate",
-      aggregateRootId: "PERTH-T2-DOMESTIC-6",
-      data: {
-        openForFlight: "VA-497",
-      },
-    });
-    await issueCommand({
-      aggregateRootType: "GATE",
-      command: "scanBoardingPass",
-      aggregateRootId: "PERTH-T2-DOMESTIC-6",
-      data: {
-        passengerName: "Waldo Mcdaniel",
-        passportNumber: "PA777",
-      },
-    });
-    await issueCommand({
-      aggregateRootType: "GATE",
-      command: "closeGate",
-      aggregateRootId: "PERTH-T2-DOMESTIC-6",
-      data: undefined,
-    });
-
-    await issueCommand({
-      aggregateRootType: "FLIGHT",
-      aggregateRootId: "VA-497",
-      command: "confirmTakeOff",
-      data: undefined,
-    });
-    await issueCommand({
-      aggregateRootType: "FLIGHT",
-      aggregateRootId: "VA-497",
-      command: "confirmLanding",
-      data: undefined,
-    });
-
-    await tryThing(() =>
-      assertEquals(readModels.passengerActivity.data, {
-        "Waldo Mcdaniel": {
-          flightsTaken: 1,
+      await issueCommand({
+        aggregateRootType: "FLIGHT",
+        command: "scheduleFlight",
+        aggregateRootId: "VA-497",
+        data: {
+          seatingCapacity: 32,
         },
-      })
-    );
+      });
 
-    await tryThing(() =>
-      assertEquals(readModels.eventLog.data, [
-        "FLIGHT: FLIGHT_SCHEDULED",
-        "GATE: GATE_OPENED",
-        "GATE: BOARDING_PASS_SCANNED",
-        "GATE: GATE_CLOSED",
-        "FLIGHT: FLIGHT_DEPARTED",
-        "FLIGHT: FLIGHT_LANDED",
-        "FLIGHT: PASSENGER_BOARDED",
-      ])
-    );
+      await issueCommand({
+        aggregateRootType: "GATE",
+        command: "openGate",
+        aggregateRootId: "PERTH-T2-DOMESTIC-6",
+        data: {
+          openForFlight: "VA-497",
+        },
+      });
+      await issueCommand({
+        aggregateRootType: "GATE",
+        command: "scanBoardingPass",
+        aggregateRootId: "PERTH-T2-DOMESTIC-6",
+        data: {
+          passengerName: "Waldo Mcdaniel",
+          passportNumber: "PA777",
+        },
+      });
+      await issueCommand({
+        aggregateRootType: "GATE",
+        command: "closeGate",
+        aggregateRootId: "PERTH-T2-DOMESTIC-6",
+        data: undefined,
+      });
 
-    await bootstrap.halt();
-  });
-});
+      await issueCommand({
+        aggregateRootType: "FLIGHT",
+        aggregateRootId: "VA-497",
+        command: "confirmTakeOff",
+        data: undefined,
+      });
+      await issueCommand({
+        aggregateRootType: "FLIGHT",
+        aggregateRootId: "VA-497",
+        command: "confirmLanding",
+        data: undefined,
+      });
+
+      await tryThing(() =>
+        assertEquals(readModels.passengerActivity.data, {
+          "Waldo Mcdaniel": {
+            flightsTaken: 1,
+          },
+        })
+      );
+
+      await tryThing(() =>
+        assertEquals(readModels.eventLog.data, [
+          "FLIGHT: FLIGHT_SCHEDULED",
+          "GATE: GATE_OPENED",
+          "GATE: BOARDING_PASS_SCANNED",
+          "GATE: GATE_CLOSED",
+          "FLIGHT: FLIGHT_DEPARTED",
+          "FLIGHT: FLIGHT_LANDED",
+          "FLIGHT: PASSENGER_BOARDED",
+        ])
+      );
+
+      await bootstrap.halt();
+    });
+  },
+);

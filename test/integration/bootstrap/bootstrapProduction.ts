@@ -1,7 +1,5 @@
 import {
   createBasicCommandIssuer,
-  createInMemoryEventStore,
-  createInMemorySnapshotStorage,
   createMemoryCursorPosition,
   createMemoryReducedProjector,
   createPollingEventStoreSubscriber,
