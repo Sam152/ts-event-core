@@ -1,4 +1,4 @@
-import { documentType } from "./utils/documentType.ts";
+import { documentType, linkToType } from "./utils/documentType.ts";
 import { EventStore } from "../src/eventStore/EventStore.ts";
 import { documentFunction } from "./utils/documentFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
@@ -39,9 +39,7 @@ export function README(): string {
     
     ## Key components
     
-    ### (AggregateRootDefinition link to type)
-    
-    (just make this the doc string):.......
+    ### ${linkToType<AggregateRootDefinition<any, any>>()}
     
     ${documentType<AggregateRootDefinition<any, any>>()}
     
@@ -50,11 +48,11 @@ export function README(): string {
     * Foo
     * Bar
     
-    ### (CommandIssuer link to type)
+    ### ${linkToType<CommandIssuer<any, any>>()}
     
     ${documentType<CommandIssuer<any, any>>()}
     
-    ### Aggregate root repository
+    ### ${linkToType<AggregateRootRepository<any, any>>()}
     
     ${documentType<AggregateRootRepository<any, any>>()}
     
@@ -74,7 +72,7 @@ export function README(): string {
     
     ${documentFunction(createPostgresSnapshotStorage)}
     
-    ### Event store
+    ### ${linkToType<EventStore>()}
     
     ${documentType<EventStore>()}
     

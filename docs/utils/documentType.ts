@@ -16,6 +16,19 @@ export function documentType<TType>(): string {
     symbolName: typeName,
     symbolType: "type",
   });
+  return formatDocString(docString);
+}
+
+export function documentTypeWithCode<TType>(): string {
+  const { filePath, typeName } = fileContainingGenericType({
+    callSites: getCallSites(),
+    depth: 0,
+  });
+  const { docString, symbolBody, lineRef } = extractSymbolAndDocString({
+    filePath,
+    symbolName: typeName,
+    symbolType: "type",
+  });
 
   const components: string[] = [];
   if (docString) {
@@ -24,4 +37,15 @@ export function documentType<TType>(): string {
   components.push(formatCode(symbolBody));
 
   return padAfterFirstLine({ count: 4, char: " " })(components.join("\n\n"));
+}
+
+export function linkToType<TType>(): string {
+  const { filePath, typeName } = fileContainingGenericType({
+    callSites: getCallSites(),
+    depth: 0,
+  });
+  return linkTo({
+    path: filePath,
+    linkName: `\`${typeName}\``,
+  });
 }

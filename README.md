@@ -13,15 +13,15 @@ It contains a set of loosely coupled types (and various implementations of these
    1. [Aggregate roots](#aggregate-roots)
    2. [Process manager](#process-manager)
 2. [Key components](#key-components)
-   1. [(AggregateRootDefinition link to type)](#aggregaterootdefinition-link-to-type)
+   1. [[`AggregateRootDefinition`](src/aggregate/AggregateRootDefinition.ts)](#aggregaterootdefinitionsrcaggregateaggregaterootdefinitionts)
       1. [Implementations](#implementations)
-   2. [(CommandIssuer link to type)](#commandissuer-link-to-type)
-   3. [Aggregate root repository](#aggregate-root-repository)
+   2. [[`CommandIssuer`](src/command/CommandIssuer.ts)](#commandissuersrccommandcommandissuerts)
+   3. [[`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts)](#aggregaterootrepositorysrcaggregateaggregaterootrepositoryts)
       1. [Basic](#basic)
       2. [Snapshotting](#snapshotting)
          1. [In-memory](#in-memory)
          2. [Postgres](#postgres)
-   4. [Event store](#event-store)
+   4. [[`EventStore`](src/eventStore/EventStore.ts)](#eventstoresrceventstoreeventstorets)
       1. [In-memory](#in-memory)
       2. [Postgres](#postgres)
    5. [Projector](#projector)
@@ -36,82 +36,22 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ## Key components
 
-### (AggregateRootDefinition link to type)
+### [`AggregateRootDefinition`](src/aggregate/AggregateRootDefinition.ts)
 
-(just make this the doc string):.......
-
-[:arrow_upper_right:](src/aggregate/AggregateRootDefinition.ts#L4-L21) A thing.
-
-```typescript
-export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
-  commands: {
-    [key: string]: <TCommandData extends never>(
-      aggregate: TAggregateRootState,
-      commandData: TCommandData,
-    ) => TEvent | TEvent[];
-  };
-  state: {
-    reducer: AggregateReducer<TAggregateRootState, TEvent>;
-    initialState: TAggregateRootState;
-
-    /**
-     * Reducers can change, so when state is reduced and persisted, by way of a snapshot, we need to be able to
-     * identify a version of the state.
-     */
-    version: AggregateStateVersion;
-  };
-};
-```
+A thing.
 
 #### Implementations
 
 * Foo
 * Bar
 
-### (CommandIssuer link to type)
+### [`CommandIssuer`](src/command/CommandIssuer.ts)
 
-[:arrow_upper_right:](src/command/CommandIssuer.ts#L6-L20) When issuing a command...
+When issuing a command...
 
-```typescript
-export type CommandIssuer<
-  TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
-> = <
-  TAggregateRootType extends keyof TAggregateRootDefinitionMap,
-  TCommandName extends keyof TAggregateRootDefinitionMap[TAggregateRootType]["commands"],
->(args: {
-  aggregateRootType: TAggregateRootType;
-  aggregateRootId: string;
-  command: TCommandName;
-  data: Parameters<TAggregateRootDefinitionMap[TAggregateRootType]["commands"][TCommandName]>[1];
-}) => Promise<void>;
-```
+### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts)
 
-### Aggregate root repository
-
-[:arrow_upper_right:](src/aggregate/AggregateRootRepository.ts#L4-L25) Retrieve and persist aggregate roots.
-
-```typescript
-export type AggregateRootRepository<
-  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
-> = {
-  retrieve: <TAggregateRootType extends keyof TAggregateDefinitionMap>(
-    args: { aggregateRootType: TAggregateRootType; aggregateRootId: string },
-  ) => Promise<AggregateRootInstance<TAggregateRootType, TAggregateDefinitionMap[TAggregateRootType]>>;
-
-  persist: <
-    TAggregateRootType extends keyof TAggregateDefinitionMap,
-    TAggregateDefinition extends TAggregateDefinitionMap[TAggregateRootType],
-    TLoadedAggregateRoot extends AggregateRootInstance<TAggregateRootType, TAggregateDefinition>,
-  >(
-    args: {
-      aggregateRoot: TLoadedAggregateRoot;
-      pendingEventPayloads: Parameters<TAggregateDefinition["state"]["reducer"]>[1][];
-    },
-  ) => Promise<void>;
-};
-```
+Retrieve and persist aggregate roots.
 
 #### Basic
 
@@ -419,23 +359,9 @@ export function createPostgresSnapshotStorage<
 
 </details>
 
-### Event store
+### [`EventStore`](src/eventStore/EventStore.ts)
 
-```typescript
-export type EventStore<TEvent extends Event = Event> = {
-  persist: (events: TEvent[]) => Promise<void>;
-  retrieve: (args: {
-    aggregateRootType: string;
-    aggregateRootId: string;
-    fromVersion?: number;
-  }) => AsyncGenerator<PersistedEvent<TEvent>>;
 
-  retrieveAll: (args: {
-    idGt: number;
-    limit: number;
-  }) => AsyncGenerator<PersistedEvent<TEvent>>;
-};
-```
 
 #### In-memory
 
@@ -617,28 +543,24 @@ export function createPostgresEventStore<TEvent extends Event>(
 
 ### Projector
 
-[:arrow_upper_right:](src/projection/Projector.ts#L3-L24) Projectors take a stream of events from an event store and transform them into
-useful data structures. These are often called read models.
+Projectors take a stream of events from an event store and transform them into
+ul data structures. These are often called read models.
 
-Read models are typically eventually consistent and thus are not required to
-adhere to any of the boundaries defined by the aggregate roots.
+ models are typically eventually consistent and thus are not required to
+re to any of the boundaries defined by the aggregate roots.
 
-New read models can be added at any point in time and can then be deleted after
-they are no longer useful.
+read models can be added at any point in time and can then be deleted after
+ are no longer useful.
 
-They may deal with data structures that describe all the events in the system as
-a whole or selectively choose to build smaller structures out of individual aggregates
-or other relations found within the event payload.
+ may deal with data structures that describe all the events in the system as
+ole or selectively choose to build smaller structures out of individual aggregates
+ther relations found within the event payload.
 
-These data structures can be stored in memory, relational databases, speciality
-databases or any other system that provides utility and value to the application.
+e data structures can be stored in memory, relational databases, speciality
+bases or any other system that provides utility and value to the application.
 
-For these reasons, the signature of a projection is extremely simple, the only contract
-an event sourced system needs to fulfil is providing a stream of events. How data can be
-retrieved or accessed beyond that, is entirely dependent on the use case.
-
-```typescript
-export type Projector<TEvent extends Event> = (event: TEvent) => void | Promise<void>;
-```
+these reasons, the signature of a projection is extremely simple, the only contract
+vent sourced system needs to fulfil is providing a stream of events. How data can be
+ieved or accessed beyond that, is entirely dependent on the use case.
 
 ## Component compositions
