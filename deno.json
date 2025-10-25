@@ -8,6 +8,7 @@
   },
   "imports": {
     "@ts-event-core/framework": "./src/index.ts",
+    "@ts-event-core/flight-tracking-domain": "./test/flightTrackingDomain/index.ts",
     "@std/assert": "jsr:@std/assert@1",
     "@std/path": "jsr:@std/path@^1.1.1",
     "@std/testing/bdd": "jsr:@std/testing/bdd",

@@ -1,7 +1,10 @@
-import { createBasicCommandIssuer } from "../../src/command/createBasicCommandIssuer.ts";
-import { airlineAggregateRoots, AirlineEvent } from "../airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { createInMemoryEventStore } from "../../src/eventStore/createInMemoryEventStore.ts";
-import { createBasicAggregateRootRepository } from "../../src/aggregate/repository/createBasicAggregateRootRepository.ts";
+import { createBasicCommandIssuer } from "@ts-event-core/framework";
+import {
+  airlineAggregateRoots,
+  AirlineEvent,
+} from "@ts-event-core/flight-tracking-domain";
+import { createInMemoryEventStore } from "@ts-event-core/framework";
+import { createBasicAggregateRootRepository } from "@ts-event-core/framework";
 import { describe, it } from "jsr:@std/testing/bdd";
 
 const issueCommand = createBasicCommandIssuer({

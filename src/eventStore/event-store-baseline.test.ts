@@ -1,7 +1,7 @@
 import { assertEquals } from "@std/assert";
 import { afterAll, beforeEach, it } from "jsr:@std/testing/bdd";
 import { describeAll } from "../../test/integration/utils/describeAll.ts";
-import { AirlineEvent } from "../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
+import { AirlineEvent } from "../../test/flightTrackingDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createInMemoryEventStore } from "./createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "./createPostgresEventStore.ts";
 import { prepareTestDatabaseContainer } from "../../test/integration/utils/prepareTestDatabaseContainer.ts";

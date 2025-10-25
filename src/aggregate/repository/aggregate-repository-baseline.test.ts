@@ -1,4 +1,4 @@
-import { airlineAggregateRoots } from "../../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
+import { airlineAggregateRoots } from "../../../test/flightTrackingDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createInMemorySnapshotStorage } from "../snapshot/createInMemorySnapshotStorage.ts";
 import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
