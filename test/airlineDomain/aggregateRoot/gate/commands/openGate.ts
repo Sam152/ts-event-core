@@ -1,13 +1,13 @@
-import { GateState } from "../state/GateState.ts";
-import { GateEvent } from "../state/GateEvent.ts";
+import {GateState} from "../state/GateState.ts";
+import {GateEvent} from "../state/GateEvent.ts";
 
 export function openGate(
   gate: GateState,
   data: { openForFlight: string },
 ): GateEvent {
-  if (gate.status === "OPEN") {
+  if (gate.status !== "CLOSED") {
     return {
-      type: "GATE_FAILED_TO_OPEN",
+      type: "OPEN_GATE_FAILED",
       reason: "GATE_ALREADY_OPEN",
     };
   }

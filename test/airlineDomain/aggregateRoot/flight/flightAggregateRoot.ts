@@ -1,11 +1,11 @@
-import { AggregateRootDefinition } from "../../../../src/aggregate/AggregateRootDefinition.ts";
-import { confirmLanding } from "./commands/confirmLanding.ts";
-import { registerPassengerOnBoard } from "./commands/registerPassengerOnBoard.ts";
-import { confirmTakeoff } from "./commands/confirmTakeoff.ts";
-import { FlightState } from "./state/FlightState.ts";
-import { FlightEvent } from "./state/FlightEvent.ts";
-import { flightReducer } from "./state/flightReducer.ts";
-import { scheduleFlight } from "./commands/scheduleFlight.ts";
+import {AggregateRootDefinition} from "../../../../src/aggregate/AggregateRootDefinition.ts";
+import {confirmLanding} from "./commands/confirmLanding.ts";
+import {registerPassengerBoarded} from "./commands/registerPassengerBoarded.ts";
+import {confirmTakeoff} from "./commands/confirmTakeoff.ts";
+import {FlightState} from "./state/FlightState.ts";
+import {FlightEvent} from "./state/FlightEvent.ts";
+import {flightReducer} from "./state/flightReducer.ts";
+import {scheduleFlight} from "./commands/scheduleFlight.ts";
 
 export const flightAggregateRoot = {
   state: {
@@ -15,7 +15,7 @@ export const flightAggregateRoot = {
   },
   commands: {
     scheduleFlight,
-    registerPassengerOnBoard,
+    registerPassengerOnBoard: registerPassengerBoarded,
     confirmTakeOff: confirmTakeoff,
     confirmLanding,
   },
