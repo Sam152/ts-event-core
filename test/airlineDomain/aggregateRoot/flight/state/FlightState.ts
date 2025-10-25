@@ -1,6 +1,9 @@
-import { AssertionError } from "@std/assert";
+import {AssertionError} from "@std/assert";
 
-export type FlightState = {
+/**
+ * State of a flight only after it has been scheduled.
+ */
+export type ScheduledFlightState = {
   status: "ON_THE_GROUND" | "IN_THE_AIR";
   totalSeats: number;
   totalBoardedPassengers: number;
@@ -8,7 +11,14 @@ export type FlightState = {
    * A map of passport IDs to passenger names.
    */
   passengerManifest: Record<string, string>;
-} | undefined;
+};
+
+export type FlightState =
+  | ScheduledFlightState
+  | /**
+   * An undefined flight state represents the state of a flight before
+   * it has been scheduled. It is an equally valid representation of a flight
+   */ undefined;
 
 /**
  * A lot of reducer cases will depend on a plane having "entered service", that is

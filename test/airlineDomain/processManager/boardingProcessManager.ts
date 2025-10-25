@@ -1,5 +1,5 @@
-import { CommandIssuer } from "../../../src/command/CommandIssuer.ts";
-import { airlineAggregateRoots, AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
+import {CommandIssuer} from "../../../src/command/CommandIssuer.ts";
+import {airlineAggregateRoots, AirlineEvent} from "../aggregateRoot/airlineAggregateRoots.ts";
 
 /**
  * A process manager facilitates coordination between aggregates, this is an example of an orchestrated
@@ -20,7 +20,7 @@ export async function boardingProcessManager(
   },
 ) {
   if (event.payload.type === "BOARDING_PASS_SCANNED") {
-    await issueCommand({
+      await issueCommand({
       aggregateRootType: "FLIGHT",
       command: "registerPassengerOnBoard",
       aggregateRootId: event.payload.boardingPlane,
