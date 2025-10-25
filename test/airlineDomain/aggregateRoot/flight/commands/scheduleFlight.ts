@@ -1,5 +1,5 @@
-import {FlightState} from "../state/FlightState.ts";
-import {FlightEvent} from "../state/FlightEvent.ts";
+import { FlightState } from "../state/FlightState.ts";
+import { FlightEvent } from "../state/FlightEvent.ts";
 
 export function scheduleFlight(
   flight: FlightState,
@@ -7,7 +7,7 @@ export function scheduleFlight(
     seatingCapacity: number;
   },
 ): FlightEvent {
-    const flightAlreadyScheduled = flight !== undefined;
+  const flightAlreadyScheduled = flight !== undefined;
   if (flightAlreadyScheduled) {
     return {
       type: "SCHEDULE_FLIGHT_FAILED",
