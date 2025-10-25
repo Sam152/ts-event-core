@@ -1,6 +1,6 @@
 import { AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
 
-type EventLog = string[];
+export type EventLog = string[];
 
 export const eventLogInitialState = [];
 

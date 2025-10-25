@@ -1,6 +1,6 @@
 import { AirlineEvent } from "../aggregateRoot/airlineAggregateRoots.ts";
 
-type PassengerActivity = {
+export type PassengerActivity = {
   [key: string]: {
     flightsTaken: number;
   };
