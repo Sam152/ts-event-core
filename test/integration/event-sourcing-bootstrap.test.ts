@@ -4,7 +4,7 @@ import { tryThing } from "./utils/tryThing.ts";
 import { bootstrapInMemory } from "./bootstrap/bootstrapInMemory.ts";
 import { bootstrapProduction } from "./bootstrap/bootstrapProduction.ts";
 import { afterAll, beforeEach } from "@std/testing/bdd";
-import {prepareTestDatabaseContainer} from "./utils/prepareTestDatabaseContainer.ts";
+import { prepareTestDatabaseContainer } from "./utils/prepareTestDatabaseContainer.ts";
 
 describe("event sourcing bootstrap", () => {
   beforeEach(prepareTestDatabaseContainer);
