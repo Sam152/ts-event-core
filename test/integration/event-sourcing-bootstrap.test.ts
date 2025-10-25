@@ -6,9 +6,6 @@ import { bootstrapProduction } from "./bootstrap/bootstrapProduction.ts";
 import { afterAll, beforeEach } from "@std/testing/bdd";
 import { prepareTestDatabaseContainer } from "./utils/prepareTestDatabaseContainer.ts";
 import { describeAll } from "./utils/describeAll.ts";
-import { FlightTrackingDomainBootstrap } from "./bootstrap/FlightTrackingDomainBootstrap.ts";
-import { createInMemorySnapshotStorage } from "@ts-event-core/framework";
-import { createPostgresSnapshotStorage } from "../../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 
 const implementations = [
   {
@@ -27,7 +24,7 @@ describeAll(
   ({ bootstrapFn, beforeEachHook }) => {
     beforeEach(beforeEachHook);
 
-    it("allows commands to be issued", async () => {
+    it("bootstraps a configuration of the event sourcing system", async () => {
       const { issueCommand, readModels, ...bootstrap } = bootstrapFn();
       await bootstrap.start();
 
@@ -39,7 +36,6 @@ describeAll(
           seatingCapacity: 32,
         },
       });
-
       await issueCommand({
         aggregateRootType: "GATE",
         command: "openGate",
@@ -63,7 +59,6 @@ describeAll(
         aggregateRootId: "PERTH-T2-DOMESTIC-6",
         data: undefined,
       });
-
       await issueCommand({
         aggregateRootType: "FLIGHT",
         aggregateRootId: "VA-497",
