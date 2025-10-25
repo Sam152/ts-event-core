@@ -7,14 +7,14 @@ import {
   createPollingEventStoreSubscriber,
   createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
-import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
+import { airlineAggregateRoots, AirlineEvent } from "../airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
+import { boardingProcessManager } from "../airlineDomain/processManager/boardingProcessManager.ts";
 import { assertEquals } from "@std/assert";
 import {
   passengerActivityInitialState,
   passengerActivityReducer,
-} from "./airlineDomain/readModels/passengerActivity.ts";
-import { eventLogInitialState, eventLogReducer } from "./airlineDomain/readModels/eventLog.ts";
+} from "../airlineDomain/readModels/passengerActivity.ts";
+import { eventLogInitialState, eventLogReducer } from "../airlineDomain/readModels/eventLog.ts";
 import { describe, it } from "jsr:@std/testing/bdd";
 import { tryThing } from "./utils/tryThing.ts";
 

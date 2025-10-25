@@ -1,12 +1,12 @@
 import { assertEquals } from "@std/assert";
 import { afterAll, beforeEach, it } from "jsr:@std/testing/bdd";
-import { describeAll } from "../../test/utils/describeAll.ts";
+import { describeAll } from "../../test/integration/utils/describeAll.ts";
 import { AirlineEvent } from "../../test/airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createInMemoryEventStore } from "./createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "./createPostgresEventStore.ts";
-import { prepareTestDatabaseContainer } from "../../test/utils/prepareTestDatabaseContainer.ts";
+import { prepareTestDatabaseContainer } from "../../test/integration/utils/prepareTestDatabaseContainer.ts";
 import postgres from "postgres";
-import { testPostgresConnectionOptions } from "../../test/utils/infra/testPostgresConnectionOptions.ts";
+import { testPostgresConnectionOptions } from "../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 import { assertRejects } from "@std/assert/rejects";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 

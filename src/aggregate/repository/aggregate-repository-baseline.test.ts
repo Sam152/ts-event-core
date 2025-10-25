@@ -5,7 +5,7 @@ import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { assertEquals } from "@std/assert";
 import { it } from "jsr:@std/testing/bdd";
-import { describeAll } from "../../../test/utils/describeAll.ts";
+import { describeAll } from "../../../test/integration/utils/describeAll.ts";
 import { createBasicAggregateRootRepository } from "./createBasicAggregateRootRepository.ts";
 
 const snapshottingEventStore = createInMemoryEventStore<
