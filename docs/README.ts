@@ -35,6 +35,7 @@ export function README(): string {
     
     ## Domain
     
+    ### Aggregate roots
     ### Commands
     ### State
     ### Process manager

@@ -8,9 +8,10 @@ This project is an implementation of Event Sourcing, written TypeScript using a 
 ----
 
 1. [Domain](#domain)
-   1. [Commands](#commands)
-   2. [State](#state)
-   3. [Process manager](#process-manager)
+   1. [Aggregate roots](#aggregate-roots)
+   2. [Commands](#commands)
+   3. [State](#state)
+   4. [Process manager](#process-manager)
 2. [Key framework components](#key-framework-components)
    1. [`CommandIssuer`](#commandissuer)
       1. [Implementations](#implementations)
@@ -29,6 +30,7 @@ This project is an implementation of Event Sourcing, written TypeScript using a 
 
 ## Domain
 
+### Aggregate roots
 ### Commands
 ### State
 ### Process manager
