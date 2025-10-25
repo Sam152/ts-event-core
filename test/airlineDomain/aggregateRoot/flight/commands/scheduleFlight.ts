@@ -1,5 +1,5 @@
-import { FlightState } from "../state/FlightState.ts";
-import { FlightEvent } from "../state/FlightEvent.ts";
+import {FlightState} from "../state/FlightState.ts";
+import {FlightEvent} from "../state/FlightEvent.ts";
 
 export function scheduleFlight(
   flight: FlightState,
@@ -14,6 +14,7 @@ export function scheduleFlight(
       REASON: "FLIGHT_ALREADY_SCHEDULED",
     };
   }
+
   return {
     type: "NEW_FLIGHT_SCHEDULED",
     seatingCapacity,
