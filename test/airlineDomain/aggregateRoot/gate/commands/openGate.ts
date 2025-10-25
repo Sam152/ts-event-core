@@ -1,5 +1,5 @@
-import {GateState} from "../state/GateState.ts";
-import {GateEvent} from "../state/GateEvent.ts";
+import { GateState } from "../state/GateState.ts";
+import { GateEvent } from "../state/GateEvent.ts";
 
 export function openGate(
   gate: GateState,

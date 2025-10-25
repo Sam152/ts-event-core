@@ -1,5 +1,5 @@
-import {GateState} from "./GateState.ts";
-import {GateEvent} from "./GateEvent.ts";
+import { GateState } from "./GateState.ts";
+import { GateEvent } from "./GateEvent.ts";
 
 export function gateReducer(state: GateState, event: GateEvent): GateState {
   switch (event.type) {
