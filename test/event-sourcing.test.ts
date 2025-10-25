@@ -5,18 +5,18 @@ import {
   createMemoryCursorPosition,
   createMemoryReducedProjector,
   createPollingEventStoreSubscriber,
-  createSnapshottingAggregateRootRepository
+  createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
-import {airlineAggregateRoots, AirlineEvent} from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import {boardingProcessManager} from "./airlineDomain/processManager/boardingProcessManager.ts";
-import {assertEquals} from "@std/assert";
+import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
+import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
+import { assertEquals } from "@std/assert";
 import {
   passengerActivityInitialState,
   passengerActivityReducer,
 } from "./airlineDomain/readModels/passengerActivity.ts";
-import {eventLogInitialState, eventLogReducer} from "./airlineDomain/readModels/eventLog.ts";
-import {describe, it} from "jsr:@std/testing/bdd";
-import {tryThing} from "./utils/tryThing.ts";
+import { eventLogInitialState, eventLogReducer } from "./airlineDomain/readModels/eventLog.ts";
+import { describe, it } from "jsr:@std/testing/bdd";
+import { tryThing } from "./utils/tryThing.ts";
 
 describe("event sourcing", () => {
   it("allows commands to be issued", async () => {
