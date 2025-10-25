@@ -14,7 +14,7 @@ import {
   passengerActivityInitialState,
   passengerActivityReducer,
 } from "@ts-event-core/flight-tracking-domain";
-import { eventLogInitialState, eventLogReducer } from "../flightTrackingDomain/readModels/eventLog.ts";
+import { eventLogInitialState, eventLogReducer } from "@ts-event-core/flight-tracking-domain";
 import { describe, it } from "jsr:@std/testing/bdd";
 import { tryThing } from "./utils/tryThing.ts";
 
