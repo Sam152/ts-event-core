@@ -62,7 +62,7 @@ describeAll(
       await issueCommand({
         aggregateRootType: "FLIGHT",
         aggregateRootId: "VA-497",
-        command: "confirmTakeOff",
+        command: "confirmTakeoff",
         data: undefined,
       });
       await issueCommand({

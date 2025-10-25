@@ -15,8 +15,8 @@ export const flightAggregateRoot = {
   },
   commands: {
     scheduleFlight,
-    registerPassengerOnBoard: registerPassengerBoarded,
-    confirmTakeOff: confirmTakeoff,
+    registerPassengerBoarded,
+    confirmTakeoff,
     confirmLanding,
   },
 } satisfies AggregateRootDefinition<FlightState, FlightEvent>;
