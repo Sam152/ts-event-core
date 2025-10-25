@@ -1,5 +1,5 @@
 import { FlightEvent } from "./FlightEvent.ts";
-import { assertPlaneInService, FlightState } from "./FlightState.ts";
+import { assertFlightScheduled, FlightState } from "./FlightState.ts";
 
 export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
   switch (event.type) {
@@ -12,21 +12,21 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
       };
     }
     case "FLIGHT_DEPARTED": {
-      assertPlaneInService(state);
+      assertFlightScheduled(state);
       return {
         ...state,
         status: "IN_THE_AIR",
       };
     }
     case "FLIGHT_LANDED": {
-      assertPlaneInService(state);
+      assertFlightScheduled(state);
       return {
         ...state,
         status: "ON_THE_GROUND",
       };
     }
     case "PASSENGER_BOARDED": {
-      assertPlaneInService(state);
+      assertFlightScheduled(state);
       return {
         ...state,
         totalBoardedPassengers: state.totalBoardedPassengers + 1,
@@ -37,7 +37,7 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
       };
     }
     case "PASSENGER_DISEMBARKED": {
-      assertPlaneInService(state);
+      assertFlightScheduled(state);
       const { [event.passportNumber]: _, ...remainingPassengers } = state.passengerManifest;
       return {
         ...state,

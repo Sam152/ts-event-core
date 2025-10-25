@@ -16,8 +16,9 @@ export type ScheduledFlightState = {
 export type FlightState =
   | ScheduledFlightState
   | /**
-   * An undefined flight state represents the state of a flight before
-   * it has been scheduled. It is an equally valid representation of a flight
+   * Undefined represents the state of a flight before it has been scheduled.
+   * It is an equally valid representation of a flight and all commands can receive
+   * this as part of the flight state.
    */ undefined;
 
 /**
@@ -28,8 +29,8 @@ export type FlightState =
  * For that reason, this assert can be used to narrow to the case of a plane having
  * entered service.
  */
-export function assertPlaneInService(state: FlightState): asserts state is Exclude<FlightState, undefined> {
-  if (typeof state === "undefined") {
+export function assertFlightScheduled(state: FlightState): asserts state is ScheduledFlightState {
+  if (state === undefined) {
     throw new AssertionError("Plane failed assertion of being in service.");
   }
 }
