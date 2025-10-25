@@ -3,7 +3,7 @@ export function filenameFromImportSymbol(
 ) {
   const importMatch = fileContents.match(
     new RegExp(
-      `import\\s+{[^}]*${symbolName}[^}]*}\\s+from\\s+["'](?<filename>[^"']+)["']`,
+      `import\\s+{[^}]* ${symbolName}[^}]*}\\s+from\\s+["'](?<filename>[^"']+)["']`,
     ),
   );
 

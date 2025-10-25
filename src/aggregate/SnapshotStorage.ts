@@ -6,7 +6,7 @@ import {
 import { AggregateRootInstance } from "./AggregateRootInstance.ts";
 
 /**
- * The storage used for snapshots can be...
+ * The storage used for snapshots can be.
  */
 export type SnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,

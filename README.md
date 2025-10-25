@@ -9,537 +9,68 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ----
 
-1. [Example domain](#example-domain)
-   1. [Aggregate roots](#aggregate-roots)
+1. [Domain implementation](#domain-implementation)
+   1. [Aggregate root definitions](#aggregate-root-definitions)
    2. [Process manager](#process-manager)
 2. [Key components](#key-components)
-   1. [[`AggregateRootDefinition`](src/aggregate/AggregateRootDefinition.ts)](#aggregaterootdefinitionsrcaggregateaggregaterootdefinitionts)
+   1. [[`CommandIssuer`](src/command/CommandIssuer.ts)](#commandissuersrccommandcommandissuerts)
       1. [Implementations](#implementations)
-   2. [[`CommandIssuer`](src/command/CommandIssuer.ts)](#commandissuersrccommandcommandissuerts)
-   3. [[`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts)](#aggregaterootrepositorysrcaggregateaggregaterootrepositoryts)
-      1. [Basic](#basic)
-      2. [Snapshotting](#snapshotting)
-         1. [In-memory](#in-memory)
-         2. [Postgres](#postgres)
+   2. [[`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts)](#aggregaterootrepositorysrcaggregateaggregaterootrepositoryts)
+      1. [Implementations](#implementations)
+   3. [[`SnapshotStorage`](src/aggregate/SnapshotStorage.ts)](#snapshotstoragesrcaggregatesnapshotstoragets)
+      1. [Implementations](#implementations)
    4. [[`EventStore`](src/eventStore/EventStore.ts)](#eventstoresrceventstoreeventstorets)
-      1. [In-memory](#in-memory)
-      2. [Postgres](#postgres)
+      1. [Implementations](#implementations)
    5. [Projector](#projector)
+   6. [Implementations](#implementations)
+   7. [Implementations](#implementations)
 3. [Component compositions](#component-compositions)
+4. [Limitations and trade-offs](#limitations-and-trade-offs)
 
 ----
 
-## Example domain
+## Domain implementation
 
-### Aggregate roots
+### Aggregate root definitions
 ### Process manager
 
 ## Key components
-
-### [`AggregateRootDefinition`](src/aggregate/AggregateRootDefinition.ts)
-
-A thing.
-
-#### Implementations
-
-* Foo
-* Bar
 
 ### [`CommandIssuer`](src/command/CommandIssuer.ts)
 
 When issuing a command...
 
+#### Implementations
+
+* [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L8-L40)
+* [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L8-L25)
+
 ### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts)
 
 Retrieve and persist aggregate roots.
 
-#### Basic
+#### Implementations
 
-[:arrow_upper_right:](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56) This aggregate root repository loads the whole event stream for an aggregate root,
-and reduces them on demand. This can be suitable for use cases where an aggregate
-root has a limited number of events.
+* [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56)
+* [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91)
 
-```typescript
-function createBasicAggregateRootRepository< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes, >( { eventStore, aggregateRoots }:
-```
-    
-<details>
-<summary> Show full <code>createBasicAggregateRootRepository</code> definition :point_down:</summary>
+### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts)
 
-```typescript
-export function createBasicAggregateRootRepository<
-  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
->(
-  { eventStore, aggregateRoots }: {
-    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap, TAggregateMapTypes>>;
-    aggregateRoots: TAggregateDefinitionMap;
-  },
-): AggregateRootRepository<TAggregateDefinitionMap, TAggregateMapTypes> {
-  return {
-    retrieve: async (
-      { aggregateRootId, aggregateRootType },
-    ) => {
-      const definition = aggregateRoots[aggregateRootType];
-      const events = eventStore.retrieve({
-        aggregateRootId,
-        aggregateRootType: aggregateRootType as string,
-      });
+The storage used for snapshots can be.
 
-      let aggregateVersion: number | undefined = undefined;
-      let state = structuredClone(definition.state.initialState);
-      for await (const event of events) {
-        state = definition.state.reducer(state, event.payload);
-        aggregateVersion = event.aggregateVersion;
-      }
+#### Implementations
 
-      return {
-        aggregateRootId,
-        aggregateRootType,
-        aggregateVersion,
-        state,
-      };
-    },
-    persist: async ({ aggregateRoot, pendingEventPayloads }) => {
-      const events: Event[] = pendingEventPayloads.map(
-        (payload, i) => ({
-          aggregateRootType: aggregateRoot.aggregateRootType as string,
-          aggregateRootId: aggregateRoot.aggregateRootId,
-          recordedAt: new Date(),
-          aggregateVersion: (aggregateRoot.aggregateVersion ?? 0) + (i + 1),
-          payload,
-        }),
-      );
-      await eventStore.persist(events);
-    },
-  };
-}
-```
-
-</details>
-
-#### Snapshotting
-
-[:arrow_upper_right:](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91) Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading
-a large number of events when retrieving an aggregate.
-
-```typescript
-function createSnapshottingAggregateRootRepository< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes, >( { eventStore, aggregateRoots, snapshotStorage }:
-```
-    
-<details>
-<summary> Show full <code>createSnapshottingAggregateRootRepository</code> definition :point_down:</summary>
-
-```typescript
-export function createSnapshottingAggregateRootRepository<
-  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes = AggregateRootDefinitionMapTypes,
->(
-  { eventStore, aggregateRoots, snapshotStorage }: {
-    eventStore: EventStore<EventsRaisedByAggregateRoots<TAggregateDefinitionMap, TAggregateMapTypes>>;
-    aggregateRoots: TAggregateDefinitionMap;
-    snapshotStorage: SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>;
-  },
-): AggregateRootRepository<TAggregateDefinitionMap, TAggregateMapTypes> {
-  return {
-    retrieve: async (
-      { aggregateRootId, aggregateRootType },
-    ) => {
-      const definition = aggregateRoots[aggregateRootType];
-
-      const snapshot = await snapshotStorage.retrieve({
-        aggregateRootId,
-        aggregateRootType,
-        stateVersion: definition.state.version,
-      });
-
-      const events = eventStore.retrieve({
-        aggregateRootId,
-        aggregateRootType: aggregateRootType as string,
-        fromVersion: snapshot && snapshot.aggregateVersion,
-      });
-
-      let state = structuredClone(snapshot ? snapshot.state : definition.state.initialState);
-      let aggregateVersion = snapshot ? snapshot.aggregateVersion : undefined;
-
-      for await (const event of events) {
-        state = definition.state.reducer(state, event.payload);
-        aggregateVersion = event.aggregateVersion;
-      }
-
-      return {
-        aggregateRootId,
-        aggregateRootType,
-        aggregateVersion,
-        state,
-      };
-    },
-    persist: async ({ aggregateRoot, pendingEventPayloads }) => {
-      const events: Event[] = pendingEventPayloads.map(
-        (payload, i) => ({
-          aggregateRootType: aggregateRoot.aggregateRootType as string,
-          aggregateRootId: aggregateRoot.aggregateRootId,
-          recordedAt: new Date(),
-          aggregateVersion: (aggregateRoot.aggregateVersion ?? 0) + (i + 1),
-          payload,
-        }),
-      );
-
-      const definition = aggregateRoots[aggregateRoot.aggregateRootType];
-      let state = aggregateRoot.state;
-      for await (const event of events) {
-        state = definition.state.reducer(state, event.payload);
-      }
-
-      const aggregateRootVersion: number | undefined = events.length > 0
-        ? events.at(-1)!.aggregateVersion
-        : aggregateRoot.aggregateVersion;
-
-      // In this case we are choosing to snapshot the aggregate, each time new
-      // events are persisted. We could choose a strategy of snapshotting every
-      // N events, to find a balance between writing aggregates to storage and
-      // retrieving events from the event store.
-      await snapshotStorage.persist({
-        stateVersion: definition.state.version,
-        aggregateRoot: {
-          state,
-          aggregateRootId: aggregateRoot.aggregateRootId,
-          aggregateVersion: aggregateRootVersion,
-          aggregateRootType: aggregateRoot.aggregateRootType,
-        },
-      });
-
-      await eventStore.persist(events);
-    },
-  };
-}
-```
-
-</details>
-
-##### In-memory
-
-[:arrow_upper_right:](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) An in-memory implementation of snapshot storage.
-
-Unlike an event store, in-memory snapshot storage can be a useful concept in production
-because having snapshots stored in memory for the duration of the process saves a lot
-of traffic to the database over the lifetime of the process. This is provided the application
-can tolerate a "warm up" for each aggregate root, where on first load, all events will still
-be loaded and reduced.
-
-For cases where too many events exist to replay and reduce on demand, persistent snapshot
-storage can be used.
-
-```typescript
-function createInMemorySnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
-```
-    
-<details>
-<summary> Show full <code>createInMemorySnapshotStorage</code> definition :point_down:</summary>
-
-```typescript
-export function createInMemorySnapshotStorage<
-  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
->(): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes> {
-  const storage: Record<string, AggregateRootInstance<unknown, AggregateRootDefinition<unknown, unknown>>> =
-    {};
-
-  return {
-    persist: async ({
-      aggregateRoot,
-      stateVersion,
-    }) => {
-      const key = snapshotKey(
-        aggregateRoot.aggregateRootType as string,
-        aggregateRoot.aggregateRootId,
-        stateVersion,
-      );
-      storage[key] = aggregateRoot;
-    },
-    retrieve: async ({
-      aggregateRootType,
-      aggregateRootId,
-      stateVersion,
-    }) => {
-      const key = snapshotKey(aggregateRootType as string, aggregateRootId, stateVersion);
-      return storage[key] as AggregateRootInstance<
-        typeof aggregateRootType,
-        AggregateRootDefinition<
-          unknown,
-          unknown
-        >
-      >;
-    },
-  };
-}
-```
-
-</details>
-
-##### Postgres
-
-[:arrow_upper_right:](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L73) A persistent snapshot storage backed by Postgres.
-
-This implementation depends on the following schema:
-
-```sql
- CREATE TABLE event_core.snapshots
-(
-    id                          BIGSERIAL PRIMARY KEY,
-    "aggregateRootType"         TEXT        NOT NULL,
-    "aggregateRootId"           TEXT        NOT NULL,
-    "stateVersion" TEXT        NOT NULL,
-    "aggregateVersion"          INT,
-    "recordedAt"                TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    state                       JSONB       NOT NULL,
-    CONSTRAINT "snapshotAccess" UNIQUE ("aggregateRootType", "aggregateRootId", "stateVersion")
-);
-```
-
-```typescript
-function createPostgresSnapshotStorage< TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>, TAggregateMapTypes extends AggregateRootDefinitionMapTypes, >(...): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes>
-```
-    
-<details>
-<summary> Show full <code>createPostgresSnapshotStorage</code> definition :point_down:</summary>
-
-```typescript
-export function createPostgresSnapshotStorage<
-  TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
-  TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
->(
-  { connection: sql }: { connection: ReturnType<typeof postgres> },
-): SnapshotStorage<TAggregateDefinitionMap, TAggregateMapTypes> {
-  return {
-    persist: async ({
-      aggregateRoot,
-      stateVersion,
-    }) => {
-      await sql`
-        INSERT INTO event_core.snapshots ${
-        sql({
-          aggregateRootType: aggregateRoot.aggregateRootType.toString(),
-          aggregateRootId: aggregateRoot.aggregateRootId,
-          stateVersion: stateVersion,
-          aggregateVersion: aggregateRoot.aggregateVersion,
-          state: aggregateRoot.state as JSONValue,
-        })
-      } ON CONFLICT ("aggregateRootType", "aggregateRootId", "stateVersion") 
-        DO UPDATE SET
-          "aggregateVersion" = EXCLUDED."aggregateVersion",
-          state = EXCLUDED.state,
-          "recordedAt" = NOW()
-      `;
-    },
-    retrieve: async ({
-      aggregateRootType,
-      aggregateRootId,
-      stateVersion,
-    }) => {
-      const result = await sql`
-        SELECT "aggregateRootType", "aggregateRootId", "aggregateVersion", state
-        FROM "event_core"."snapshots"
-        WHERE "aggregateRootType" = ${aggregateRootType as string}
-          AND "aggregateRootId" = ${aggregateRootId}
-          AND "stateVersion" = ${stateVersion}
-      `;
-      return result[0]
-        ? {
-          aggregateRootType,
-          aggregateRootId: result[0].aggregateRootId,
-          aggregateVersion: result[0].aggregateVersion,
-          state: result[0].state,
-        }
-        : undefined;
-    },
-  };
-}
-```
-
-</details>
+* [`createInMemorySnapshotStorage`](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) 
+* [`createPostgresSnapshotStorage`](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L73) 
 
 ### [`EventStore`](src/eventStore/EventStore.ts)
 
 
 
-#### In-memory
+#### Implementations
 
-[:arrow_upper_right:](src/eventStore/createInMemoryEventStore.ts#L9-L65) An in-memory test store is most useful for testing purposes. Most use cases
-would benefit from persistent storage.
-
-```typescript
-function createInMemoryEventStore<TEvent extends Event>(): & EventStore<TEvent> & EventEmitter<TEvent>
-```
-    
-<details>
-<summary> Show full <code>createInMemoryEventStore</code> definition :point_down:</summary>
-
-```typescript
-export function createInMemoryEventStore<TEvent extends Event>():
-  & EventStore<TEvent>
-  & EventEmitter<TEvent> {
-  const storageByAggregate: Record<string, PersistedEvent<TEvent>[]> = {};
-  const storageByInsertOrder: PersistedEvent<TEvent>[] = [];
-  const subscribers: EventSubscriber<TEvent>[] = [];
-
-  let idSequence = 0;
-
-  return {
-    addSubscriber: subscribers.push.bind(subscribers),
-    persist: async (events) => {
-      await Promise.all(events.map(async (event) => {
-        const key = streamKey(event.aggregateRootType, event.aggregateRootId);
-        storageByAggregate[key] = storageByAggregate[key] ?? [];
-
-        if (
-          storageByAggregate[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)
-        ) {
-          throw new AggregateRootVersionIntegrityError();
-        }
-
-        const id = ++idSequence;
-        const persistedEvent = {
-          id,
-          ...event,
-        };
-
-        storageByAggregate[key].push(persistedEvent);
-        storageByInsertOrder.push(persistedEvent);
-
-        await Promise.all(subscribers?.map((subscriber) => subscriber(event)) ?? []);
-      }));
-    },
-    retrieve: async function* ({
-      aggregateRootType,
-      aggregateRootId,
-      fromVersion,
-    }) {
-      const key = streamKey(aggregateRootType, aggregateRootId);
-      const events = storageByAggregate[key] || [];
-      yield* (
-        fromVersion !== undefined ? events.filter((event) => event.aggregateVersion > fromVersion) : events
-      );
-    },
-    retrieveAll: async function* ({
-      idGt,
-      limit,
-    }) {
-      yield* storageByInsertOrder.slice(idGt, idGt + limit);
-    },
-  };
-}
-```
-
-</details>
-
-#### Postgres
-
-[:arrow_upper_right:](src/eventStore/createPostgresEventStore.ts#L5-L99) A persistent event store backed by Postgres.
-
-This implementation depends on the following schema:
-
-```sql
-  CREATE TABLE event_core.events
-  (
-      id                  BIGSERIAL PRIMARY KEY,
-      "aggregateRootType" TEXT        NOT NULL,
-      "aggregateRootId"   TEXT        NOT NULL,
-      "aggregateVersion"  INT         NOT NULL,
-      "recordedAt"        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      payload             JSONB       NOT NULL,
-
-      CONSTRAINT "aggregateIntegrity"
-          UNIQUE ("aggregateRootType", "aggregateRootId", "aggregateVersion")
-  );
-```
-
-```typescript
-function createPostgresEventStore<TEvent extends Event>(...): EventStore<TEvent>
-```
-    
-<details>
-<summary> Show full <code>createPostgresEventStore</code> definition :point_down:</summary>
-
-```typescript
-export function createPostgresEventStore<TEvent extends Event>(
-  { connection: sql }: { connection: ReturnType<typeof postgres> },
-): EventStore<TEvent> {
-  return {
-    persist: async (events) => {
-      if (events.length === 0) {
-        return;
-      }
-      try {
-        await sql`
-          INSERT INTO event_core.events ${
-          sql(
-            events.map((event) => ({
-              aggregateRootType: event.aggregateRootType,
-              aggregateRootId: event.aggregateRootId,
-              aggregateVersion: event.aggregateVersion,
-              payload: event.payload as JSONValue,
-            })),
-          )
-        }
-        `;
-      } catch (error) {
-        const isAggregateIntegrityError = error &&
-          typeof error === "object" &&
-          "constraint_name" in error &&
-          error.constraint_name === "aggregateIntegrity";
-
-        if (isAggregateIntegrityError) {
-          throw new AggregateRootVersionIntegrityError();
-        }
-
-        throw error;
-      }
-    },
-
-    retrieve: async function* ({
-      aggregateRootType,
-      aggregateRootId,
-      fromVersion = 0,
-    }: {
-      aggregateRootType: string;
-      aggregateRootId: string;
-      fromVersion?: number;
-    }) {
-      const cursor = sql<PersistedEvent<TEvent>[]>`
-        SELECT *
-        FROM "event_core"."events"
-        WHERE "aggregateRootType" = ${aggregateRootType}
-          AND "aggregateRootId" = ${aggregateRootId}
-          AND "aggregateVersion" > ${fromVersion}
-        ORDER BY "aggregateVersion" ASC
-    `.cursor(1000);
-
-      for await (const rows of cursor) {
-        yield* rows;
-      }
-    },
-
-    retrieveAll: async function* ({
-      idGt,
-      limit,
-    }) {
-      const cursor = sql<PersistedEvent<TEvent>[]>`
-        SELECT *
-        FROM "event_core"."events"
-        WHERE id > ${idGt}
-        ORDER BY id ASC
-        LIMIT ${limit}
-      `.cursor(1000);
-      for await (const rows of cursor) {
-        yield* rows;
-      }
-    },
-  };
-}
-```
-
-</details>
+* [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L9-L65)
+* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L5-L99)
 
 ### Projector
 
@@ -563,4 +94,12 @@ these reasons, the signature of a projection is extremely simple, the only contr
 vent sourced system needs to fulfil is providing a stream of events. How data can be
 ieved or accessed beyond that, is entirely dependent on the use case.
 
+### Implementations
+
+* [`createMemoryReducedProjector`](src/projection/createMemoryReducedProjector.ts#L4-L16)
+
+### Implementations
+
 ## Component compositions
+
+## Limitations and trade-offs

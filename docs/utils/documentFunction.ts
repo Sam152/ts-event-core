@@ -8,6 +8,22 @@ import { formatCode } from "./formatCode.ts";
 import { padAfterFirstLine } from "./padAfterFirstLine.ts";
 import { formatInlineCode } from "./formatInlineCode.ts";
 
+export function linkFunction(func: (...args: any) => unknown): string {
+  const filePath = resolve(
+    dirname(getCallSites()[1].scriptName),
+    filenameFromImportSymbol({
+      fileContents: Deno.readTextFileSync(getCallSites()[1].scriptName),
+      symbolName: func.name,
+    }),
+  );
+  const { lineRef } = extractSymbolAndDocString({
+    filePath,
+    symbolName: func.name,
+    symbolType: "function",
+  });
+  return linkTo({ linkName: `\`${func.name}\``, path: `${filePath}#${lineRef}` });
+}
+
 export function documentFunction(func: (...args: any) => unknown): string {
   const filePath = resolve(
     dirname(getCallSites()[1].scriptName),

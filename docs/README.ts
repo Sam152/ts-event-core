@@ -1,6 +1,6 @@
 import { documentType, linkToType } from "./utils/documentType.ts";
 import { EventStore } from "../src/eventStore/EventStore.ts";
-import { documentFunction } from "./utils/documentFunction.ts";
+import { documentFunction, linkFunction } from "./utils/documentFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
 import { AggregateRootDefinition } from "../src/aggregate/AggregateRootDefinition.ts";
@@ -13,9 +13,13 @@ import {
 import { Projector } from "../src/projection/Projector.ts";
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 import { createPostgresSnapshotStorage } from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
+import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
+import { createQueuedCommandIssuer } from "../src/command/createQueuedCommandIssuer.ts";
+import { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
+import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
 
 /**
- * Edit with soft-wrap enabled.
+ * Add `README.ts` to soft-wraps configuration before editing.
  */
 export function README(): string {
   return `
@@ -32,63 +36,62 @@ export function README(): string {
     
     ----
     
-    ## Example domain
+    ## Domain implementation
     
-    ### Aggregate roots
+    ### Aggregate root definitions
     ### Process manager
     
     ## Key components
-    
-    ### ${linkToType<AggregateRootDefinition<any, any>>()}
-    
-    ${documentType<AggregateRootDefinition<any, any>>()}
-    
-    #### Implementations
-    
-    * Foo
-    * Bar
     
     ### ${linkToType<CommandIssuer<any, any>>()}
     
     ${documentType<CommandIssuer<any, any>>()}
     
+    #### Implementations
+    
+    * ${linkFunction(createBasicCommandIssuer)}
+    * ${linkFunction(createQueuedCommandIssuer)}
+    
     ### ${linkToType<AggregateRootRepository<any, any>>()}
     
     ${documentType<AggregateRootRepository<any, any>>()}
     
-    #### Basic
+    #### Implementations
     
-    ${documentFunction(createBasicAggregateRootRepository)}
+    * ${linkFunction(createBasicAggregateRootRepository)}
+    * ${linkFunction(createSnapshottingAggregateRootRepository)}
     
-    #### Snapshotting
+    ### ${linkToType<SnapshotStorage<any, any>>()}
     
-    ${documentFunction(createSnapshottingAggregateRootRepository)}
+    ${documentType<SnapshotStorage<any, any>>()}
     
-    ##### In-memory
+    #### Implementations
     
-    ${documentFunction(createInMemorySnapshotStorage)}
-    
-    ##### Postgres
-    
-    ${documentFunction(createPostgresSnapshotStorage)}
+    * ${linkFunction(createInMemorySnapshotStorage)} 
+    * ${linkFunction(createPostgresSnapshotStorage)} 
     
     ### ${linkToType<EventStore>()}
     
     ${documentType<EventStore>()}
     
-    #### In-memory
+    #### Implementations
     
-    ${documentFunction(createInMemoryEventStore)}
-    
-    #### Postgres
-    
-    ${documentFunction(createPostgresEventStore)}
- 
+    * ${linkFunction(createInMemoryEventStore)}
+    * ${linkFunction(createPostgresEventStore)}
+
     ### Projector
     
     ${documentType<Projector<any>>()}
     
+    ### Implementations
+    
+    * ${linkFunction(createMemoryReducedProjector)}
+    
+    ### Implementations
+    
     ## Component compositions
+    
+    ## Limitations and trade-offs
     
   `;
 }

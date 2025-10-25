@@ -21,12 +21,15 @@ export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
 };
 
 /**
- * Versioning state is important, so that reducers that produce state can evolve and change over time.
- * By versioning state, we can ensure that any state persisted to storage can be retrieved faithfully
- * by deployments of the application which may have changes the underlying reducers of an aggregate root.
+ * Versioning state is important, so that state can evolve and change over time. By versioning state,
+ * we can ensure that any state persisted to storage can be retrieved faithfully, by versions of the
+ * application that require it.
  */
 export type AggregateStateVersion = string | number;
 
+/**
+ * Each Aggregate Root contains a reducer.
+ */
 export type AggregateReducer<TState, TEvent> = (state: TState, event: TEvent) => TState;
 
 /**
