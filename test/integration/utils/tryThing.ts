@@ -1,4 +1,4 @@
-import {wait} from "./wait.ts";
+import { wait } from "./wait.ts";
 
 export async function tryThing(thing: () => unknown) {
   let status: "TRYING" | "TIMEOUT_EXCEEDED" | "SUCCEEDED" = "TRYING";

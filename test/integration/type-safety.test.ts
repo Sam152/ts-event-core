@@ -1,8 +1,5 @@
 import { createBasicCommandIssuer } from "@ts-event-core/framework";
-import {
-  airlineAggregateRoots,
-  AirlineEvent,
-} from "@ts-event-core/flight-tracking-domain";
+import { airlineAggregateRoots, AirlineEvent } from "@ts-event-core/flight-tracking-domain";
 import { createInMemoryEventStore } from "@ts-event-core/framework";
 import { createBasicAggregateRootRepository } from "@ts-event-core/framework";
 import { describe, it } from "jsr:@std/testing/bdd";

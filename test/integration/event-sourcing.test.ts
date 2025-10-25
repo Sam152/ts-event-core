@@ -7,10 +7,7 @@ import {
   createPollingEventStoreSubscriber,
   createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
-import {
-  airlineAggregateRoots,
-  AirlineEvent,
-} from "@ts-event-core/flight-tracking-domain";
+import { airlineAggregateRoots, AirlineEvent } from "@ts-event-core/flight-tracking-domain";
 import { boardingProcessManager } from "@ts-event-core/flight-tracking-domain";
 import { assertEquals } from "@std/assert";
 import {
