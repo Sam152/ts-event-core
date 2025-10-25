@@ -36,7 +36,15 @@ export function buildIndex(markdown: string): string {
       // Increment counter for current level
       counters[level] = (counters[level] || 0) + 1;
 
-      return `${indent}${counters[level]}. [${text}](#${anchor})`;
+      return `${indent}${counters[level]}. [${sanitizeText(text)}](#${anchor})`;
     })
     .join("\n");
+}
+
+function sanitizeText(text: string): string {
+  const markdownLink = text.match(/\[(?<linkText>.*)\]\((.*)\)/);
+  if (markdownLink) {
+    return markdownLink.groups!.linkText;
+  }
+  return text;
 }
