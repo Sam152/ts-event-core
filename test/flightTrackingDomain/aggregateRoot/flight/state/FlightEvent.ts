@@ -8,6 +8,6 @@ export type FlightEvent = {
 } | {
   type: "FLIGHT_DEPARTED" | "FLIGHT_LANDED";
 } | {
-  type: "NEW_FLIGHT_SCHEDULED";
+  type: "FLIGHT_SCHEDULED";
   seatingCapacity: number;
 };

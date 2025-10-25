@@ -3,7 +3,7 @@ import { assertFlightScheduled, FlightState } from "./FlightState.ts";
 
 export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
   switch (event.type) {
-    case "NEW_FLIGHT_SCHEDULED": {
+    case "FLIGHT_SCHEDULED": {
       return {
         totalSeats: event.seatingCapacity,
         totalBoardedPassengers: 0,

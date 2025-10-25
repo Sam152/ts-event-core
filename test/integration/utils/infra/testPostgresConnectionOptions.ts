@@ -1,4 +1,4 @@
-import { Options } from "postgres";
+import type { Options } from "postgres";
 
 export const testPostgresConnectionOptions: Options<never> = {
   host: "127.0.0.1",

@@ -41,7 +41,7 @@ describeAll(
           aggregateRootId: "plane-001",
         }))).map((e) => e.payload.type),
         [
-          "NEW_FLIGHT_SCHEDULED",
+          "FLIGHT_SCHEDULED",
           "PASSENGER_BOARDED",
           "FLIGHT_DEPARTED",
         ],
@@ -115,7 +115,7 @@ const testEventStream: AirlineEvent[] = [
     aggregateRootId: "plane-001",
     aggregateVersion: 1,
     payload: {
-      type: "NEW_FLIGHT_SCHEDULED",
+      type: "FLIGHT_SCHEDULED",
       seatingCapacity: 180,
     },
   },
@@ -145,7 +145,7 @@ const testEventStream: AirlineEvent[] = [
     aggregateRootId: "plane-002",
     aggregateVersion: 1,
     payload: {
-      type: "NEW_FLIGHT_SCHEDULED",
+      type: "FLIGHT_SCHEDULED",
       seatingCapacity: 220,
     },
   },

@@ -2,10 +2,11 @@ import { assertEquals } from "@std/assert";
 import { describe, it } from "jsr:@std/testing/bdd";
 import { tryThing } from "./utils/tryThing.ts";
 import { bootstrapInMemory } from "./bootstrap/bootstrapInMemory.ts";
+import {bootstrapProduction} from "./bootstrap/bootstrapProduction.ts";
 
 describe("event sourcing bootstrap", () => {
   it("allows commands to be issued", async () => {
-    const { issueCommand, readModels, ...bootstrap } = bootstrapInMemory();
+    const { issueCommand, readModels, ...bootstrap } = bootstrapProduction();
     await bootstrap.start();
 
     await issueCommand({
@@ -64,7 +65,7 @@ describe("event sourcing bootstrap", () => {
 
     await tryThing(() =>
       assertEquals(readModels.eventLog.data, [
-        "FLIGHT: NEW_FLIGHT_SCHEDULED",
+        "FLIGHT: FLIGHT_SCHEDULED",
         "GATE: GATE_OPENED",
         "GATE: BOARDING_PASS_SCANNED",
         "GATE: GATE_CLOSED",

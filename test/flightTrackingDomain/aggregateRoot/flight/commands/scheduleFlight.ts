@@ -16,7 +16,7 @@ export function scheduleFlight(
   }
 
   return {
-    type: "NEW_FLIGHT_SCHEDULED",
+    type: "FLIGHT_SCHEDULED",
     seatingCapacity,
   };
 }
