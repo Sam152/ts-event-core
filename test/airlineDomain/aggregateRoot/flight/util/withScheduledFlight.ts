@@ -1,5 +1,5 @@
-import { FlightState, ScheduledFlightState } from "../state/FlightState.ts";
-import { FlightEvent } from "../state/FlightEvent.ts";
+import {FlightState, ScheduledFlightState} from "../state/FlightState.ts";
+import {FlightEvent} from "../state/FlightEvent.ts";
 
 type CommandThatHandlesScheduledFlights = (
   flight: ScheduledFlightState,
@@ -22,14 +22,14 @@ export function withScheduledFlight<TCommandFunc extends CommandThatHandlesSched
   commandName: string,
   command: TCommandFunc,
 ): DecoratedCommand<TCommandFunc> {
-  return ((...args: Parameters<TCommandFunc>) => {
-    if (args[0] === undefined) {
+  return ((state: Parameters<TCommandFunc>[0], data: Parameters<TCommandFunc>[1]) => {
+    if (state === undefined) {
       return {
         type: "COMMAND_FAILED",
         commandName,
         reason: "FLIGHT_NOT_YET_SCHEDULED",
       };
     }
-    return command(args[0], args[1]);
+    return command(state, data);
   }) as DecoratedCommand<TCommandFunc>;
 }
