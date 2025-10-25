@@ -1,18 +1,25 @@
 import {
   createBasicCommandIssuer,
-  createInMemoryEventStore, createInMemorySnapshotStorage, createMemoryCursorPosition, createMemoryReducedProjector,
+  createInMemoryEventStore,
+  createInMemorySnapshotStorage,
+  createMemoryCursorPosition,
+  createMemoryReducedProjector,
   createPollingEventStoreSubscriber,
-  createSnapshottingAggregateRootRepository
+  createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
 import {
   airlineAggregateRoots,
-  AirlineEvent, boardingProcessManager, eventLogInitialState, eventLogReducer,
-  passengerActivityInitialState, passengerActivityReducer
+  AirlineEvent,
+  boardingProcessManager,
+  eventLogInitialState,
+  eventLogReducer,
+  passengerActivityInitialState,
+  passengerActivityReducer,
 } from "@ts-event-core/flight-tracking-domain";
-import {testPostgresConnectionOptions} from "../utils/infra/testPostgresConnectionOptions.ts";
-import {createPostgresEventStore} from "../../../src/eventStore/createPostgresEventStore.ts";
+import { testPostgresConnectionOptions } from "../utils/infra/testPostgresConnectionOptions.ts";
+import { createPostgresEventStore } from "../../../src/eventStore/createPostgresEventStore.ts";
 import postgres from "postgres";
-import {createPostgresSnapshotStorage} from "../../../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
+import { createPostgresSnapshotStorage } from "../../../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 
 /**
  * Create a production bootstrap of the flight tracking domain, which uses
@@ -21,7 +28,7 @@ import {createPostgresSnapshotStorage} from "../../../src/aggregate/snapshot/cre
 export function bootstrapProduction() {
   const connection = postgres(testPostgresConnectionOptions);
 
-  const eventStore = createPostgresEventStore<AirlineEvent>({connection});
+  const eventStore = createPostgresEventStore<AirlineEvent>({ connection });
 
   const issueCommand = createBasicCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
@@ -31,7 +38,7 @@ export function bootstrapProduction() {
       // In theory, an in-memory snapshot storage could also be a suitable configuration for
       // production, where each time a container started, aggregates would "warm up" with a
       // full event replay, but then load faster on subsequent commands.
-      snapshotStorage: createPostgresSnapshotStorage({connection}),
+      snapshotStorage: createPostgresSnapshotStorage({ connection }),
     }),
   });
 
