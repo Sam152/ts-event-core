@@ -22,8 +22,7 @@ It contains a set of loosely coupled types (and various implementations of these
    4. [`EventStore`](#eventstoresrceventstoreeventstorets)
       1. [Implementations](#implementations)
    5. [`Projector`](#projectorsrcprojectionprojectorts)
-   6. [Implementations](#implementations)
-   7. [Implementations](#implementations)
+      1. [Implementations](#implementations)
 3. [Component compositions](#component-compositions)
 4. [Limitations and trade-offs](#limitations-and-trade-offs)
 
@@ -94,11 +93,9 @@ these reasons, the signature of a projection is extremely simple, the only contr
 vent sourced system needs to fulfil is providing a stream of events. How data can be
 ieved or accessed beyond that, is entirely dependent on the use case.
 
-### Implementations
+#### Implementations
 
 * [`createMemoryReducedProjector`](src/projection/createMemoryReducedProjector.ts#L4-L16)
-
-### Implementations
 
 ## Component compositions
 

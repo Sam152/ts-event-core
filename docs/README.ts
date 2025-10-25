@@ -1,9 +1,8 @@
 import { documentType, linkType } from "./utils/documentType.ts";
 import { EventStore } from "../src/eventStore/EventStore.ts";
-import { documentFunction, linkFunction } from "./utils/documentFunction.ts";
+import { linkFunction } from "./utils/documentFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
-import { AggregateRootDefinition } from "../src/aggregate/AggregateRootDefinition.ts";
 import { CommandIssuer } from "../src/command/CommandIssuer.ts";
 import { AggregateRootRepository } from "../src/aggregate/AggregateRootRepository.ts";
 import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
@@ -83,11 +82,9 @@ export function README(): string {
     
     ${documentType<Projector<any>>()}
     
-    ### Implementations
+    #### Implementations
     
     * ${linkFunction(createMemoryReducedProjector)}
-    
-    ### Implementations
     
     ## Component compositions
     
