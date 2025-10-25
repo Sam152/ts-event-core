@@ -1,5 +1,5 @@
-import {FlightState} from "../state/FlightState.ts";
-import {FlightEvent} from "../state/FlightEvent.ts";
+import { FlightState } from "../state/FlightState.ts";
+import { FlightEvent } from "../state/FlightEvent.ts";
 
 export function scheduleFlight(
   flight: FlightState,
