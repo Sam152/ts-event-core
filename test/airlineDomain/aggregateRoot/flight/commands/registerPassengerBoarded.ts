@@ -1,6 +1,6 @@
-import {FlightState} from "../state/FlightState.ts";
-import {FlightEvent} from "../state/FlightEvent.ts";
-import {withScheduledFlight} from "../util/withScheduledFlight.ts";
+import { FlightState } from "../state/FlightState.ts";
+import { FlightEvent } from "../state/FlightEvent.ts";
+import { withScheduledFlight } from "../util/withScheduledFlight.ts";
 
 export const registerPassengerBoarded = withScheduledFlight("REGISTER_PASSENGER_ONBOARD", (
   flight: FlightState,
