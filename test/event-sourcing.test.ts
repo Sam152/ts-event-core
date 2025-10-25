@@ -1,22 +1,20 @@
-import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
-import { airlineAggregateRoots, AirlineEvent } from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
-import { boardingProcessManager } from "./airlineDomain/processManager/boardingProcessManager.ts";
-import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
-import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
-import { assertEquals } from "@std/assert";
+import {createBasicCommandIssuer} from "../src/command/createBasicCommandIssuer.ts";
+import {airlineAggregateRoots, AirlineEvent} from "./airlineDomain/aggregateRoot/airlineAggregateRoots.ts";
+import {boardingProcessManager} from "./airlineDomain/processManager/boardingProcessManager.ts";
+import {createInMemoryEventStore} from "../src/eventStore/createInMemoryEventStore.ts";
+import {createMemoryReducedProjector} from "../src/projection/createMemoryReducedProjector.ts";
+import {assertEquals} from "@std/assert";
 import {
   passengerActivityInitialState,
   passengerActivityReducer,
 } from "./airlineDomain/readModels/passengerActivity.ts";
-import { eventLogInitialState, eventLogReducer } from "./airlineDomain/readModels/eventLog.ts";
-import { describe, it } from "jsr:@std/testing/bdd";
-import {
-  createSnapshottingAggregateRootRepository,
-} from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
-import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
-import { createPollingEventStoreSubscriber } from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
-import { createMemoryCursorPosition } from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
-import { tryThing } from "./utils/tryThing.ts";
+import {eventLogInitialState, eventLogReducer} from "./airlineDomain/readModels/eventLog.ts";
+import {describe, it} from "jsr:@std/testing/bdd";
+import {createSnapshottingAggregateRootRepository} from "@ts-event-core/framework";
+import {createInMemorySnapshotStorage} from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
+import {createPollingEventStoreSubscriber} from "../src/eventStore/subscriber/createPollingEventStoreSubscriber.ts";
+import {createMemoryCursorPosition} from "../src/eventStore/cursor/createMemoryCursorPosition.ts";
+import {tryThing} from "./utils/tryThing.ts";
 
 describe("event sourcing", () => {
   it("allows commands to be issued", async () => {
