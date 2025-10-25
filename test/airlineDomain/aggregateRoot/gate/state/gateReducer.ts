@@ -1,5 +1,5 @@
-import { GateState } from "./GateState.ts";
-import { GateEvent } from "./GateEvent.ts";
+import {GateState} from "./GateState.ts";
+import {GateEvent} from "./GateEvent.ts";
 
 export function gateReducer(state: GateState, event: GateEvent): GateState {
   switch (event.type) {
@@ -10,7 +10,7 @@ export function gateReducer(state: GateState, event: GateEvent): GateState {
     case "GATE_OPENED":
       return {
         status: "OPEN",
-        planeDepartingAtGate: event.openedForPlane,
+        planeDepartingAtGate: event.openedForFlight,
       };
     default:
       return state;

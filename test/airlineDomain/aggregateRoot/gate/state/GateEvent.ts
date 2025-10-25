@@ -8,7 +8,7 @@ export type GateEvent = {
   boardingPlane: string;
 } | {
   type: "GATE_OPENED";
-  openedForPlane: string;
+  openedForFlight: string;
 } | {
   type: "GATE_CLOSED";
 };
