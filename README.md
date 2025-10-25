@@ -1,19 +1,17 @@
-<!--- This file was automatically generated from ./docs/README.ts -->
+<!-- This file was automatically generated from ./docs/README.ts -->
 
 ts-event-core
 ====
 
-This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm.
-
-It contains a set of loosely coupled types (and various implementations of these types) which can be composed and interchanged.
+This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm. It contains a set of loosely coupled types (and various implementations) which can be composed together.
 
 ----
 
-1. [Domain implementation](#domain-implementation)
+1. [Domain](#domain)
    1. [Commands](#commands)
    2. [State](#state)
    3. [Process manager](#process-manager)
-2. [Key components](#key-components)
+2. [Key framework components](#key-framework-components)
    1. [`CommandIssuer`](#commandissuer)
       1. [Implementations](#implementations)
    2. [`AggregateRootRepository`](#aggregaterootrepository)
@@ -24,18 +22,18 @@ It contains a set of loosely coupled types (and various implementations of these
       1. [Implementations](#implementations)
    5. [`Projector`](#projector)
       1. [Implementations](#implementations)
-3. [Component compositions](#component-compositions)
+3. [Bootstraps](#bootstraps)
 4. [Limitations, trade-offs & gaps](#limitations-trade-offs-gaps)
 
 ----
 
-## Domain implementation
+## Domain
 
 ### Commands
 ### State
 ### Process manager
 
-## Key components
+## Key framework components
 
 ### [`CommandIssuer`](src/command/CommandIssuer.ts)
 
@@ -99,6 +97,6 @@ ieved or accessed beyond that, is entirely dependent on the use case.
 
 * [`createMemoryReducedProjector`](src/projection/createMemoryReducedProjector.ts#L4-L16)
 
-## Component compositions
+## Bootstraps
 
 ## Limitations, trade-offs & gaps

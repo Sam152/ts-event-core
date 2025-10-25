@@ -25,9 +25,7 @@ export function README(): string {
     ts-event-core
     ====
     
-    This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm.
-    
-    It contains a set of loosely coupled types (and various implementations of these types) which can be composed and interchanged.
+    This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm. It contains a set of loosely coupled types (and various implementations) which can be composed together.
 
     ----
     
@@ -35,13 +33,13 @@ export function README(): string {
     
     ----
     
-    ## Domain implementation
+    ## Domain
     
     ### Commands
     ### State
     ### Process manager
     
-    ## Key components
+    ## Key framework components
     
     ### ${linkType<CommandIssuer<any, any>>()}
     
@@ -87,7 +85,7 @@ export function README(): string {
     
     * ${linkFunction(createMemoryReducedProjector)}
     
-    ## Component compositions
+    ## Bootstraps
     
     ## Limitations, trade-offs & gaps
     
