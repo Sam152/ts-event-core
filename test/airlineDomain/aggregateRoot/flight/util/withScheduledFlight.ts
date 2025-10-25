@@ -1,5 +1,5 @@
-import {FlightState, ScheduledFlightState} from "../state/FlightState.ts";
-import {FlightEvent} from "../state/FlightEvent.ts";
+import { FlightState, ScheduledFlightState } from "../state/FlightState.ts";
+import { FlightEvent } from "../state/FlightEvent.ts";
 
 type CommandThatHandlesScheduledFlights = (
   flight: ScheduledFlightState,
