@@ -1,4 +1,4 @@
-import {AssertionError} from "@std/assert";
+import { AssertionError } from "@std/assert";
 
 /**
  * State of a flight only after it has been scheduled.
