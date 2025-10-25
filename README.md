@@ -10,8 +10,9 @@ It contains a set of loosely coupled types (and various implementations of these
 ----
 
 1. [Domain implementation](#domain-implementation)
-   1. [Aggregate root definitions](#aggregate-root-definitions)
-   2. [Process manager](#process-manager)
+   1. [Commands](#commands)
+   2. [State](#state)
+   3. [Process manager](#process-manager)
 2. [Key components](#key-components)
    1. [`CommandIssuer`](#commandissuer)
       1. [Implementations](#implementations)
@@ -30,7 +31,8 @@ It contains a set of loosely coupled types (and various implementations of these
 
 ## Domain implementation
 
-### Aggregate root definitions
+### Commands
+### State
 ### Process manager
 
 ## Key components

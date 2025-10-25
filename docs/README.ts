@@ -37,7 +37,8 @@ export function README(): string {
     
     ## Domain implementation
     
-    ### Aggregate root definitions
+    ### Commands
+    ### State
     ### Process manager
     
     ## Key components
