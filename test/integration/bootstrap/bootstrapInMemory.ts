@@ -24,6 +24,7 @@ import { FlightTrackingDomainBootstrap } from "./FlightTrackingDomainBootstrap.t
  */
 export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
   const eventStore = createInMemoryEventStore<AirlineEvent>();
+
   const issueCommand = createBasicCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
     aggregateRootRepository: createSnapshottingAggregateRootRepository({
