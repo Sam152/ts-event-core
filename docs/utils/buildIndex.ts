@@ -6,7 +6,7 @@ export function buildIndex(markdown: string): string {
     const match = line.match(/^(#{1,6})\s+(.+)$/);
     if (match) {
       const level = match[1].length;
-      const text = match[2];
+      const text = sanitizeText(match[2]);
       const anchor = text
         .toLowerCase()
         .replace(/[^\w\s-]/g, "")
@@ -36,7 +36,7 @@ export function buildIndex(markdown: string): string {
       // Increment counter for current level
       counters[level] = (counters[level] || 0) + 1;
 
-      return `${indent}${counters[level]}. [${sanitizeText(text)}](#${anchor})`;
+      return `${indent}${counters[level]}. [${text}](#${anchor})`;
     })
     .join("\n");
 }
