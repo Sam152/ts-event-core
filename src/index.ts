@@ -1,3 +1,9 @@
+export { createMemoryCursorPosition } from "./eventStore/cursor/createMemoryCursorPosition.ts";
+export { createPollingEventStoreSubscriber } from "./eventStore/subscriber/createPollingEventStoreSubscriber.ts";
+export { createInMemorySnapshotStorage } from "./aggregate/snapshot/createInMemorySnapshotStorage.ts";
 export {
-  createSnapshottingAggregateRootRepository
+  createSnapshottingAggregateRootRepository,
 } from "./aggregate/repository/createSnapshottingAggregateRootRepository.ts";
+export { createBasicCommandIssuer } from "./command/createBasicCommandIssuer.ts";
+export { createInMemoryEventStore } from "./eventStore/createInMemoryEventStore.ts";
+export { createMemoryReducedProjector } from "./projection/createMemoryReducedProjector.ts";
