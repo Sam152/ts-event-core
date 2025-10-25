@@ -1,4 +1,4 @@
-import { documentType, linkToType } from "./utils/documentType.ts";
+import { documentType, linkType } from "./utils/documentType.ts";
 import { EventStore } from "../src/eventStore/EventStore.ts";
 import { documentFunction, linkFunction } from "./utils/documentFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
@@ -43,7 +43,7 @@ export function README(): string {
     
     ## Key components
     
-    ### ${linkToType<CommandIssuer<any, any>>()}
+    ### ${linkType<CommandIssuer<any, any>>()}
     
     ${documentType<CommandIssuer<any, any>>()}
     
@@ -52,7 +52,7 @@ export function README(): string {
     * ${linkFunction(createBasicCommandIssuer)}
     * ${linkFunction(createQueuedCommandIssuer)}
     
-    ### ${linkToType<AggregateRootRepository<any, any>>()}
+    ### ${linkType<AggregateRootRepository<any, any>>()}
     
     ${documentType<AggregateRootRepository<any, any>>()}
     
@@ -61,7 +61,7 @@ export function README(): string {
     * ${linkFunction(createBasicAggregateRootRepository)}
     * ${linkFunction(createSnapshottingAggregateRootRepository)}
     
-    ### ${linkToType<SnapshotStorage<any, any>>()}
+    ### ${linkType<SnapshotStorage<any, any>>()}
     
     ${documentType<SnapshotStorage<any, any>>()}
     
@@ -70,7 +70,7 @@ export function README(): string {
     * ${linkFunction(createInMemorySnapshotStorage)} 
     * ${linkFunction(createPostgresSnapshotStorage)} 
     
-    ### ${linkToType<EventStore>()}
+    ### ${linkType<EventStore>()}
     
     ${documentType<EventStore>()}
     
@@ -79,7 +79,7 @@ export function README(): string {
     * ${linkFunction(createInMemoryEventStore)}
     * ${linkFunction(createPostgresEventStore)}
 
-    ### Projector
+    ### ${linkType<Projector<any>>()}
     
     ${documentType<Projector<any>>()}
     

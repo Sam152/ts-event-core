@@ -39,7 +39,7 @@ export function documentTypeWithCode<TType>(): string {
   return padAfterFirstLine({ count: 4, char: " " })(components.join("\n\n"));
 }
 
-export function linkToType<TType>(): string {
+export function linkType<TType>(): string {
   const { filePath, typeName } = fileContainingGenericType({
     callSites: getCallSites(),
     depth: 0,

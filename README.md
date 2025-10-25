@@ -21,7 +21,7 @@ It contains a set of loosely coupled types (and various implementations of these
       1. [Implementations](#implementations)
    4. [[`EventStore`](src/eventStore/EventStore.ts)](#eventstoresrceventstoreeventstorets)
       1. [Implementations](#implementations)
-   5. [Projector](#projector)
+   5. [[`Projector`](src/projection/Projector.ts)](#projectorsrcprojectionprojectorts)
    6. [Implementations](#implementations)
    7. [Implementations](#implementations)
 3. [Component compositions](#component-compositions)
@@ -72,7 +72,7 @@ The storage used for snapshots can be.
 * [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L9-L65)
 * [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L5-L99)
 
-### Projector
+### [`Projector`](src/projection/Projector.ts)
 
 Projectors take a stream of events from an event store and transform them into
 ul data structures. These are often called read models.
