@@ -9,6 +9,4 @@ cd "$ROOT_DIR"
 
 deno check
 
-#deno task test
-
-deno task readme && git add "$ROOT_DIR/README.md"
+# deno task test
