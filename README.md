@@ -37,7 +37,7 @@ This project is an implementation of Event Sourcing, written TypeScript using a 
 
 ## Key framework components
 
-### [`CommandIssuer`](src/command/CommandIssuer.ts)
+### [`CommandIssuer`](src/command/CommandIssuer.ts#L6-L20)
 
 When issuing a command...
 
@@ -46,7 +46,7 @@ When issuing a command...
 * [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L8-L40)
 * [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L8-L25)
 
-### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts)
+### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L25)
 
 Retrieve and persist aggregate roots.
 
@@ -55,7 +55,7 @@ Retrieve and persist aggregate roots.
 * [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56)
 * [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91)
 
-### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts)
+### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L35)
 
 The storage used for snapshots can be.
 
@@ -64,7 +64,7 @@ The storage used for snapshots can be.
 * [`createInMemorySnapshotStorage`](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) 
 * [`createPostgresSnapshotStorage`](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L73) 
 
-### [`EventStore`](src/eventStore/EventStore.ts)
+### [`EventStore`](src/eventStore/EventStore.ts#L22-L37)
 
 It's where we store events...
 
@@ -73,7 +73,7 @@ It's where we store events...
 * [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L9-L65)
 * [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L5-L99)
 
-### [`Projector`](src/projection/Projector.ts)
+### [`Projector`](src/projection/Projector.ts#L3-L24)
 
 Projectors take a stream of events from an event store and transform them into
 useful data structures. These are often called read models.

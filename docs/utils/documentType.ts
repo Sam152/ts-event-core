@@ -49,8 +49,13 @@ export function linkType<TType>(): string {
     callSites: getCallSites(),
     depth: 0,
   });
+  const { lineRef } = extractSymbolAndDocString({
+    filePath,
+    symbolName: typeName,
+    symbolType: "type",
+  });
   return linkTo({
-    path: filePath,
+    path: `${filePath}#${lineRef}`,
     linkName: `\`${typeName}\``,
   });
 }
