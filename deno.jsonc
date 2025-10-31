@@ -4,8 +4,9 @@
     "test": "deno test --allow-run --allow-env --allow-net",
     "test:debug": "deno test --inspect-brk --allow-run --allow-env --allow-net",
     "test:db-reset": "docker compose -f test/utils/infra/docker-compose.yml down -v",
-    "readme": "deno fmt && deno --allow-write --allow-read ./docs/generateReadme.ts",
-    "readme:debug": "deno fmt && deno --inspect-brk --allow-write --allow-read ./docs/generateReadme.ts"
+    "readme": "deno --allow-write --allow-read ./docs/generateReadme.ts",
+    "readme:debug": "deno fmt && deno --inspect-brk --allow-write --allow-read ./docs/generateReadme.ts",
+    "on-save": "deno --allow-run .githooks/on-save.ts"
   },
   "imports": {
     "@ts-event-core/framework": "./src/index.ts",
@@ -13,7 +14,8 @@
     "@std/assert": "jsr:@std/assert@1",
     "@std/path": "jsr:@std/path@^1.1.1",
     "@std/testing/bdd": "jsr:@std/testing/bdd",
-    "postgres": "npm:postgres@^3.4.7"
+    "postgres": "npm:postgres@^3.4.7",
+    "@std/cli": "jsr:@std/cli"
   },
   "fmt": {
     "lineWidth": 110,
