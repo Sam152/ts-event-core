@@ -18,5 +18,12 @@
   "fmt": {
     "lineWidth": 110,
     "useBraces": "always"
+  },
+  "lint": {
+    "rules": {
+      "exclude": [
+        "require-await"
+      ]
+    }
   }
 }
