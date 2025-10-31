@@ -21,7 +21,7 @@ export function documentType<TType>(): string {
     throw new Error(`Could not extract doc string for type ${typeName} in ${filePath}`);
   }
 
-  return formatDocString(docString);
+  return padAfterFirstLine({ count: 4, char: " " })(formatDocString(docString));
 }
 
 export function documentTypeWithCode<TType>(): string {
