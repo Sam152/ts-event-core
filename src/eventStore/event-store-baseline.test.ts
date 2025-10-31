@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert";
-import { afterAll, beforeEach, it } from "jsr:@std/testing/bdd";
+import { afterAll, beforeEach, it } from "@std/testing/bdd";
 import { describeAll } from "../../test/integration/utils/describeAll.ts";
 import { AirlineEvent } from "../../test/flightTrackingDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createInMemoryEventStore } from "./createInMemoryEventStore.ts";
