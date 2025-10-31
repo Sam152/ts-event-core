@@ -20,8 +20,14 @@
     "useBraces": "always"
   },
   "lint": {
+    "plugins": [
+      // Allows unused imports to be removed.
+      "jsr:@hirochachacha/deno-lint-plugin-unused-fixer"
+    ],
     "rules": {
       "exclude": [
+        // Ensures unused vars are not removed by the unused imports plugin.
+        "unused-fixer/no-unused-vars",
         "require-await"
       ]
     }

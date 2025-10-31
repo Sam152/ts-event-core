@@ -11,6 +11,7 @@ export type { CommandIssuer } from "./command/CommandIssuer.ts";
 export { createMemoryCursorPosition } from "./eventStore/cursor/createMemoryCursorPosition.ts";
 export { createPollingEventStoreSubscriber } from "./eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 export { createInMemorySnapshotStorage } from "./aggregate/snapshot/createInMemorySnapshotStorage.ts";
+export { createPostgresSnapshotStorage } from "./aggregate/snapshot/createPostgresSnapshotStorage.ts";
 export {
   createSnapshottingAggregateRootRepository,
 } from "./aggregate/repository/createSnapshottingAggregateRootRepository.ts";

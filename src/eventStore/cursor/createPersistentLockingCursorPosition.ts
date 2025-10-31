@@ -1,5 +1,5 @@
 import { CursorPosition } from "./CursorPosition.ts";
-import postgres, { JSONValue } from "postgres";
+import postgres from "postgres";
 
 /**
  * Requirements:

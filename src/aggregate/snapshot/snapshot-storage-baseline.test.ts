@@ -1,8 +1,8 @@
 import { assertEquals } from "@std/assert";
 import { afterAll, beforeEach, it } from "@std/testing/bdd";
 import postgres from "postgres";
-import { createInMemorySnapshotStorage } from "./createInMemorySnapshotStorage.ts";
-import { createPostgresSnapshotStorage } from "./createPostgresSnapshotStorage.ts";
+import { createInMemorySnapshotStorage } from "@ts-event-core/framework";
+import { createPostgresSnapshotStorage } from "@ts-event-core/framework";
 import { describeAll } from "../../../test/integration/utils/describeAll.ts";
 import { prepareTestDatabaseContainer } from "../../../test/integration/utils/prepareTestDatabaseContainer.ts";
 import { testPostgresConnectionOptions } from "../../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
