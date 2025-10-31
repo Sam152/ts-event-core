@@ -10,6 +10,6 @@ export function eventLogReducer(
 ): EventLog {
   return [
     ...state,
-    `${event.aggregateRootType}: ${event.payload.type}`,
+    `${event.aggregateRootType}(${event.aggregateRootId}): ${event.payload.type}`,
   ];
 }

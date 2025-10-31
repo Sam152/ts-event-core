@@ -83,13 +83,13 @@ describeAll(
 
       await tryThing(() =>
         assertEquals(readModels.eventLog.data, [
-          "FLIGHT: FLIGHT_SCHEDULED",
-          "GATE: GATE_OPENED",
-          "GATE: BOARDING_PASS_SCANNED",
-          "FLIGHT: PASSENGER_BOARDED",
-          "GATE: GATE_CLOSED",
-          "FLIGHT: FLIGHT_DEPARTED",
-          "FLIGHT: FLIGHT_LANDED",
+          "FLIGHT(VA-497): FLIGHT_SCHEDULED",
+          "GATE(PERTH-T2-DOMESTIC-6): GATE_OPENED",
+          "GATE(PERTH-T2-DOMESTIC-6): BOARDING_PASS_SCANNED",
+          "FLIGHT(VA-497): PASSENGER_BOARDED",
+          "GATE(PERTH-T2-DOMESTIC-6): GATE_CLOSED",
+          "FLIGHT(VA-497): FLIGHT_DEPARTED",
+          "FLIGHT(VA-497): FLIGHT_LANDED",
         ])
       );
 
