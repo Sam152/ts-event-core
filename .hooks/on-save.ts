@@ -14,7 +14,7 @@ if (!flags.file) {
 
 console.log(`Running on ${flags.file}`);
 
-await run(new Deno.Command("deno", { args: ["lint", `--fix ${flags.file}`] }));
+await run(new Deno.Command("deno", { args: ["lint", `--fix`, flags.file] }));
 await run(new Deno.Command("deno", { args: ["fmt", flags.file ?? ""] }));
 
 async function run(command: Deno.Command) {

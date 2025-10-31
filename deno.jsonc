@@ -1,12 +1,12 @@
 {
   "tasks": {
-    "init:git-hooks": "git config core.hooksPath .githooks",
+    "init:git-hooks": "git config core.hooksPath .hooks",
     "test": "deno test --allow-run --allow-env --allow-net",
     "test:debug": "deno test --inspect-brk --allow-run --allow-env --allow-net",
     "test:db-reset": "docker compose -f test/utils/infra/docker-compose.yml down -v",
     "readme": "deno --allow-write --allow-read ./docs/generateReadme.ts",
     "readme:debug": "deno fmt && deno --inspect-brk --allow-write --allow-read ./docs/generateReadme.ts",
-    "on-save": "deno --allow-run .githooks/on-save.ts"
+    "on-save": "deno --allow-run .hooks/on-save.ts"
   },
   "imports": {
     "@ts-event-core/framework": "./src/index.ts",
@@ -23,12 +23,11 @@
   },
   "lint": {
     "plugins": [
-      // Allows unused imports to be removed.
+      // Allows unused imports to be removed automatically.
       "jsr:@hirochachacha/deno-lint-plugin-unused-fixer"
     ],
     "rules": {
       "exclude": [
-        // Ensures unused vars are not removed by the unused imports plugin.
         "unused-fixer/no-unused-vars",
         "require-await"
       ]
