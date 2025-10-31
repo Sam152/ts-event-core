@@ -8,5 +8,4 @@ ROOT_DIR=$(git rev-parse --show-toplevel)
 cd "$ROOT_DIR"
 
 deno check
-
-# deno task test
+deno task test

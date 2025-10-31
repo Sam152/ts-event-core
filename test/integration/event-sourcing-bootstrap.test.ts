@@ -44,6 +44,7 @@ describeAll(
           openForFlight: "VA-497",
         },
       });
+
       await issueCommand({
         aggregateRootType: "GATE",
         command: "scanBoardingPass",
@@ -53,6 +54,14 @@ describeAll(
           passportNumber: "PA777",
         },
       });
+      await tryThing(() =>
+        assertEquals(readModels.passengerActivity.data, {
+          "Waldo Mcdaniel": {
+            flightsTaken: 1,
+          },
+        })
+      );
+
       await issueCommand({
         aggregateRootType: "GATE",
         command: "closeGate",
@@ -73,22 +82,14 @@ describeAll(
       });
 
       await tryThing(() =>
-        assertEquals(readModels.passengerActivity.data, {
-          "Waldo Mcdaniel": {
-            flightsTaken: 1,
-          },
-        })
-      );
-
-      await tryThing(() =>
         assertEquals(readModels.eventLog.data, [
           "FLIGHT: FLIGHT_SCHEDULED",
           "GATE: GATE_OPENED",
           "GATE: BOARDING_PASS_SCANNED",
+          "FLIGHT: PASSENGER_BOARDED",
           "GATE: GATE_CLOSED",
           "FLIGHT: FLIGHT_DEPARTED",
           "FLIGHT: FLIGHT_LANDED",
-          "FLIGHT: PASSENGER_BOARDED",
         ])
       );
 
