@@ -5,6 +5,7 @@ import { GateState } from "./state/GateState.ts";
 import { GateEvent } from "./state/GateEvent.ts";
 import { openGate } from "./commands/openGate.ts";
 import { closeGate } from "./commands/closeGate.ts";
+import { eventLogInitialState } from "@ts-event-core/flight-tracking-domain";
 
 export const gateAggregateRoot = {
   state: {
