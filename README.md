@@ -1,3 +1,5 @@
+<!-- deno-fmt-ignore-start -->
+
 <!-- This file was automatically generated from ./docs/README.ts -->
 
 ts-event-core
