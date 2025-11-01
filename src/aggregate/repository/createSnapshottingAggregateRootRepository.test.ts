@@ -83,5 +83,59 @@ describe("snapshotting aggregate root repository", () => {
   });
 
   it("does not save a snapshot cases where there was an integrity violation", async () => {
+    const { proxy: snapshotStorage, calls: snapshotStorageCalls } = traceCalls(
+      createInMemorySnapshotStorage(),
+    );
+
+    const snapshottingRepository = createSnapshottingAggregateRootRepository({
+      eventStore,
+      aggregateRoots: airlineAggregateRoots,
+      snapshotStorage,
+    });
+
+    // Persist initial flight with version 1
+    await snapshottingRepository.persist({
+      aggregateRoot: {
+        aggregateRootId: "VA498",
+        aggregateRootType: "FLIGHT",
+        state: { status: "NOT_YET_SCHEDULED" },
+      },
+      pendingEventPayloads: [
+        {
+          type: "FLIGHT_SCHEDULED",
+          sellableSeats: 100,
+          departureTime: new Date(1000000),
+        },
+      ],
+    });
+
+    // This should have saved a snapshot
+    assertEquals(snapshotStorageCalls.length, 1);
+
+    // Try to persist an event with version 1 again - this should cause an integrity violation
+    let errorThrown = false;
+    try {
+      await snapshottingRepository.persist({
+        aggregateRoot: {
+          aggregateRootId: "VA498",
+          aggregateRootType: "FLIGHT",
+          aggregateVersion: 0,
+          state: { status: "NOT_YET_SCHEDULED" },
+        },
+        pendingEventPayloads: [
+          {
+            type: "FLIGHT_SCHEDULED",
+            sellableSeats: 150,
+            departureTime: new Date(2000000),
+          },
+        ],
+      });
+    } catch (error) {
+      errorThrown = true;
+    }
+
+    assertEquals(errorThrown, true);
+    // Snapshot should NOT have been saved after the integrity violation
+    assertEquals(snapshotStorageCalls.length, 1);
   });
 });
