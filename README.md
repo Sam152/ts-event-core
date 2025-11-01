@@ -5,7 +5,7 @@
 ts-event-core
 ====
 
-This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm. It contains a set of loosely coupled types (and various implementations) which can be composed together.
+This project is an implementation of Event Sourcing, written TypeScript using a functional programming paradigm. It contains a set of loosely coupled components which can be composed together and an example domain demonstrating how they can be used.
 
 ----
 
@@ -14,6 +14,7 @@ This project is an implementation of Event Sourcing, written TypeScript using a 
    2. [Commands](#commands)
    3. [State](#state)
    4. [Process manager](#process-manager)
+   5. [Bootstraps](#bootstraps)
 2. [Key framework components](#key-framework-components)
    1. [`CommandIssuer`](#commandissuer)
       1. [Implementations](#implementations)
@@ -25,8 +26,7 @@ This project is an implementation of Event Sourcing, written TypeScript using a 
       1. [Implementations](#implementations)
    5. [`Projector`](#projector)
       1. [Implementations](#implementations)
-3. [Bootstraps](#bootstraps)
-4. [Limitations, trade-offs & gaps](#limitations-trade-offs-gaps)
+3. [Limitations, trade-offs & todos](#limitations-trade-offs-todos)
 
 ----
 
@@ -36,6 +36,7 @@ This project is an implementation of Event Sourcing, written TypeScript using a 
 ### Commands
 ### State
 ### Process manager
+### Bootstraps
 
 ## Key framework components
 
@@ -101,6 +102,4 @@ retrieved or accessed beyond that, is entirely dependent on the use case.
 
 * [`createMemoryReducedProjector`](src/projection/createMemoryReducedProjector.ts#L4-L16)
 
-## Bootstraps
-
-## Limitations, trade-offs & gaps
+## Limitations, trade-offs & todos
