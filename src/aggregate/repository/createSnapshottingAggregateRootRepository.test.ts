@@ -83,59 +83,81 @@ describe("snapshotting aggregate root repository", () => {
   });
 
   it("does not save a snapshot cases where there was an integrity violation", async () => {
-    const { proxy: snapshotStorage, calls: snapshotStorageCalls } = traceCalls(
-      createInMemorySnapshotStorage(),
-    );
-
-    const snapshottingRepository = createSnapshottingAggregateRootRepository({
+    const repository = createSnapshottingAggregateRootRepository({
       eventStore,
       aggregateRoots: airlineAggregateRoots,
-      snapshotStorage,
+      snapshotStorage: createInMemorySnapshotStorage(),
     });
 
-    // Persist initial flight with version 1
-    await snapshottingRepository.persist({
+    // Persist initial flight and purchase one ticket
+    await repository.persist({
       aggregateRoot: {
         aggregateRootId: "VA498",
         aggregateRootType: "FLIGHT",
-        state: { status: "NOT_YET_SCHEDULED" },
+        aggregateVersion: 1,
+        state: {
+          status: "SCHEDULED",
+          totalSeats: 100,
+          totalSeatsSold: 0,
+          totalAvailableSeats: 100,
+          passengerManifest: [],
+        },
       },
       pendingEventPayloads: [
         {
-          type: "FLIGHT_SCHEDULED",
-          sellableSeats: 100,
-          departureTime: new Date(1000000),
+          type: "TICKET_PURCHASED",
+          passengerId: "PA-111111",
+          purchasePrice: {
+            currency: "AUD",
+            cents: 100_00,
+          },
         },
       ],
     });
 
-    // This should have saved a snapshot
-    assertEquals(snapshotStorageCalls.length, 1);
-
-    // Try to persist an event with version 1 again - this should cause an integrity violation
-    let errorThrown = false;
+    // Persisting a second time, with the same aggregate version will throw.
+    let didThrow = false;
     try {
-      await snapshottingRepository.persist({
+      await repository.persist({
         aggregateRoot: {
           aggregateRootId: "VA498",
           aggregateRootType: "FLIGHT",
-          aggregateVersion: 0,
-          state: { status: "NOT_YET_SCHEDULED" },
+          aggregateVersion: 1,
+          state: {
+            status: "SCHEDULED",
+            totalSeats: 100,
+            totalSeatsSold: 0,
+            totalAvailableSeats: 100,
+            passengerManifest: [],
+          },
         },
         pendingEventPayloads: [
           {
-            type: "FLIGHT_SCHEDULED",
-            sellableSeats: 150,
-            departureTime: new Date(2000000),
+            type: "TICKET_PURCHASED",
+            passengerId: "PA-222222",
+            purchasePrice: {
+              currency: "AUD",
+              cents: 100_00,
+            },
           },
         ],
       });
-    } catch (error) {
-      errorThrown = true;
+    } catch (_e) {
+      didThrow = true;
     }
+    assertEquals(didThrow, true);
 
-    assertEquals(errorThrown, true);
-    // Snapshot should NOT have been saved after the integrity violation
-    assertEquals(snapshotStorageCalls.length, 1);
+    // The state should be unaffected by the second, errored persist call.
+    const aggregate = await repository.retrieve({
+      aggregateRootId: "VA498",
+      aggregateRootType: "FLIGHT",
+    });
+    assertEquals(aggregate.state, {
+      status: "SCHEDULED",
+      totalSeats: 100,
+      totalSeatsSold: 1,
+      totalAvailableSeats: 99,
+      passengerManifest: ["PA-111111"],
+    });
   });
 });
