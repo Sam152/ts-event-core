@@ -4,19 +4,16 @@ import { notifyOfFlightDelay } from "./command/notifyOfFlightDelay.ts";
 import { addTicketToAccount } from "./command/addTicketToAccount.ts";
 import { setNotificationPreference } from "./command/setNotificationPreference.ts";
 
-type EmailAddress = string;
-type PhoneNumber = number;
-
 export type PassengerState = {
   purchasedTickets: {
     flightNumber: string;
   }[];
   notificationPreference: {
     type: "EMAIL";
-    emailAddress: EmailAddress;
+    emailAddress: string;
   } | {
     type: "SMS";
-    phoneNumber: PhoneNumber;
+    phoneNumber: string;
   } | {
     type: "DO_NOT_CONTACT";
   };
@@ -41,7 +38,7 @@ export type PassengerEvent =
       emailAddress: string;
     } | {
       preference: "SMS";
-      phoneNumber: number;
+      phoneNumber: string;
     })
   | {
     type: "NOTIFICATION_NOT_SENT";
@@ -50,7 +47,7 @@ export type PassengerEvent =
   }
   | {
     type: "SMS_NOTIFICATION_SENT";
-    phoneNumber: number;
+    phoneNumber: string;
     notification: NotificationType;
   }
   | {

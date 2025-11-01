@@ -45,7 +45,7 @@ When issuing a command...
 
 #### Implementations
 
-* [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L8-L40)
+* [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L9-L50)
 * [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L8-L25)
 
 ### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L25)

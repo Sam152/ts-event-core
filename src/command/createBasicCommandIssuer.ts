@@ -4,6 +4,7 @@ import {
   AggregateRootDefinitionMapTypes,
 } from "../aggregate/AggregateRootDefinition.ts";
 import { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
+import { AggregateRootVersionIntegrityError } from "../eventStore/error/AggregateRootVersionIntegrityError.ts";
 
 /**
  * An immediate command issuer processes commands right away. This is in contrast to other kinds
@@ -19,7 +20,7 @@ export function createBasicCommandIssuer<
     aggregateRootRepository: AggregateRootRepository<TAggregateMap, TAggregateMapTypes>;
   },
 ): CommandIssuer<TAggregateMap, TAggregateMapTypes> {
-  return async ({ aggregateRootType, aggregateRootId, command, data }) => {
+  return async function issueCommand({ aggregateRootType, aggregateRootId, command, data }) {
     const aggregate = await aggregateRootRepository.retrieve({
       aggregateRootId,
       aggregateRootType,
@@ -31,10 +32,19 @@ export function createBasicCommandIssuer<
     const commandResult = commandFunction(aggregate.state, data);
     const raisedEvents = Array.isArray(commandResult) ? commandResult : [commandResult];
 
-    // @todo catch AggregateRootVersionIntegrityError and retry the command.
-    await aggregateRootRepository.persist({
-      aggregateRoot: aggregate,
-      pendingEventPayloads: raisedEvents,
-    });
+    try {
+      await aggregateRootRepository.persist({
+        aggregateRoot: aggregate,
+        pendingEventPayloads: raisedEvents,
+      });
+    } catch (e) {
+      // In cases where there was a version integrity error, we can retry the command. This
+      // will retrieve the latest version of the aggregate, and deriver a new command outcome
+      // based on up-to-date data.
+      if (e instanceof AggregateRootVersionIntegrityError) {
+        return await issueCommand({ aggregateRootType, aggregateRootId, command, data });
+      }
+      throw e;
+    }
   };
 }

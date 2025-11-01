@@ -3,7 +3,7 @@ import { PassengerEvent, PassengerState } from "../aggregateRoot.ts";
 export function setNotificationPreference(
   _passenger: PassengerState,
   data: { emailAddress: string } | {
-    phoneNumber: number;
+    phoneNumber: string;
   },
 ): PassengerEvent {
   if ("emailAddress" in data) {
