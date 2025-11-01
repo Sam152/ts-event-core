@@ -38,7 +38,7 @@ describeAll(
       assertEquals(
         (await Array.fromAsync(eventStore.retrieve({
           aggregateRootType: "FLIGHT",
-          aggregateRootId: "VA-456",
+          aggregateRootId: "VA456",
         }))).map((e) => e.payload.type),
         [
           "FLIGHT_SCHEDULED",
@@ -53,7 +53,7 @@ describeAll(
       await eventStore.persist(testEventStream);
       const retrievedEvents = eventStore.retrieve({
         aggregateRootType: "FLIGHT",
-        aggregateRootId: "VA-456",
+        aggregateRootId: "VA456",
         fromVersion: 2,
       });
       assertEquals((await retrievedEvents.next()).value.aggregateVersion, 3);
@@ -112,7 +112,7 @@ const testEventStream: AirlineDomainEvent[] = [
   {
     recordedAt: new Date("2023-01-01T10:00:00Z"),
     aggregateRootType: "FLIGHT",
-    aggregateRootId: "VA-456",
+    aggregateRootId: "VA456",
     aggregateVersion: 1,
     payload: {
       type: "FLIGHT_SCHEDULED",
@@ -123,7 +123,7 @@ const testEventStream: AirlineDomainEvent[] = [
   {
     recordedAt: new Date("2023-01-01T11:00:00Z"),
     aggregateRootType: "FLIGHT",
-    aggregateRootId: "VA-456",
+    aggregateRootId: "VA456",
     aggregateVersion: 2,
     payload: {
       type: "TICKET_PURCHASED",
@@ -137,7 +137,7 @@ const testEventStream: AirlineDomainEvent[] = [
   {
     recordedAt: new Date("2023-01-01T12:00:00Z"),
     aggregateRootType: "FLIGHT",
-    aggregateRootId: "VA-456",
+    aggregateRootId: "VA456",
     aggregateVersion: 3,
     payload: {
       type: "TICKET_PURCHASED",
@@ -151,7 +151,7 @@ const testEventStream: AirlineDomainEvent[] = [
   {
     recordedAt: new Date("2023-01-01T10:00:00Z"),
     aggregateRootType: "FLIGHT",
-    aggregateRootId: "VA-987",
+    aggregateRootId: "VA987",
     aggregateVersion: 1,
     payload: {
       type: "FLIGHT_SCHEDULED",

@@ -40,7 +40,7 @@ describeAll(
 
       const retrieved = await storage.retrieve({
         aggregateRootType: "FLIGHT",
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         stateVersion: 1,
       });
 
@@ -81,7 +81,7 @@ describeAll(
       assertEquals(
         (await storage.retrieve({
           aggregateRootType: "FLIGHT",
-          aggregateRootId: "VA-497",
+          aggregateRootId: "VA497",
           stateVersion: 1,
         }))?.state?.totalBoardedPassengers,
         5,
@@ -97,7 +97,7 @@ describeAll(
       assertEquals(
         await factory().retrieve({
           aggregateRootType: "FLIGHT",
-          aggregateRootId: "VA-497",
+          aggregateRootId: "VA497",
           stateVersion: 2,
         }),
         undefined,
@@ -108,7 +108,7 @@ describeAll(
 
 const testAggregateSnapshot = {
   aggregateRootType: "FLIGHT",
-  aggregateRootId: "VA-497",
+  aggregateRootId: "VA497",
   aggregateVersion: 3,
   state: {
     totalSeats: 100,

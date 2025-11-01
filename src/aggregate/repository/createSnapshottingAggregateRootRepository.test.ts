@@ -20,7 +20,7 @@ describe("snapshotting aggregate root repository", () => {
   it("can avoid loading the full event stream", async () => {
     await aggregateRootRepository.persist({
       aggregateRoot: {
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
         state: { status: "NOT_YET_SCHEDULED" },
       },
@@ -44,7 +44,7 @@ describe("snapshotting aggregate root repository", () => {
     await eventStore.persist([
       {
         aggregateVersion: 3,
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
         recordedAt: new Date(),
         payload: {
@@ -56,7 +56,7 @@ describe("snapshotting aggregate root repository", () => {
     ]);
 
     const aggregate = await aggregateRootRepository.retrieve({
-      aggregateRootId: "VA-497",
+      aggregateRootId: "VA497",
       aggregateRootType: "FLIGHT",
     });
 
@@ -66,7 +66,7 @@ describe("snapshotting aggregate root repository", () => {
       name: "retrieve",
       args: [
         {
-          aggregateRootId: "VA-497",
+          aggregateRootId: "VA497",
           aggregateRootType: "FLIGHT",
           fromVersion: 2,
         },

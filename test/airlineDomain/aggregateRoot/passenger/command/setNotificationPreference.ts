@@ -2,21 +2,20 @@ import { PassengerEvent, PassengerState } from "../aggregateRoot.ts";
 
 export function setNotificationPreference(
   _passenger: PassengerState,
-  { emailAddress, phoneNumber }: { emailAddress: string; phoneNumber: undefined } | {
-    emailAddress: undefined;
+  data: { emailAddress: string } | {
     phoneNumber: number;
   },
 ): PassengerEvent {
-  if (emailAddress !== undefined) {
+  if ("emailAddress" in data) {
     return {
       type: "NOTIFICATION_PREFERENCE_SET",
       preference: "EMAIL",
-      emailAddress,
+      emailAddress: data.emailAddress,
     };
   }
   return {
     type: "NOTIFICATION_PREFERENCE_SET",
     preference: "SMS",
-    phoneNumber,
+    phoneNumber: data.phoneNumber,
   };
 }

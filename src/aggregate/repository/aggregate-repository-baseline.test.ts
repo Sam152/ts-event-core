@@ -39,7 +39,7 @@ describeAll(
     it("can persist and retrieve an aggregate", async () => {
       await repository.persist({
         aggregateRoot: {
-          aggregateRootId: "VA-497",
+          aggregateRootId: "VA497",
           aggregateRootType: "FLIGHT",
           state: { status: "NOT_YET_SCHEDULED" },
         },
@@ -61,12 +61,12 @@ describeAll(
       });
 
       const aggregate = await repository.retrieve({
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
       });
 
       assertEquals(aggregate, {
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
         aggregateVersion: 2,
         state: {
@@ -81,7 +81,7 @@ describeAll(
 
     it("can persist and retrieve an existing aggregate", async () => {
       const aggregate = await repository.retrieve({
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
       });
 
@@ -100,12 +100,12 @@ describeAll(
       });
 
       const retrievedAgain = await repository.retrieve({
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
       });
 
       assertEquals(retrievedAgain, {
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
         aggregateVersion: 3,
         state: {
@@ -124,7 +124,7 @@ describeAll(
       await eventStore.persist([
         {
           aggregateVersion: 4,
-          aggregateRootId: "VA-497",
+          aggregateRootId: "VA497",
           aggregateRootType: "FLIGHT",
           recordedAt: new Date(),
           payload: {
@@ -139,11 +139,11 @@ describeAll(
       ]);
 
       const retrievedAgain = await repository.retrieve({
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
       });
       assertEquals(retrievedAgain, {
-        aggregateRootId: "VA-497",
+        aggregateRootId: "VA497",
         aggregateRootType: "FLIGHT",
         aggregateVersion: 4,
         state: {
