@@ -14,19 +14,21 @@ import {
   AirlineDomainEvent,
   flightDelayProcessManager,
   lifetimeEarningsReport,
+  notificationOutbox,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
 import { createPersistentLockingCursorPosition } from "@ts-event-core/framework";
+import { createFakeMemoryNotifier } from "../../airlineDomain/integration/createFakeMemoryNotifier.ts";
+import { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
 
 /**
- * Create a production bootstrap of the flight tracking domain, which uses
- * persistent storage for key components.
+ * Create a production bootstrap of the flight tracking domain.
  */
-export function bootstrapProduction() {
+export function bootstrapProduction(): AirlineDomainBootstrap {
   const connection = postgres(testPostgresConnectionOptions);
 
+  // Create event store and command issuer.
   const eventStore = createPostgresEventStore<AirlineDomainEvent>({ connection });
-
   const issueCommand = createBasicCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
     aggregateRootRepository: createSnapshottingAggregateRootRepository({
@@ -39,6 +41,9 @@ export function bootstrapProduction() {
     }),
   });
 
+  // Initialize a projection. In production this could be persistent, but depending
+  // on the size of the event stream, it may be acceptable for a replay each time a
+  // container starts.
   const projections = createPollingEventStoreSubscriber({
     cursor: createMemoryCursorPosition(),
     eventStore,
@@ -47,8 +52,7 @@ export function bootstrapProduction() {
   projections.addSubscriber(lifetimeEarnings.projector);
 
   // Configure a process manager with a locking and persistent cursor. Under this configuration
-  // only a single app container will run the process manager, and during boot-up side effects
-  // will not be repeated.
+  // events will be processed exactly once, across all present and future containers.
   const processManagers = createPollingEventStoreSubscriber({
     cursor: createPersistentLockingCursorPosition({
       connection,
@@ -59,17 +63,37 @@ export function bootstrapProduction() {
   processManagers.addSubscriber((event) => flightDelayProcessManager({ event, issueCommand }));
   processManagers.addSubscriber((event) => ticketProcessManager({ event, issueCommand }));
 
+  // Wire up an event subscriber as an outbox, ensuring to use a persistent cursor, such that
+  // notifications aren't sent every time a container starts.
+  const notificationOutboxSubscriber = createPollingEventStoreSubscriber({
+    cursor: createPersistentLockingCursorPosition({
+      connection,
+      id: "notificationOutbox",
+    }),
+    eventStore,
+  });
+  const notifierFake = createFakeMemoryNotifier();
+  notificationOutboxSubscriber.addSubscriber((event) =>
+    notificationOutbox({
+      notifier: notifierFake.notifier,
+      event,
+    })
+  );
+
   return {
     issueCommand,
+    notificationLog: notifierFake.log,
     projections: {
       lifetimeEarnings,
     },
     start: async () => {
       await projections.start();
+      await notificationOutboxSubscriber.start();
       await processManagers.start();
     },
     halt: async () => {
       await processManagers.halt();
+      await notificationOutboxSubscriber.halt();
       await projections.halt();
       await connection.end();
     },

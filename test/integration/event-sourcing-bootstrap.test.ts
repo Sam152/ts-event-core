@@ -1,39 +1,38 @@
-import { beforeAll, it } from "@std/testing/bdd";
+import { afterAll, beforeAll, it } from "@std/testing/bdd";
 import { bootstrapInMemory } from "./bootstrap/bootstrapInMemory.ts";
 import { bootstrapProduction } from "./bootstrap/bootstrapProduction.ts";
 import { prepareTestDatabaseContainer } from "./utils/prepareTestDatabaseContainer.ts";
 import { describeAll } from "./utils/describeAll.ts";
-
 import { assertEquals } from "@std/assert";
-
 import { purchaseTicket } from "../airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts";
 import {
   setNotificationPreference,
 } from "../airlineDomain/aggregateRoot/passenger/command/setNotificationPreference.ts";
-import { wait } from "./utils/wait.ts";
+import { tryThing } from "./utils/tryThing.ts";
+import { assertArrayIncludes } from "@std/assert/array-includes";
 
 const implementations = [
   {
     bootstrapFn: bootstrapInMemory,
-    beforeEachHook: () => undefined,
+    beforeAllHook: () => undefined,
   },
   {
     bootstrapFn: bootstrapProduction,
-    beforeEachHook: prepareTestDatabaseContainer,
+    beforeAllHook: prepareTestDatabaseContainer,
   },
 ];
 
 describeAll(
   "event sourcing bootstrap",
   implementations,
-  ({ bootstrapFn, beforeEachHook }) => {
-    beforeAll(beforeEachHook);
-    const { issueCommand, projections, ...bootstrap } = bootstrapFn();
+  ({ bootstrapFn, beforeAllHook }) => {
+    const { issueCommand, projections, notificationLog, ...bootstrap } = bootstrapFn();
 
-    it("bootstraps a configuration of the event sourcing system", async () => {
-      await bootstrap.start();
+    beforeAll(beforeAllHook);
+    beforeAll(bootstrap.start);
+    afterAll(bootstrap.halt);
 
-      // Schedule a flight.
+    it("allows us to schedule a flight", async () => {
       await issueCommand({
         aggregateRootType: "FLIGHT",
         aggregateRootId: "SB93",
@@ -43,8 +42,9 @@ describeAll(
           sellableSeats: 3,
         },
       });
+    });
 
-      // Try buy 4 of the 3 available tickets.
+    it("allows all 3 of the available tickets to be purchased", async () => {
       await issuePurchaseTicket({
         passengerId: "PA_1111111",
         purchasePriceAudCents: 110_00,
@@ -57,25 +57,38 @@ describeAll(
         passengerId: "PA_3333333",
         purchasePriceAudCents: 85_00,
       });
-      // This purchase will fail, since we can only sell 3 seats.
+    });
+
+    it("will not allow a 4th ticket to be purchased", async () => {
       await issuePurchaseTicket({
         passengerId: "PA_4444444",
         purchasePriceAudCents: 300_00,
       });
+    });
 
+    it("projects a read model of our lifetime earnings", async () => {
+      await tryThing(() =>
+        assertEquals(projections.lifetimeEarnings.data, {
+          lifetimeEarningsCents: 415_00,
+        })
+      );
+    });
+
+    it("allows notification preferences to be set", async () => {
       await issueSetNotificationPreference("PA_1111111", {
         emailAddress: "sam@example.com",
       });
       await issueSetNotificationPreference("PA_3333333", {
         phoneNumber: "+61491570158",
       });
-      // Jeff can set his notification preferences, but since they don't have a ticket,
-      // the notification is not relevant to them.
+      // Jeff can set his notification preferences, despite not having successfully
+      // booked a ticket.
       await issueSetNotificationPreference("PA_4444444", {
         emailAddress: "jeff@example.com",
       });
+    });
 
-      // Uh oh there was a flight delay.
+    it("allows a flight to be delayed", async () => {
       await issueCommand({
         aggregateRootType: "FLIGHT",
         aggregateRootId: "SB93",
@@ -84,15 +97,15 @@ describeAll(
           delayedUntil: new Date("2035-01-01"),
         },
       });
+    });
 
-      await wait(1000);
-
-      // Our projection will give us lifetime earnings from our three ticket sales.
-      assertEquals(projections.lifetimeEarnings.data, {
-        lifetimeEarningsCents: 415_00,
-      });
-
-      await bootstrap.halt();
+    it("ensures notifications are sent to affected passengers through the correct channel", async () => {
+      await tryThing(() =>
+        assertArrayIncludes(notificationLog, [
+          "EMAIL: sam@example.com Flight delayed Hi, Flight SB93 has been delayed. Sorry about that.",
+          "SMS: +61491570158 Uh-oh! Flight SB93 has been delayed... we're sorry :(",
+        ])
+      );
     });
 
     const issuePurchaseTicket = (data: Parameters<typeof purchaseTicket>[1]) =>

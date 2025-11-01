@@ -26,8 +26,7 @@ export async function notificationOutbox(
         await notifier.sendEmail({
           emailAddress: event.payload.emailAddress,
           subject: "Flight delayed",
-          body:
-            `Hi,\n\nYour flight with number ${event.payload.notification.flightNumber} has been delayed.\n\nThought you ought to know.`,
+          body: `Hi, Flight ${event.payload.notification.flightNumber} has been delayed. Sorry about that.`,
         });
     }
   }

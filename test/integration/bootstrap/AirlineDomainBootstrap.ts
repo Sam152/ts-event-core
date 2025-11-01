@@ -14,6 +14,7 @@ import { airlineAggregateRoots, LifetimeEarningsReport } from "@ts-event-core/ai
  */
 export type AirlineDomainBootstrap = {
   issueCommand: CommandIssuer<typeof airlineAggregateRoots>;
+  notificationLog: string[];
   projections: {
     lifetimeEarnings: {
       data: LifetimeEarningsReport;

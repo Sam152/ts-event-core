@@ -55,7 +55,7 @@ Retrieve and persist aggregate roots.
 #### Implementations
 
 * [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56)
-* [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L91)
+* [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L92)
 
 ### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L35)
 

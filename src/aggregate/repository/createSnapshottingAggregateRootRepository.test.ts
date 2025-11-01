@@ -81,4 +81,7 @@ describe("snapshotting aggregate root repository", () => {
       passengerManifest: ["PA-111110"],
     });
   });
+
+  it("does not save a snapshot cases where there was an integrity violation", async () => {
+  });
 });

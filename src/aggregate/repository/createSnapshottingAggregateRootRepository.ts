@@ -71,10 +71,13 @@ export function createSnapshottingAggregateRootRepository<
         ? events.at(-1)!.aggregateVersion
         : aggregateRoot.aggregateVersion;
 
-      // In this case we are choosing to snapshot the aggregate, each time new
-      // events are persisted. We could choose a strategy of snapshotting every
-      // N events, to find a balance between writing aggregates to storage and
-      // retrieving events from the event store.
+      // Persist events first, such that we can be sure there were no integrity
+      // violations.
+      await eventStore.persist(events);
+
+      // Persist a snapshot for this aggregate to storage. Depending on the size of
+      // the state, we could choose to do this less often and reduce the delta of
+      // the events.
       await snapshotStorage.persist({
         stateVersion: definition.state.version,
         aggregateRoot: {
@@ -84,8 +87,6 @@ export function createSnapshottingAggregateRootRepository<
           aggregateRootType: aggregateRoot.aggregateRootType,
         },
       });
-
-      await eventStore.persist(events);
     },
   };
 }

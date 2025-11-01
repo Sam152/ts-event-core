@@ -12,7 +12,7 @@ export async function tryThing(thing: () => unknown) {
       thing();
       status = "SUCCEEDED";
     } catch (e) {
-      // @ts-ignore - Is this a bug in typescript narrowing?
+      // @ts-expect-error - Is this a bug in typescript narrowing?
       if (status === "TIMEOUT_EXCEEDED") {
         throw e;
       }

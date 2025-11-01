@@ -13,8 +13,10 @@ import {
   AirlineDomainEvent,
   flightDelayProcessManager,
   lifetimeEarningsReport,
+  notificationOutbox,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
+import { createFakeMemoryNotifier } from "../../airlineDomain/integration/createFakeMemoryNotifier.ts";
 
 /**
  * Create an in-memory bootstrap of the flight tracking domain. Useful for things
@@ -47,17 +49,32 @@ export function bootstrapInMemory(): AirlineDomainBootstrap {
   processManagers.addSubscriber((event) => flightDelayProcessManager({ event, issueCommand }));
   processManagers.addSubscriber((event) => ticketProcessManager({ event, issueCommand }));
 
+  const notificationOutboxSubscriber = createPollingEventStoreSubscriber({
+    cursor: createMemoryCursorPosition(),
+    eventStore,
+  });
+  const notifierFake = createFakeMemoryNotifier();
+  notificationOutboxSubscriber.addSubscriber((event) =>
+    notificationOutbox({
+      notifier: notifierFake.notifier,
+      event,
+    })
+  );
+
   return {
     issueCommand,
+    notificationLog: notifierFake.log,
     projections: {
       lifetimeEarnings,
     },
     start: async () => {
       await projections.start();
+      await notificationOutboxSubscriber.start();
       await processManagers.start();
     },
     halt: async () => {
       await processManagers.halt();
+      await notificationOutboxSubscriber.halt();
       await projections.halt();
     },
   };
