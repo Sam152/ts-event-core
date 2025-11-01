@@ -1,4 +1,8 @@
 import { CommandIssuer } from "@ts-event-core/framework";
+import {
+  airlineAggregateRoots,
+  AirlineEvent,
+} from "../../flightTrackingDomain/aggregateRoot/airlineAggregateRoots.ts";
 
 /**
  * A process manager facilitates coordination between aggregates, this is an example of an orchestrated
@@ -12,7 +16,7 @@ import { CommandIssuer } from "@ts-event-core/framework";
  * Where strong consistency is a hard requirement of a transaction within the domain, all events and
  * aggregates must be colocated within the same aggregate root.
  */
-export async function boardingProcessManager(
+export async function ticketPurchaseProcessManager(
   { event, issueCommand }: {
     event: AirlineEvent;
     issueCommand: CommandIssuer<typeof airlineAggregateRoots>;
@@ -21,7 +25,7 @@ export async function boardingProcessManager(
   if (event.payload.type === "BOARDING_PASS_SCANNED") {
     await issueCommand({
       aggregateRootType: "FLIGHT",
-      command: "registerPassengerBoarded",
+      command: "aaa",
       aggregateRootId: event.payload.boardingPlane,
       data: {
         passengerName: event.payload.passengerName,
