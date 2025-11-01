@@ -25,7 +25,7 @@ describeAll(
     beforeEach(beforeEachHook);
 
     it("bootstraps a configuration of the event sourcing system", async () => {
-      const { issueCommand, readModels, ...bootstrap } = bootstrapFn();
+      const { issueCommand, projections, ...bootstrap } = bootstrapFn();
       await bootstrap.start();
 
       await issueCommand({

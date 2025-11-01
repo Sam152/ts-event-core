@@ -1,5 +1,6 @@
 import { CursorPosition } from "./CursorPosition.ts";
 import postgres from "postgres";
+import { createMemoryCursorPosition } from "@ts-event-core/framework";
 
 /**
  * Requirements:
@@ -11,12 +12,6 @@ import postgres from "postgres";
 export function createPersistentLockingCursorPosition(
   { connection: sql, id }: { connection: ReturnType<typeof postgres>; id: string },
 ): CursorPosition {
-  return {
-    acquire: async () => {
-      return 0;
-    },
-    update: async (position) => {
-      // @todo
-    },
-  };
+  // @TODO - Implement the persistent locking cursor.
+  return createMemoryCursorPosition();
 }

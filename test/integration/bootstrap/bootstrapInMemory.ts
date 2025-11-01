@@ -7,11 +7,12 @@ import {
   createPollingEventStoreSubscriber,
   createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
-import { FlightTrackingDomainBootstrap } from "./FlightTrackingDomainBootstrap.ts";
+import { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
 import {
   airlineAggregateRoots,
   AirlineDomainEvent,
   flightDelayProcessManager,
+  lifetimeEarningsReport,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
 
@@ -19,7 +20,7 @@ import {
  * Create an in-memory bootstrap of the flight tracking domain. Useful for things
  * like fast integration testing.
  */
-export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
+export function bootstrapInMemory(): AirlineDomainBootstrap {
   const eventStore = createInMemoryEventStore<AirlineDomainEvent>();
 
   const issueCommand = createBasicCommandIssuer({
@@ -31,22 +32,13 @@ export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
     }),
   });
 
-  const passengerActivity = createMemoryReducedProjector({
-    initialState: passengerActivityInitialState,
-    reducer: passengerActivityReducer,
-  });
-
-  const eventLog = createMemoryReducedProjector({
-    initialState: eventLogInitialState,
-    reducer: eventLogReducer,
-  });
-
   const projections = createPollingEventStoreSubscriber({
     cursor: createMemoryCursorPosition(),
     eventStore,
   });
-  projections.addSubscriber(eventLog.projector);
-  projections.addSubscriber(passengerActivity.projector);
+
+  const lifetimeEarnings = createMemoryReducedProjector(lifetimeEarningsReport);
+  projections.addSubscriber(lifetimeEarnings.projector);
 
   const processManagers = createPollingEventStoreSubscriber({
     cursor: createMemoryCursorPosition(),
@@ -57,9 +49,8 @@ export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
 
   return {
     issueCommand,
-    readModels: {
-      eventLog: eventLog,
-      passengerActivity: passengerActivity,
+    projections: {
+      lifetimeEarnings,
     },
     start: async () => {
       await projections.start();

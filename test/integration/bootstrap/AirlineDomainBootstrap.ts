@@ -1,5 +1,6 @@
 import { CommandIssuer } from "@ts-event-core/framework";
-import { airlineAggregateRoots, EventLog, PassengerActivity } from "@ts-event-core/flight-tracking-domain";
+import { airlineAggregateRoots } from "@ts-event-core/flight-tracking-domain";
+import { LifetimeEarningsReport } from "@ts-event-core/airline-domain";
 
 /**
  * A bootstrap of the flight tracking domain. This object combines components of the
@@ -12,14 +13,11 @@ import { airlineAggregateRoots, EventLog, PassengerActivity } from "@ts-event-co
  * shipped and integrated into different contexts, but is defined in a way here which
  * smoothly integrates with the framework components.
  */
-export type FlightTrackingDomainBootstrap = {
+export type AirlineDomainBootstrap = {
   issueCommand: CommandIssuer<typeof airlineAggregateRoots>;
-  readModels: {
-    eventLog: {
-      data: EventLog;
-    };
-    passengerActivity: {
-      data: PassengerActivity;
+  projections: {
+    lifetimeEarnings: {
+      data: LifetimeEarningsReport;
     };
   };
   start: () => Promise<void>;

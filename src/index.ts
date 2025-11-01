@@ -19,3 +19,4 @@ export { createBasicCommandIssuer } from "./command/createBasicCommandIssuer.ts"
 export { createInMemoryEventStore } from "./eventStore/createInMemoryEventStore.ts";
 export { createMemoryReducedProjector } from "./projection/createMemoryReducedProjector.ts";
 export { createBasicAggregateRootRepository } from "./aggregate/repository/createBasicAggregateRootRepository.ts";
+export { createPersistentLockingCursorPosition } from "./eventStore/cursor/createPersistentLockingCursorPosition.ts";

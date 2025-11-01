@@ -14,7 +14,9 @@ export const airlineAggregateRoots = {
 };
 
 export type AirlineDomainEvent = EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>;
+export type { LifetimeEarningsReport } from "./projection/lifetimeEarningsReport.ts";
 
 export { ticketProcessManager } from "./processManager/ticketProcessManager.ts";
 export { flightDelayProcessManager } from "./processManager/flightDelayProcessManager.ts";
 export { notificationOutbox } from "./integration/notificationOutbox.ts";
+export { lifetimeEarningsReport } from "./projection/lifetimeEarningsReport.ts";
