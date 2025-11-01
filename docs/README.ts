@@ -89,5 +89,7 @@ export function README(): string {
     
     ## Limitations, trade-offs & todos
     
+    ## References and inspiration
+    
   `;
 }

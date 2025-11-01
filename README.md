@@ -27,6 +27,7 @@ This project is an implementation of Event Sourcing, written TypeScript using a 
    5. [`Projector`](#projector)
       1. [Implementations](#implementations)
 3. [Limitations, trade-offs & todos](#limitations-trade-offs-todos)
+4. [References and inspiration](#references-and-inspiration)
 
 ----
 
@@ -103,3 +104,5 @@ retrieved or accessed beyond that, is entirely dependent on the use case.
 * [`createMemoryReducedProjector`](src/projection/createMemoryReducedProjector.ts#L4-L16)
 
 ## Limitations, trade-offs & todos
+
+## References and inspiration
