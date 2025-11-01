@@ -7,23 +7,20 @@ import {
   createPollingEventStoreSubscriber,
   createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
+import { FlightTrackingDomainBootstrap } from "./FlightTrackingDomainBootstrap.ts";
 import {
   airlineAggregateRoots,
-  AirlineEvent,
-  boardingProcessManager,
-  eventLogInitialState,
-  eventLogReducer,
-  passengerActivityInitialState,
-  passengerActivityReducer,
-} from "@ts-event-core/flight-tracking-domain";
-import { FlightTrackingDomainBootstrap } from "./FlightTrackingDomainBootstrap.ts";
+  AirlineDomainEvent,
+  flightDelayProcessManager,
+  ticketProcessManager,
+} from "@ts-event-core/airline-domain";
 
 /**
  * Create an in-memory bootstrap of the flight tracking domain. Useful for things
  * like fast integration testing.
  */
 export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
-  const eventStore = createInMemoryEventStore<AirlineEvent>();
+  const eventStore = createInMemoryEventStore<AirlineDomainEvent>();
 
   const issueCommand = createBasicCommandIssuer({
     aggregateRoots: airlineAggregateRoots,
@@ -51,11 +48,12 @@ export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
   projections.addSubscriber(eventLog.projector);
   projections.addSubscriber(passengerActivity.projector);
 
-  const processManager = createPollingEventStoreSubscriber({
+  const processManagers = createPollingEventStoreSubscriber({
     cursor: createMemoryCursorPosition(),
     eventStore,
   });
-  processManager.addSubscriber((event) => boardingProcessManager({ event, issueCommand }));
+  processManagers.addSubscriber((event) => flightDelayProcessManager({ event, issueCommand }));
+  processManagers.addSubscriber((event) => ticketProcessManager({ event, issueCommand }));
 
   return {
     issueCommand,
@@ -65,10 +63,10 @@ export function bootstrapInMemory(): FlightTrackingDomainBootstrap {
     },
     start: async () => {
       await projections.start();
-      await processManager.start();
+      await processManagers.start();
     },
     halt: async () => {
-      await processManager.halt();
+      await processManagers.halt();
       await projections.halt();
     },
   };

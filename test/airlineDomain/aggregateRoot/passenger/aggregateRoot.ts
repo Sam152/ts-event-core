@@ -1,13 +1,17 @@
 import { AggregateRootDefinition } from "@ts-event-core/framework";
 import { passengerReducer } from "./reducer.ts";
 import { notifyOfFlightDelay } from "./command/notifyOfFlightDelay.ts";
+import { addTicketToAccount } from "./command/addTicketToAccount.ts";
+import { setNotificationPreference } from "./command/setNotificationPreference.ts";
 
 type EmailAddress = string;
 type PhoneNumber = number;
 
 export type PassengerState = {
-  purchasedTickets: [];
-  notificationPreferences: {
+  purchasedTickets: {
+    flightNumber: string;
+  }[];
+  notificationPreference: {
     type: "EMAIL";
     emailAddress: EmailAddress;
   } | {
@@ -18,8 +22,47 @@ export type PassengerState = {
   };
 };
 
-export type PassengerEvent = {
-  type: "TICKET_PURCHASED";
+export type PassengerEvent =
+  | {
+    type:
+      | "ADD_TICKET_TO_ACCOUNT_FAILED"
+      | "SET_NOTIFICATION_PREFERENCE_FAILED";
+    reason: string;
+  }
+  | {
+    type: "TICKET_ADDED_TO_ACCOUNT";
+    flightNumber: string;
+  }
+  | {
+    type: "NOTIFICATION_PREFERENCE_SET";
+  }
+    & ({
+      preference: "EMAIL";
+      emailAddress: string;
+    } | {
+      preference: "SMS";
+      phoneNumber: number;
+    })
+  | {
+    type: "NOTIFICATION_NOT_SENT";
+    reason: string;
+    notification: NotificationType;
+  }
+  | {
+    type: "SMS_NOTIFICATION_SENT";
+    phoneNumber: number;
+    notification: NotificationType;
+  }
+  | {
+    type: "EMAIL_NOTIFICATION_SENT";
+    emailAddress: string;
+    notification: NotificationType;
+  };
+
+export type NotificationType = {
+  type: "DELAYED_FLIGHT";
+  delayedUntil: Date;
+  flightNumber: string;
 };
 
 export const passengerAggregateRoot = {
@@ -27,7 +70,7 @@ export const passengerAggregateRoot = {
     version: 1,
     initialState: {
       purchasedTickets: [],
-      notificationPreferences: {
+      notificationPreference: {
         type: "DO_NOT_CONTACT",
       },
     },
@@ -35,5 +78,7 @@ export const passengerAggregateRoot = {
   },
   commands: {
     notifyOfFlightDelay,
+    addTicketToAccount,
+    setNotificationPreference,
   },
 } satisfies AggregateRootDefinition<PassengerState, PassengerEvent>;

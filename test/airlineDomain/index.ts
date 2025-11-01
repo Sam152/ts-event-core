@@ -1,12 +1,6 @@
 import { passengerAggregateRoot } from "./aggregateRoot/passenger/aggregateRoot.ts";
 import { flightAggregateRoot } from "./aggregateRoot/flight/aggregateRoot.ts";
 import { EventsRaisedByAggregateRoots } from "@ts-event-core/framework";
-export { boardingProcessManager } from "./subscriber/boardingProcessManager.ts";
-export { passengerActivityInitialState, passengerActivityReducer } from "./projection/passengerActivity.ts";
-export { eventLogInitialState, eventLogReducer } from "./projection/eventLog.ts";
-
-export type { EventLog } from "./projection/eventLog.ts";
-export type { PassengerActivity } from "./projection/passengerActivity.ts";
 
 /**
  * Each aggregate root forms a logical grouping of events and commands in an event
@@ -14,9 +8,13 @@ export type { PassengerActivity } from "./projection/passengerActivity.ts";
  * boundary is considered to execute in a deterministic, predictable and sequential fashion.
  * This can also be referred to as a "consistency boundary".
  */
-export const aggregateRoots = {
-  PASSENGER: passengerAggregateRoot,
+export const airlineAggregateRoots = {
   FLIGHT: flightAggregateRoot,
+  PASSENGER: passengerAggregateRoot,
 };
 
-export type AirlineDomainEvent = EventsRaisedByAggregateRoots<typeof aggregateRoots>;
+export type AirlineDomainEvent = EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>;
+
+export { ticketProcessManager } from "./processManager/ticketProcessManager.ts";
+export { flightDelayProcessManager } from "./processManager/flightDelayProcessManager.ts";
+export { notificationOutbox } from "./integration/notificationOutbox.ts";

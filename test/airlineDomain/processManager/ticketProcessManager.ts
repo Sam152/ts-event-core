@@ -1,5 +1,5 @@
 import { CommandIssuer } from "@ts-event-core/framework";
-import { aggregateRoots, AirlineDomainEvent } from "../index.ts";
+import { airlineAggregateRoots, AirlineDomainEvent } from "../index.ts";
 
 /**
  * A process manager facilitates coordination between aggregates, this is an example of an orchestrated
@@ -16,7 +16,7 @@ import { aggregateRoots, AirlineDomainEvent } from "../index.ts";
 export async function ticketProcessManager(
   { event, issueCommand }: {
     event: AirlineDomainEvent;
-    issueCommand: CommandIssuer<typeof aggregateRoots>;
+    issueCommand: CommandIssuer<typeof airlineAggregateRoots>;
   },
 ) {
   if (event.payload.type === "TICKET_PURCHASED") {

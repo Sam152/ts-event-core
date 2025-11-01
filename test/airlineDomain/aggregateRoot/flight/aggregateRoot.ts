@@ -2,6 +2,7 @@ import { AggregateRootDefinition } from "@ts-event-core/framework";
 import { flightReducer } from "./reducer.ts";
 import { purchaseTicket } from "./command/purchaseTicket.ts";
 import { scheduleFlight } from "./command/scheduleFlight.ts";
+import { delayFlight } from "./command/delayFlight.ts";
 
 export type FlightState =
   | {
@@ -30,6 +31,7 @@ export type FlightEvent = {
 } | {
   type: "FLIGHT_DELAYED";
   delayedUntil: Date;
+  impactedPassengerIds: string[];
 };
 
 export const flightAggregateRoot = {
@@ -39,7 +41,8 @@ export const flightAggregateRoot = {
     reducer: flightReducer,
   },
   commands: {
-    purchaseTicket,
     scheduleFlight,
+    purchaseTicket,
+    delayFlight,
   },
 } satisfies AggregateRootDefinition<FlightState, FlightEvent>;
