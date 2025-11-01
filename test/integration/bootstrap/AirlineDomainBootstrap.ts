@@ -1,6 +1,5 @@
 import { CommandIssuer } from "@ts-event-core/framework";
-import { airlineAggregateRoots } from "@ts-event-core/flight-tracking-domain";
-import { LifetimeEarningsReport } from "@ts-event-core/airline-domain";
+import { airlineAggregateRoots, LifetimeEarningsReport } from "@ts-event-core/airline-domain";
 
 /**
  * A bootstrap of the flight tracking domain. This object combines components of the

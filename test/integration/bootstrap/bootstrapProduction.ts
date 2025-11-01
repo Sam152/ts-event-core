@@ -16,9 +16,7 @@ import {
   lifetimeEarningsReport,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
-import {
-  createPersistentLockingCursorPosition,
-} from "../../../src/eventStore/cursor/createPersistentLockingCursorPosition.ts";
+import { createPersistentLockingCursorPosition } from "@ts-event-core/framework";
 
 /**
  * Create a production bootstrap of the flight tracking domain, which uses

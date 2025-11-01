@@ -8,7 +8,7 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
         totalSeats: event.sellableSeats,
         totalAvailableSeats: event.sellableSeats,
         totalSeatsSold: 0,
-        passengerManifest: {},
+        passengerManifest: [],
       };
     }
   }

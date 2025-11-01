@@ -1,12 +1,12 @@
-import { airlineAggregateRoots } from "../../../test/flightTrackingDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createInMemorySnapshotStorage } from "../snapshot/createInMemorySnapshotStorage.ts";
 import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { assertEquals } from "@std/assert";
-import { it } from "jsr:@std/testing/bdd";
+import { it } from "@std/testing/bdd";
 import { describeAll } from "../../../test/integration/utils/describeAll.ts";
 import { createBasicAggregateRootRepository } from "./createBasicAggregateRootRepository.ts";
+import { airlineAggregateRoots } from "@ts-event-core/airline-domain";
 
 const snapshottingEventStore = createInMemoryEventStore<
   EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>

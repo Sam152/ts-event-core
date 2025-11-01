@@ -1,4 +1,3 @@
-import { airlineAggregateRoots } from "../../../test/flightTrackingDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createInMemorySnapshotStorage } from "../snapshot/createInMemorySnapshotStorage.ts";
 import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
 import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
@@ -6,6 +5,7 @@ import { createSnapshottingAggregateRootRepository } from "./createSnapshottingA
 import { traceCalls } from "../../../test/integration/utils/traceCalls.ts";
 import { describe, it } from "jsr:@std/testing/bdd";
 import { assertEquals } from "@std/assert";
+import { airlineAggregateRoots } from "@ts-event-core/airline-domain";
 
 describe("snapshotting aggregate root repository", () => {
   const { proxy: eventStore, calls: eventStoreCalls } = traceCalls(
@@ -22,17 +22,21 @@ describe("snapshotting aggregate root repository", () => {
       aggregateRoot: {
         aggregateRootId: "VA-497",
         aggregateRootType: "FLIGHT",
-        state: undefined,
+        state: { status: "NOT_YET_SCHEDULED" },
       },
       pendingEventPayloads: [
         {
           type: "FLIGHT_SCHEDULED",
-          seatingCapacity: 100,
+          sellableSeats: 100,
+          departureTime: new Date(1000000),
         },
         {
-          type: "PASSENGER_BOARDED",
-          passengerName: "Harold Gribble",
-          passportNumber: "PA1234567",
+          type: "TICKET_PURCHASED",
+          passengerId: "PA-111110",
+          purchasePrice: {
+            currency: "AUD",
+            cents: 100_00,
+          },
         },
       ],
     });
@@ -44,9 +48,9 @@ describe("snapshotting aggregate root repository", () => {
         aggregateRootType: "FLIGHT",
         recordedAt: new Date(),
         payload: {
-          type: "PASSENGER_BOARDED",
-          passengerName: "Fred Gribble",
-          passportNumber: "PA4567",
+          type: "FLIGHT_DELAYED",
+          delayedUntil: new Date(1001000),
+          impactedPassengerIds: ["PA-111110"],
         },
       },
     ]);
@@ -70,10 +74,11 @@ describe("snapshotting aggregate root repository", () => {
     });
 
     assertEquals(aggregate.state, {
+      status: "SCHEDULED",
       totalSeats: 100,
-      totalBoardedPassengers: 2,
-      passengerManifest: { PA1234567: "Harold Gribble", PA4567: "Fred Gribble" },
-      status: "ON_THE_GROUND",
+      totalAvailableSeats: 100,
+      totalSeatsSold: 0,
+      passengerManifest: [],
     });
   });
 });

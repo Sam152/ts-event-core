@@ -1,16 +1,19 @@
 {
   "tasks": {
     "init:git-hooks": "git config core.hooksPath .hooks",
+    "on-save": "deno --allow-run .hooks/on-save.ts",
     "test": "deno test --allow-run --allow-env --allow-net",
     "test:debug": "deno test --inspect-brk --allow-run --allow-env --allow-net",
     "test:db-reset": "docker compose -f test/utils/infra/docker-compose.yml down -v",
     "readme": "deno --allow-write --allow-read ./docs/generateReadme.ts",
-    "readme:debug": "deno fmt && deno --inspect-brk --allow-write --allow-read ./docs/generateReadme.ts",
-    "on-save": "deno --allow-run .hooks/on-save.ts"
+    "readme:debug": "deno fmt && deno --inspect-brk --allow-write --allow-read ./docs/generateReadme.ts"
   },
   "imports": {
+    // Packages in this repo.
     "@ts-event-core/framework": "./src/index.ts",
     "@ts-event-core/airline-domain": "./test/airlineDomain/index.ts",
+    // Dependencies.
+    "@faker-js/faker": "npm:@faker-js/faker@^10.1.0",
     "@std/assert": "jsr:@std/assert@1",
     "@std/path": "jsr:@std/path@^1.1.1",
     "@std/testing/bdd": "jsr:@std/testing/bdd",
@@ -23,11 +26,12 @@
   },
   "lint": {
     "plugins": [
-      // Allows unused imports to be removed automatically.
+      // Automatically removes unused imports.
       "jsr:@hirochachacha/deno-lint-plugin-unused-fixer"
     ],
     "rules": {
       "exclude": [
+        // Do not automatically remove unused vars.
         "unused-fixer/no-unused-vars",
         "require-await"
       ]
