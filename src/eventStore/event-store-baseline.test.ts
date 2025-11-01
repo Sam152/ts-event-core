@@ -1,7 +1,6 @@
 import { assertEquals } from "@std/assert";
 import { afterAll, beforeEach, it } from "@std/testing/bdd";
 import { describeAll } from "../../test/integration/utils/describeAll.ts";
-import { AirlineEvent } from "../../test/flightTrackingDomain/aggregateRoot/airlineAggregateRoots.ts";
 import { createInMemoryEventStore } from "./createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "./createPostgresEventStore.ts";
 import { prepareTestDatabaseContainer } from "../../test/integration/utils/prepareTestDatabaseContainer.ts";
@@ -9,17 +8,18 @@ import postgres from "postgres";
 import { testPostgresConnectionOptions } from "../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 import { assertRejects } from "@std/assert/rejects";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
+import { AirlineDomainEvent } from "@ts-event-core/airline-domain";
 
 const connection = postgres(testPostgresConnectionOptions);
 
 const implementations = [
   {
-    factory: createInMemoryEventStore<AirlineEvent>,
+    factory: createInMemoryEventStore<AirlineDomainEvent>,
     beforeEachHook: () => undefined,
     afterAllHook: () => undefined,
   },
   {
-    factory: () => createPostgresEventStore<AirlineEvent>({ connection }),
+    factory: () => createPostgresEventStore<AirlineDomainEvent>({ connection }),
     beforeEachHook: prepareTestDatabaseContainer,
     afterAllHook: connection.end,
   },
@@ -37,13 +37,13 @@ describeAll(
       await eventStore.persist(testEventStream);
       assertEquals(
         (await Array.fromAsync(eventStore.retrieve({
-          aggregateRootType: "PLANE",
-          aggregateRootId: "plane-001",
+          aggregateRootType: "FLIGHT",
+          aggregateRootId: "VA-456",
         }))).map((e) => e.payload.type),
         [
           "FLIGHT_SCHEDULED",
-          "PASSENGER_BOARDED",
-          "FLIGHT_DEPARTED",
+          "TICKET_PURCHASED",
+          "TICKET_PURCHASED",
         ],
       );
     });
@@ -52,8 +52,8 @@ describeAll(
       const eventStore = factory();
       await eventStore.persist(testEventStream);
       const retrievedEvents = eventStore.retrieve({
-        aggregateRootType: "PLANE",
-        aggregateRootId: "plane-001",
+        aggregateRootType: "FLIGHT",
+        aggregateRootId: "VA-456",
         fromVersion: 2,
       });
       assertEquals((await retrievedEvents.next()).value.aggregateVersion, 3);
@@ -63,7 +63,7 @@ describeAll(
     it("should return empty array for non-existent aggregate", async () => {
       assertEquals(
         (await factory().retrieve({
-          aggregateRootType: "PLANE",
+          aggregateRootType: "FLIGHT",
           aggregateRootId: "non-existent",
         }).next()).value,
         undefined,
@@ -89,8 +89,8 @@ describeAll(
           limit: 2,
         }))).map((e) => e.payload.type),
         [
-          "PASSENGER_BOARDED",
-          "FLIGHT_DEPARTED",
+          "TICKET_PURCHASED",
+          "TICKET_PURCHASED",
         ],
       );
     });
@@ -108,45 +108,55 @@ describeAll(
   },
 );
 
-const testEventStream: AirlineEvent[] = [
+const testEventStream: AirlineDomainEvent[] = [
   {
     recordedAt: new Date("2023-01-01T10:00:00Z"),
-    aggregateRootType: "PLANE",
-    aggregateRootId: "plane-001",
+    aggregateRootType: "FLIGHT",
+    aggregateRootId: "VA-456",
     aggregateVersion: 1,
     payload: {
       type: "FLIGHT_SCHEDULED",
-      seatingCapacity: 180,
+      sellableSeats: 100,
+      departureTime: new Date(1000000),
     },
   },
   {
     recordedAt: new Date("2023-01-01T11:00:00Z"),
-    aggregateRootType: "PLANE",
-    aggregateRootId: "plane-001",
+    aggregateRootType: "FLIGHT",
+    aggregateRootId: "VA-456",
     aggregateVersion: 2,
     payload: {
-      type: "PASSENGER_BOARDED",
-      passengerName: "John Doe",
-      passportNumber: "P123456",
+      type: "TICKET_PURCHASED",
+      passengerId: "PA-111110",
+      purchasePrice: {
+        currency: "AUD",
+        cents: 100_00,
+      },
     },
   },
   {
     recordedAt: new Date("2023-01-01T12:00:00Z"),
-    aggregateRootType: "PLANE",
-    aggregateRootId: "plane-001",
+    aggregateRootType: "FLIGHT",
+    aggregateRootId: "VA-456",
     aggregateVersion: 3,
     payload: {
-      type: "FLIGHT_DEPARTED",
+      type: "TICKET_PURCHASED",
+      passengerId: "PA-456789",
+      purchasePrice: {
+        currency: "AUD",
+        cents: 110_00,
+      },
     },
   },
   {
     recordedAt: new Date("2023-01-01T10:00:00Z"),
-    aggregateRootType: "PLANE",
-    aggregateRootId: "plane-002",
+    aggregateRootType: "FLIGHT",
+    aggregateRootId: "VA-987",
     aggregateVersion: 1,
     payload: {
       type: "FLIGHT_SCHEDULED",
-      seatingCapacity: 220,
+      sellableSeats: 45,
+      departureTime: new Date(1001000),
     },
   },
 ];

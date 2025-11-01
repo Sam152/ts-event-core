@@ -76,9 +76,9 @@ describe("snapshotting aggregate root repository", () => {
     assertEquals(aggregate.state, {
       status: "SCHEDULED",
       totalSeats: 100,
-      totalAvailableSeats: 100,
-      totalSeatsSold: 0,
-      passengerManifest: [],
+      totalAvailableSeats: 99,
+      totalSeatsSold: 1,
+      passengerManifest: ["PA-111110"],
     });
   });
 });

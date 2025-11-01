@@ -7,6 +7,7 @@ import { it } from "@std/testing/bdd";
 import { describeAll } from "../../../test/integration/utils/describeAll.ts";
 import { createBasicAggregateRootRepository } from "./createBasicAggregateRootRepository.ts";
 import { airlineAggregateRoots } from "@ts-event-core/airline-domain";
+import { assertEquals } from "@std/assert";
 
 const snapshottingEventStore = createInMemoryEventStore<
   EventsRaisedByAggregateRoots<typeof airlineAggregateRoots>
@@ -64,19 +65,18 @@ describeAll(
         aggregateRootType: "FLIGHT",
       });
 
-      console.log(aggregate);
-
-      // assertEquals(aggregate, {
-      //   aggregateRootId: "VA-497",
-      //   aggregateRootType: "FLIGHT",
-      //   aggregateVersion: 2,
-      //   state: {
-      //     totalSeats: 100,
-      //     totalBoardedPassengers: 1,
-      //     passengerManifest: { PA1234567: "Harold Gribble" },
-      //     status: "ON_THE_GROUND",
-      //   },
-      // });
+      assertEquals(aggregate, {
+        aggregateRootId: "VA-497",
+        aggregateRootType: "FLIGHT",
+        aggregateVersion: 2,
+        state: {
+          status: "SCHEDULED",
+          totalSeats: 100,
+          totalAvailableSeats: 99,
+          totalSeatsSold: 1,
+          passengerManifest: ["PA-111110"],
+        },
+      });
     });
 
     it("can persist and retrieve an existing aggregate", async () => {
@@ -104,18 +104,18 @@ describeAll(
         aggregateRootType: "FLIGHT",
       });
 
-      console.log(retrievedAgain);
-      // assertEquals(retrievedAgain, {
-      //   aggregateRootId: "VA-497",
-      //   aggregateRootType: "FLIGHT",
-      //   aggregateVersion: 3,
-      //   state: {
-      //     totalSeats: 100,
-      //     totalBoardedPassengers: 2,
-      //     passengerManifest: { PA1234567: "Harold Gribble", PA78965: "Sally Gribble" },
-      //     status: "ON_THE_GROUND",
-      //   },
-      // });
+      assertEquals(retrievedAgain, {
+        aggregateRootId: "VA-497",
+        aggregateRootType: "FLIGHT",
+        aggregateVersion: 3,
+        state: {
+          status: "SCHEDULED",
+          totalSeats: 100,
+          totalAvailableSeats: 98,
+          totalSeatsSold: 2,
+          passengerManifest: ["PA-111110", "PA-111110"],
+        },
+      });
     });
 
     it("can retrieve an aggregate, based on events written by another process", async () => {
@@ -142,22 +142,18 @@ describeAll(
         aggregateRootId: "VA-497",
         aggregateRootType: "FLIGHT",
       });
-      console.log(retrievedAgain);
-      // assertEquals(retrievedAgain, {
-      //   aggregateRootId: "VA-497",
-      //   aggregateRootType: "FLIGHT",
-      //   aggregateVersion: 4,
-      //   state: {
-      //     totalSeats: 100,
-      //     totalBoardedPassengers: 3,
-      //     passengerManifest: {
-      //       PA1234567: "Harold Gribble",
-      //       PA78965: "Sally Gribble",
-      //       PA4567: "Fred Gribble",
-      //     },
-      //     status: "ON_THE_GROUND",
-      //   },
-      // });
+      assertEquals(retrievedAgain, {
+        aggregateRootId: "VA-497",
+        aggregateRootType: "FLIGHT",
+        aggregateVersion: 4,
+        state: {
+          status: "SCHEDULED",
+          totalSeats: 100,
+          totalAvailableSeats: 97,
+          totalSeatsSold: 3,
+          passengerManifest: ["PA-111110", "PA-111110", "PA-456789"],
+        },
+      });
     });
   },
 );
