@@ -34,6 +34,9 @@ export type FlightEvent = {
   impactedPassengerIds: string[];
 };
 
+/**
+ * Foo bar baz.
+ */
 export const flightAggregateRoot = {
   state: {
     version: 1,

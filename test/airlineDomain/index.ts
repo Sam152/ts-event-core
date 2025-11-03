@@ -3,10 +3,8 @@ import { flightAggregateRoot } from "./aggregateRoot/flight/aggregateRoot.ts";
 import { EventsRaisedByAggregateRoots } from "@ts-event-core/framework";
 
 /**
- * Each aggregate root forms a logical grouping of events and commands in an event
- * sourced system. It is the meeting place of data and behavior, and everything inside the
- * boundary is considered to execute in a deterministic, predictable and sequential fashion.
- * This can also be referred to as a "consistency boundary".
+ * A map of aggregate root IDs to aggregate root definitions is passed into
+ * various framework components.
  */
 export const airlineAggregateRoots = {
   FLIGHT: flightAggregateRoot,

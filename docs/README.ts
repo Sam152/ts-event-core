@@ -16,6 +16,8 @@ import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssue
 import { createQueuedCommandIssuer } from "../src/command/createQueuedCommandIssuer.ts";
 import { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
 import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
+import { documentConst } from "./utils/documentConst.ts";
+import { flightAggregateRoot } from "../test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts";
 
 /**
  * Add `README.ts` to soft-wraps configuration before editing.
@@ -36,6 +38,9 @@ export function README(): string {
     ## Domain
     
     ### Aggregate roots
+    
+    ${documentConst(flightAggregateRoot)}
+    
     ### Commands
     ### State
     ### Process manager

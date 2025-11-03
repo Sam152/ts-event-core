@@ -34,6 +34,9 @@ This project is an implementation of Event Sourcing, written in TypeScript using
 ## Domain
 
 ### Aggregate roots
+
+Foo bar baz.
+
 ### Commands
 ### State
 ### Process manager
