@@ -14,8 +14,9 @@ import { airlineAggregateRoots, AirlineDomainEvent } from "../index.ts";
  * recorded. These tradeoffs are completely acceptable in our airline domain.
  *
  * Features which require strong consistency (such as not overbooking a flight) must be validated within a single aggregate
- * root. If consistency issues are a headache in a given system, it may be a sign that aggregate roots have been modelled
- * too granularly.
+ * root. If consistency issues are a headache in a given domain, it may be a sign that aggregates roots need to be less granular.
+ * The granularity of aggregates generally trade-off parallelism and throughput with consistency. In this case, passengers
+ * updating their notification preferences can happen in parallel to flight scheduling and ticket purchasing.
  */
 export async function flightDelayProcessManager(
   { event, issueCommand }: {
