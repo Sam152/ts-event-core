@@ -35,17 +35,17 @@ export type FlightEvent = {
 };
 
 /**
- * Foo bar baz.
+ * Each aggregate root is a declaration that consists of commands and state.
  */
 export const flightAggregateRoot = {
-  state: {
-    version: 1,
-    initialState: { status: "NOT_YET_SCHEDULED" },
-    reducer: flightReducer,
-  },
   commands: {
     scheduleFlight,
     purchaseTicket,
     delayFlight,
+  },
+  state: {
+    version: 1,
+    initialState: { status: "NOT_YET_SCHEDULED" },
+    reducer: flightReducer,
   },
 } satisfies AggregateRootDefinition<FlightState, FlightEvent>;

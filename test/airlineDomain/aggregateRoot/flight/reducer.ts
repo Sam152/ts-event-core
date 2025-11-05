@@ -22,6 +22,5 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
       };
     }
   }
-
   return state;
 }

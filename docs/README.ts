@@ -16,8 +16,9 @@ import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssue
 import { createQueuedCommandIssuer } from "../src/command/createQueuedCommandIssuer.ts";
 import { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
 import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
-import { documentConst } from "./utils/documentConst.ts";
+import { documentConstWithCode } from "./utils/documentConst.ts";
 import { flightAggregateRoot } from "../test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts";
+import { airlineAggregateRoots } from "../test/airlineDomain/index.ts";
 
 /**
  * Add `README.ts` to soft-wraps configuration before editing.
@@ -39,7 +40,9 @@ export function README(): string {
     
     ### Aggregate roots
     
-    ${documentConst(flightAggregateRoot)}
+    ${documentConstWithCode(airlineAggregateRoots)}
+    
+    ${documentConstWithCode(flightAggregateRoot)}
     
     ### Commands
     ### State

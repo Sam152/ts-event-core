@@ -35,7 +35,32 @@ This project is an implementation of Event Sourcing, written in TypeScript using
 
 ### Aggregate roots
 
-Foo bar baz.
+[:arrow_upper_right:](test/airlineDomain/index.ts#L5-L12) For any given domain, a map between an aggregate root type and an aggregate root definition is created.
+This object becomes a key declaration that is passed into other framework components.
+
+```typescript
+export const airlineAggregateRoots = {
+  FLIGHT: flightAggregateRoot,
+  PASSENGER: passengerAggregateRoot,
+};
+```
+
+[:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51) Each aggregate root is a declaration that consists of commands and state.
+
+```typescript
+export const flightAggregateRoot = {
+  commands: {
+    scheduleFlight,
+    purchaseTicket,
+    delayFlight,
+  },
+  state: {
+    version: 1,
+    initialState: { status: "NOT_YET_SCHEDULED" },
+    reducer: flightReducer,
+  },
+} satisfies AggregateRootDefinition<FlightState, FlightEvent>;
+```
 
 ### Commands
 ### State

@@ -3,8 +3,8 @@ import { flightAggregateRoot } from "./aggregateRoot/flight/aggregateRoot.ts";
 import { EventsRaisedByAggregateRoots } from "@ts-event-core/framework";
 
 /**
- * A map of aggregate root IDs to aggregate root definitions is passed into
- * various framework components.
+ * For any given domain, a map between an aggregate root type and an aggregate root definition is created.
+ * This object becomes a key declaration that is passed into other framework components.
  */
 export const airlineAggregateRoots = {
   FLIGHT: flightAggregateRoot,
