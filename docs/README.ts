@@ -1,6 +1,6 @@
 import { documentType, linkType } from "./utils/documentType.ts";
 import { EventStore } from "../src/eventStore/EventStore.ts";
-import { linkFunction } from "./utils/documentFunction.ts";
+import { documentFunction, linkFunction } from "./utils/documentFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
 import { CommandIssuer } from "../src/command/CommandIssuer.ts";
@@ -19,6 +19,7 @@ import { createMemoryReducedProjector } from "../src/projection/createMemoryRedu
 import { documentConstWithCode } from "./utils/documentConst.ts";
 import { flightAggregateRoot } from "../test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts";
 import { airlineAggregateRoots } from "../test/airlineDomain/index.ts";
+import { flightReducer } from "../test/airlineDomain/aggregateRoot/flight/reducer.ts";
 
 /**
  * Add `README.ts` to soft-wraps configuration before editing.
@@ -28,7 +29,7 @@ export function README(): string {
     ts-event-core
     ====
     
-    This project is an implementation of Event Sourcing, written in TypeScript using functional programming techniques. It contains a set of loosely coupled components which can be composed together and an example domain demonstrating how they can be used.
+    This project is an implementation of Event Sourcing, written in TypeScript using functional programming. It contains a set of loosely coupled components which can be interchanged and composed together.
 
     ----
     
@@ -38,14 +39,26 @@ export function README(): string {
     
     ## Example domain
     
+    Our example domain comes from the airline industry. We've been tasked with figuring out how to notify passengers when flights are delayed. We've been given a few basic requirements:
+    
+    * We should be able to schedule flights.
+    * Passengers can purchase tickets to those flights and set notification preferences on their account.
+    * When flights are delayed, all ticket holders are sent either an SMS or email, depending on their preferences.
+
+    We will start by defining our domain, then explore how its consumed by components of the framework.
+
     ### Aggregate roots
     
     ${documentConstWithCode(airlineAggregateRoots)}
     
     ${documentConstWithCode(flightAggregateRoot)}
     
-    ### Commands
     ### State
+    
+    ${documentFunction(flightReducer)}
+    
+    
+    ### Commands
     ### Process manager
     ### Bootstraps
     

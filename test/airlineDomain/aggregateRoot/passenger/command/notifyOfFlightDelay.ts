@@ -10,6 +10,15 @@ export function notifyOfFlightDelay(
     flightNumber,
   };
 
+  // We should never send a notification to a passenger if they don't hold a ticket for the given flight.
+  if (!passenger.purchasedTickets.map((ticket) => ticket.flightNumber).includes(flightNumber)) {
+    return {
+      type: "NOTIFICATION_NOT_SENT",
+      reason: "PASSENGER_NOT_ON_THE_GIVEN_FLIGHT",
+      notification,
+    };
+  }
+
   switch (passenger.notificationPreference.type) {
     case "DO_NOT_CONTACT": {
       return {

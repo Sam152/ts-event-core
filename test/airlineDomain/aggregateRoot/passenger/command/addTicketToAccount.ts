@@ -7,7 +7,6 @@ export function addTicketToAccount(
   },
 ): PassengerEvent {
   if (passenger.purchasedTickets.map((ticket) => ticket.flightNumber).includes(flightNumber)) {
-    const a = 1;
     return {
       type: "ADD_TICKET_TO_ACCOUNT_FAILED",
       reason: "TICKET_ALREADY_IN_ACCOUNT",

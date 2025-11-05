@@ -5,14 +5,14 @@
 ts-event-core
 ====
 
-This project is an implementation of Event Sourcing, written in TypeScript using functional programming techniques. It contains a set of loosely coupled components which can be composed together and an example domain demonstrating how they can be used.
+This project is an implementation of Event Sourcing, written in TypeScript using functional programming. It contains a set of loosely coupled components which can be interchanged and composed together.
 
 ----
 
 1. [Example domain](#example-domain)
    1. [Aggregate roots](#aggregate-roots)
-   2. [Commands](#commands)
-   3. [State](#state)
+   2. [State](#state)
+   3. [Commands](#commands)
    4. [Process manager](#process-manager)
    5. [Bootstraps](#bootstraps)
 2. [Key framework components](#key-framework-components)
@@ -33,9 +33,19 @@ This project is an implementation of Event Sourcing, written in TypeScript using
 
 ## Example domain
 
+Our example domain comes from the airline industry. We've been tasked with figuring out how to notify passengers when flights are delayed. We've been given a few basic requirements:
+
+* We should be able to schedule flights.
+* Passengers can purchase tickets to those flights and set notification preferences on their account.
+* When flights are delayed, all ticket holders are sent either an SMS or email, depending on their preferences.
+
+We will start by defining our domain, then explore how its consumed by components of the framework.
+
 ### Aggregate roots
 
-A domain starts as a [:arrow_upper_right:](test/airlineDomain/index.ts#L5-L11)
+A domain starts with a declaration of the aggregate roots. Each aggregate type has an identifier, in this
+case FLIGHT and PASSENGER. This object represents a bundle of all the code contained within the domain and
+is later consumed by components of the framework. [:arrow_upper_right:](test/airlineDomain/index.ts#L5-L13)
 
 ```typescript
 export const airlineAggregateRoots = {
@@ -44,25 +54,67 @@ export const airlineAggregateRoots = {
 };
 ```
 
-Each aggregate root is a declaration that consists of commands and state. [:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51)
+Each aggregate root definition has a state and commands property. [:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51)
 
 ```typescript
 export const flightAggregateRoot = {
-  commands: {
-    scheduleFlight,
-    purchaseTicket,
-    delayFlight,
-  },
   state: {
     version: 1,
     initialState: { status: "NOT_YET_SCHEDULED" },
     reducer: flightReducer,
   },
+  commands: {
+    scheduleFlight,
+    purchaseTicket,
+    delayFlight,
+  },
 } satisfies AggregateRootDefinition<FlightState, FlightEvent>;
 ```
 
-### Commands
 ### State
+
+[:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/reducer.ts#L4-L32) The state reducer is responsible for creating a useful decision model out of the events raised by the aggregate root.
+
+In this case we're keeping track of the total number of seats we're allowed to sell as tickets are purchased, such that
+we don't oversell any flights.
+
+```typescript
+function flightReducer(...): FlightState
+```
+    
+<details>
+<summary> Show full <code>flightReducer</code> definition :point_down:</summary>
+
+```typescript
+export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
+  switch (event.type) {
+    case "FLIGHT_SCHEDULED": {
+      return {
+        status: "SCHEDULED",
+        totalSeats: event.sellableSeats,
+        totalAvailableSeats: event.sellableSeats,
+        totalSeatsSold: 0,
+        passengerManifest: [],
+      };
+    }
+    case "TICKET_PURCHASED": {
+      assertFlightScheduled(state);
+      return {
+        ...state,
+        totalSeatsSold: state.totalSeatsSold + 1,
+        totalAvailableSeats: state.totalAvailableSeats - 1,
+        passengerManifest: [...state.passengerManifest, event.passengerId],
+      };
+    }
+  }
+  return state;
+}
+```
+
+</details>
+
+
+### Commands
 ### Process manager
 ### Bootstraps
 

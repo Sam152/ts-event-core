@@ -1,6 +1,12 @@
 import { FlightEvent, FlightState } from "./aggregateRoot.ts";
 import { assertFlightScheduled } from "./util/assertFlightScheduled.ts";
 
+/**
+ * The state reducer is responsible for creating a useful decision model out of the events raised by the aggregate root.
+ *
+ * In this case we're keeping track of the total number of seats we're allowed to sell as tickets are purchased, such that
+ * we don't oversell any flights.
+ */
 export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
   switch (event.type) {
     case "FLIGHT_SCHEDULED": {
