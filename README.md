@@ -15,7 +15,7 @@ This project is an implementation of Event Sourcing, written in TypeScript using
    3. [Commands](#commands)
    4. [Process manager](#process-manager)
    5. [Projections](#projections)
-   6. [Bootstraps](#bootstraps)
+   6. [Bootstrap](#bootstrap)
 2. [Key framework components](#key-framework-components)
    1. [`CommandIssuer`](#commandissuer)
       1. [Implementations](#implementations)
@@ -205,7 +205,7 @@ export const lifetimeEarningsReport: LifetimeEarningsReportProjection = {
 };
 ```
 
-### Bootstraps
+### Bootstrap
 
 To bootstrap a domain into a working application, key framework components need to be composed together with the
 domain. All components have in-memory implementations, which allow for fast integration testing and persistent components
@@ -285,27 +285,18 @@ It's where we store events...
 * [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L9-L65)
 * [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L5-L99)
 
-### [`Projector`](src/projection/Projector.ts#L3-L24)
+### [`Projector`](src/projection/Projector.ts#L3-L15)
 
 Projectors take a stream of events from an event store and transform them into
-useful data structures. These are often called read models.
-
-Read models are typically eventually consistent and thus are not required to
-adhere to any of the boundaries defined by the aggregate roots.
-
-New read models can be added at any point in time and can then be deleted after
-they are no longer useful.
-
-They may deal with data structures that describe all the events in the system as
-a whole or selectively choose to build smaller structures out of individual aggregates
-or other relations found within the event payload.
+useful data structures. These are often called read models. Read models are
+considered eventually consistent and can be created or deleted as required.
 
 These data structures can be stored in memory, relational databases, speciality
-databases or any other system that provides utility and value to the application.
+databases or any other system.
 
-For these reasons, the signature of a projection is extremely simple, the only contract
-an event sourced system needs to fulfil is providing a stream of events. How data can be
-retrieved or accessed beyond that, is entirely dependent on the use case.
+For these reasons, the signature of a projection is extremely simple, the only
+contract that needs to be fulfilled is providing a stream of events. How data is
+reduced, retrieved or accessed beyond, is dependent on the use case.
 
 #### Implementations
 
