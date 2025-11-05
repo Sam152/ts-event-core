@@ -251,7 +251,7 @@ it("ensures notifications are sent to affected passengers through the correct ch
 
 ### [`CommandIssuer`](src/command/CommandIssuer.ts#L6-L20)
 
-A CommandIssuer is responsible for receiving commands, preparing the required state and persisting the result.
+A CommandIssuer is responsible for receiving commands, preparing the required state and persisting the outcome.
 
 #### Implementations
 
