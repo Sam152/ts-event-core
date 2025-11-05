@@ -251,25 +251,31 @@ it("ensures notifications are sent to affected passengers through the correct ch
 
 ### [`CommandIssuer`](src/command/CommandIssuer.ts#L6-L20)
 
-When issuing a command...
+A CommandIssuer is responsible for receiving commands, preparing the required state and persisting the result.
 
 #### Implementations
 
 * [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L9-L50)
 * [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L8-L25)
 
-### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L25)
+### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L26)
 
-Retrieve and persist aggregate roots.
+An `CommandIssuer` is responsible for loading aggregate state and persisting any pending events which
+were recorded as the result of processing a command with the loaded state.
 
 #### Implementations
 
 * [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56)
 * [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L92)
 
-### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L35)
+### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L40)
 
-The storage used for snapshots can be.
+Some aggregates contain a large number of events. Components like `createSnapshottingAggregateRootRepository` can
+persist a snapshot of aggregate state, to avoid needing to load and reduce many events. Snapshots can be stored in
+memory or be persistent.
+
+The `aggregateRootDefinition.state.version` property governs which snapshots can be retrieved, to satisfy a given
+request to load an aggregate, as state can change over time.
 
 #### Implementations
 
@@ -278,7 +284,7 @@ The storage used for snapshots can be.
 
 ### [`EventStore`](src/eventStore/EventStore.ts#L22-L37)
 
-It's where we store events...
+The `EventStore` retrieves and persists events.
 
 #### Implementations
 

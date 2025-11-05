@@ -4,7 +4,7 @@ import {
 } from "../aggregate/AggregateRootDefinition.ts";
 
 /**
- * When issuing a command...
+ * A CommandIssuer is responsible for receiving commands, preparing the required state and persisting the result.
  */
 export type CommandIssuer<
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,

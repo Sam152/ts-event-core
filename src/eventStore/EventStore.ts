@@ -20,7 +20,7 @@ export type PersistedEvent<TEvent = Event> = TEvent & {
 };
 
 /**
- * It's where we store events...
+ * The `EventStore` retrieves and persists events.
  */
 export type EventStore<TEvent extends Event = Event> = {
   persist: (events: TEvent[]) => Promise<void>;
