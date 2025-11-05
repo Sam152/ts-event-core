@@ -43,7 +43,7 @@ We will start by defining our domain, then explore how its consumed by component
 
 ### Aggregate roots
 
-A domain starts with a declaration of the aggregate roots. Each aggregate type has an identifier, in this
+A domain starts with a declaration of the aggregate roots. Each aggregate root has an identifier, in this
 case FLIGHT and PASSENGER. This object represents a bundle of all the code contained within the domain and
 is later consumed by components of the framework. [:arrow_upper_right:](test/airlineDomain/index.ts#L5-L13)
 
@@ -54,7 +54,7 @@ export const airlineAggregateRoots = {
 };
 ```
 
-Each aggregate root definition has a state and commands property. [:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51)
+An aggregate root definition contains a map of commands and state, describing the business rules. [:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51)
 
 ```typescript
 export const flightAggregateRoot = {

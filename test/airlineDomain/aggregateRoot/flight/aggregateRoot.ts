@@ -35,7 +35,7 @@ export type FlightEvent = {
 };
 
 /**
- * Each aggregate root definition has a state and commands property.
+ * An aggregate root definition contains a map of commands and state, describing the business rules.
  */
 export const flightAggregateRoot = {
   state: {
