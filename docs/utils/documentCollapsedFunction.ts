@@ -41,7 +41,7 @@ export function documentFunction(func: (...args: any) => unknown): string {
   const components: string[] = [];
 
   if (docString) {
-    components.push(`${linkTo({ path: `${filePath}#${lineRef}` })} ${formatDocString(docString)}`);
+    components.push(`${formatDocString(docString)} ${linkTo({ path: `${filePath}#${lineRef}` })}`);
   }
   components.push(formatCode(symbolBody));
 
