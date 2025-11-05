@@ -2,7 +2,7 @@ import { AggregateRootInstance } from "./AggregateRootInstance.ts";
 import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "./AggregateRootDefinition.ts";
 
 /**
- * An `CommandIssuer` is responsible for loading aggregate state and persisting any pending events which
+ * An `AggregateRootRepository` is responsible for loading aggregate state and persisting any pending events which
  * were recorded as the result of processing a command with the loaded state.
  */
 export type AggregateRootRepository<

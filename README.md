@@ -249,9 +249,10 @@ it("ensures notifications are sent to affected passengers through the correct ch
 
 ## Key framework components
 
-### [`CommandIssuer`](src/command/CommandIssuer.ts#L6-L20)
+### [`CommandIssuer`](src/command/CommandIssuer.ts#L6-L21)
 
-A CommandIssuer is responsible for receiving commands, preparing the required state and persisting the outcome.
+A CommandIssuer is responsible for receiving commands, preparing the required state, executing commands and then
+persisting the outcome.
 
 #### Implementations
 
@@ -260,7 +261,7 @@ A CommandIssuer is responsible for receiving commands, preparing the required st
 
 ### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L26)
 
-An `CommandIssuer` is responsible for loading aggregate state and persisting any pending events which
+An `AggregateRootRepository` is responsible for loading aggregate state and persisting any pending events which
 were recorded as the result of processing a command with the loaded state.
 
 #### Implementations
