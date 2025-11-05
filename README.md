@@ -9,7 +9,7 @@ This project is an implementation of Event Sourcing, written in TypeScript using
 
 ----
 
-1. [Domain](#domain)
+1. [Example domain](#example-domain)
    1. [Aggregate roots](#aggregate-roots)
    2. [Commands](#commands)
    3. [State](#state)
@@ -31,12 +31,11 @@ This project is an implementation of Event Sourcing, written in TypeScript using
 
 ----
 
-## Domain
+## Example domain
 
 ### Aggregate roots
 
-[:arrow_upper_right:](test/airlineDomain/index.ts#L5-L12) For any given domain, a map between an aggregate root type and an aggregate root definition is created.
-This object becomes a key declaration that is passed into other framework components.
+A domain starts as a [:arrow_upper_right:](test/airlineDomain/index.ts#L5-L11)
 
 ```typescript
 export const airlineAggregateRoots = {
@@ -45,7 +44,7 @@ export const airlineAggregateRoots = {
 };
 ```
 
-[:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51) Each aggregate root is a declaration that consists of commands and state.
+Each aggregate root is a declaration that consists of commands and state. [:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51)
 
 ```typescript
 export const flightAggregateRoot = {

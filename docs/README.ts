@@ -36,7 +36,7 @@ export function README(): string {
     
     ----
     
-    ## Domain
+    ## Example domain
     
     ### Aggregate roots
     
