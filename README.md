@@ -45,7 +45,7 @@ We will start by defining our domain, then explore how its consumed by component
 
 A domain starts with a declaration of the aggregate roots. Each aggregate root has an identifier, in this
 case FLIGHT and PASSENGER. This object represents a bundle of all the code contained within the domain and
-is later consumed by components of the framework. [:arrow_upper_right:](test/airlineDomain/index.ts#L5-L13)
+is later consumed by components of the framework. [:link:](test/airlineDomain/index.ts#L5-L13)
 
 ```typescript
 export const airlineAggregateRoots = {
@@ -54,7 +54,7 @@ export const airlineAggregateRoots = {
 };
 ```
 
-An aggregate root definition contains a map of commands and state, describing the business rules. [:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51)
+An aggregate root definition contains a map of commands and state, describing the business rules. [:link:](test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts#L37-L51)
 
 ```typescript
 export const flightAggregateRoot = {
@@ -77,7 +77,7 @@ The main component of state is a reducer is responsible for creating a useful de
 by the aggregate root.
 
 In this case we're keeping track of the total number of seats we're allowed to sell as tickets are purchased, so that
-we don't accidentally overbook a flight. [:arrow_upper_right:](test/airlineDomain/aggregateRoot/flight/reducer.ts#L4-L33)
+we don't accidentally overbook a flight. [:link:](test/airlineDomain/aggregateRoot/flight/reducer.ts#L4-L33)
 
 ```typescript
 export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
