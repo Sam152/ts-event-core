@@ -262,7 +262,7 @@ persisting the outcome.
 ### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L26)
 
 An `AggregateRootRepository` is responsible for loading aggregate state and persisting any pending events which
-were recorded as the result of processing a command with the loaded state.
+were recorded as the result of processing a command.
 
 #### Implementations
 

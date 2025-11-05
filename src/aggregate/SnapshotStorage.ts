@@ -10,8 +10,7 @@ import { AggregateRootInstance } from "./AggregateRootInstance.ts";
  * persist a snapshot of aggregate state, to avoid needing to load and reduce many events. Snapshots can be stored in
  * memory or be persistent.
  *
- * The `aggregateRootDefinition.state.version` property governs which snapshots can be retrieved, to satisfy a given
- * request to load an aggregate, as state can change over time.
+ * The `aggregateRootDefinition.state.version` is a mechanism for versioning state, as the underlying reducer evolves.
  */
 export type SnapshotStorage<
   TAggregateDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
