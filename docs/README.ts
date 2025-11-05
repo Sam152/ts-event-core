@@ -73,7 +73,7 @@ export function README(): string {
     
     ${documentConstWithCode(lifetimeEarningsReport)}
     
-    ### Bootstraps
+    ### Bootstrap
     
     ${documentType<AirlineDomainBootstrap>()}
     
