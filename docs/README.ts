@@ -23,6 +23,7 @@ import { lifetimeEarningsReport } from "../test/airlineDomain/projection/lifetim
 import { flightDelayProcessManager } from "../test/airlineDomain/processManager/flightDelayProcessManager.ts";
 import { flightReducer } from "../test/airlineDomain/aggregateRoot/flight/reducer.ts";
 import { purchaseTicket } from "../test/airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts";
+import { AirlineDomainBootstrap } from "../test/integration/bootstrap/AirlineDomainBootstrap.ts";
 
 /**
  * Add `README.ts` to soft-wraps configuration before editing.
@@ -72,8 +73,9 @@ export function README(): string {
     
     ${documentConstWithCode(lifetimeEarningsReport)}
     
-    
     ### Bootstraps
+    
+    ${documentType<AirlineDomainBootstrap>()}
     
     ## Key framework components
     
