@@ -11,14 +11,8 @@ export const lifetimeEarningsReport: {
   initialState: {
     lifetimeEarningsCents: 0,
   },
-  reducer: (state: LifetimeEarningsReport, event: AirlineDomainEvent) => {
-    switch (event.payload.type) {
-      case "TICKET_PURCHASED": {
-        return {
-          lifetimeEarningsCents: state.lifetimeEarningsCents + event.payload.purchasePrice.cents,
-        };
-      }
-    }
-    return state;
-  },
+  reducer: (state: LifetimeEarningsReport, event: AirlineDomainEvent) => ({
+    lifetimeEarningsCents: state.lifetimeEarningsCents +
+      (event.payload.type === "TICKET_PURCHASED" ? event.payload.purchasePrice.cents : 0),
+  }),
 };

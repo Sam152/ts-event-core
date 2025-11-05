@@ -1,10 +1,14 @@
 import { AirlineDomainEvent } from "../index.ts";
-import { Notifier } from "./Notifier.ts";
+
+export type Notifier = {
+  sendSms: (args: { phoneNumber: string; message: string }) => Promise<void>;
+  sendEmail: (args: { emailAddress: string; subject: string; body: string }) => Promise<void>;
+};
 
 /**
  * Treats the event store as an outbox for sending notifications.
  */
-export async function notificationOutbox(
+export async function notificationsReactor(
   { event, notifier }: {
     event: AirlineDomainEvent;
     notifier: Notifier;

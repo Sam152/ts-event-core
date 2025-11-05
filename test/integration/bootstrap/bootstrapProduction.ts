@@ -14,7 +14,7 @@ import {
   AirlineDomainEvent,
   flightDelayProcessManager,
   lifetimeEarningsReport,
-  notificationOutbox,
+  notificationsReactor,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
 import { createPersistentLockingCursorPosition } from "@ts-event-core/framework";
@@ -74,7 +74,7 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
   });
   const notifierFake = createFakeMemoryNotifier();
   notificationOutboxSubscriber.addSubscriber((event) =>
-    notificationOutbox({
+    notificationsReactor({
       notifier: notifierFake.notifier,
       event,
     })

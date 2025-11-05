@@ -13,7 +13,7 @@ import {
   AirlineDomainEvent,
   flightDelayProcessManager,
   lifetimeEarningsReport,
-  notificationOutbox,
+  notificationsReactor,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
 import { createFakeMemoryNotifier } from "../../airlineDomain/reactor/createFakeMemoryNotifier.ts";
@@ -55,7 +55,7 @@ export function bootstrapInMemory(): AirlineDomainBootstrap {
   });
   const notifierFake = createFakeMemoryNotifier();
   notificationOutboxSubscriber.addSubscriber((event) =>
-    notificationOutbox({
+    notificationsReactor({
       notifier: notifierFake.notifier,
       event,
     })

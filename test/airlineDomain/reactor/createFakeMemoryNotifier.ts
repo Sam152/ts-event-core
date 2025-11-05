@@ -1,4 +1,4 @@
-import { Notifier } from "./Notifier.ts";
+import { Notifier } from "./notificationsReactor.ts";
 
 export function createFakeMemoryNotifier(): { notifier: Notifier; log: string[] } {
   const log: string[] = [];

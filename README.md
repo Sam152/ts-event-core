@@ -14,7 +14,8 @@ This project is an implementation of Event Sourcing, written in TypeScript using
    2. [State](#state)
    3. [Commands](#commands)
    4. [Process manager](#process-manager)
-   5. [Bootstraps](#bootstraps)
+   5. [Projections](#projections)
+   6. [Bootstraps](#bootstraps)
 2. [Key framework components](#key-framework-components)
    1. [`CommandIssuer`](#commandissuer)
       1. [Implementations](#implementations)
@@ -181,6 +182,10 @@ export async function flightDelayProcessManager(
   }
 }
 ```
+
+### Projections
+
+
 
 ### Bootstraps
 
