@@ -27,7 +27,8 @@ import { airlineAggregateRoots, LifetimeEarningsReport } from "@ts-event-core/ai
  * });
  * ```
  *
- * ...and concludes asserting notifications were sent:
+ * ...and concludes asserting notifications for a delay were sent to the correct passengers, through the correct
+ * channels:
  *
  * ```typescript
  * it("ensures notifications are sent to affected passengers through the correct channel", async () => {
