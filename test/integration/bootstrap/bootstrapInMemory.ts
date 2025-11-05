@@ -16,7 +16,7 @@ import {
   notificationOutbox,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
-import { createFakeMemoryNotifier } from "../../airlineDomain/integration/createFakeMemoryNotifier.ts";
+import { createFakeMemoryNotifier } from "../../airlineDomain/reactor/createFakeMemoryNotifier.ts";
 
 /**
  * Create an in-memory bootstrap of the flight tracking domain. Useful for things

@@ -17,5 +17,5 @@ export type { LifetimeEarningsReport } from "./projection/lifetimeEarningsReport
 
 export { ticketProcessManager } from "./processManager/ticketProcessManager.ts";
 export { flightDelayProcessManager } from "./processManager/flightDelayProcessManager.ts";
-export { notificationOutbox } from "./integration/notificationOutbox.ts";
+export { notificationOutbox } from "./reactor/notificationOutbox.ts";
 export { lifetimeEarningsReport } from "./projection/lifetimeEarningsReport.ts";

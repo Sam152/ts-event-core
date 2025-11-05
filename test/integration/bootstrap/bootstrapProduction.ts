@@ -18,7 +18,7 @@ import {
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
 import { createPersistentLockingCursorPosition } from "@ts-event-core/framework";
-import { createFakeMemoryNotifier } from "../../airlineDomain/integration/createFakeMemoryNotifier.ts";
+import { createFakeMemoryNotifier } from "../../airlineDomain/reactor/createFakeMemoryNotifier.ts";
 import { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
 
 /**
