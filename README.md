@@ -79,13 +79,6 @@ In this case we're keeping track of the total number of seats we're allowed to s
 we don't oversell any flights.
 
 ```typescript
-function flightReducer(...): FlightState
-```
-    
-<details>
-<summary> Show full <code>flightReducer</code> definition :point_down:</summary>
-
-```typescript
 export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
   switch (event.type) {
     case "FLIGHT_SCHEDULED": {
@@ -110,8 +103,6 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
   return state;
 }
 ```
-
-</details>
 
 
 ### Commands

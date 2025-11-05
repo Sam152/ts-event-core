@@ -43,6 +43,30 @@ export function documentFunction(func: (...args: any) => unknown): string {
   if (docString) {
     components.push(`${linkTo({ path: `${filePath}#${lineRef}` })} ${formatDocString(docString)}`);
   }
+  components.push(formatCode(symbolBody));
+
+  return padAfterFirstLine({ count: 4, char: " " })(components.join("\n\n"));
+}
+
+export function documentCollapsedFunction(func: (...args: any) => unknown): string {
+  const filePath = resolve(
+    dirname(getCallSites()[1].scriptName),
+    filenameFromImportSymbol({
+      fileContents: Deno.readTextFileSync(getCallSites()[1].scriptName),
+      symbolName: func.name,
+    }),
+  );
+  const { docString, symbolBody, lineRef } = extractSymbolAndDocString({
+    filePath,
+    symbolName: func.name,
+    symbolType: "function",
+  });
+
+  const components: string[] = [];
+
+  if (docString) {
+    components.push(`${linkTo({ path: `${filePath}#${lineRef}` })} ${formatDocString(docString)}`);
+  }
   components.push(formatFunctionBody(symbolBody));
 
   return padAfterFirstLine({ count: 4, char: " " })(components.join("\n\n"));

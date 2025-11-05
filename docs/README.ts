@@ -1,6 +1,6 @@
 import { documentType, linkType } from "./utils/documentType.ts";
 import { EventStore } from "../src/eventStore/EventStore.ts";
-import { documentFunction, linkFunction } from "./utils/documentFunction.ts";
+import { documentFunction, linkFunction } from "./utils/documentCollapsedFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
 import { CommandIssuer } from "../src/command/CommandIssuer.ts";
