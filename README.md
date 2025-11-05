@@ -269,14 +269,13 @@ were recorded as the result of processing a command.
 * [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56)
 * [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L92)
 
-### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L40)
+### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L39)
 
 Some aggregates contain a large number of events. Components like `createSnapshottingAggregateRootRepository` can
 persist a snapshot of aggregate state, to avoid needing to load and reduce many events. Snapshots can be stored in
 memory or be persistent.
 
-The `aggregateRootDefinition.state.version` property governs which snapshots can be retrieved, to satisfy a given
-request to load an aggregate, as state can change over time.
+The `aggregateRootDefinition.state.version` is a mechanism for versioning state, as the underlying reducer evolves.
 
 #### Implementations
 
