@@ -107,12 +107,13 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
 
 ### Commands
 
-Commands are pure functions. They receive a state object and command data from the issuer. They return an event or
-array of events, describing the outcome of the command.
+Commands are pure functions. They receive a state object and command data from the issuer as arguments. They return
+an event (or array of events), which occurred as a result of processing the command.
 
-Since these are pure functions any functional programming techniques can be applied here. A lot of our commands require
-that a flight has actually been scheduled, so the `withScheduledFlight` HOF takes care of this check for us, returning
-a `TICKET_PURCHASED_FAILED` event on our behalf. [:link:](test/airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts#L4-L33)
+Since these are pure functions any functional programming techniques can be applied here. A lot of the commands in this
+domain require that a flight has already been scheduled, so the `withScheduledFlight` HOF takes care of this check
+for us, returning a `TICKET_PURCHASED_FAILED` event on our behalf and narrowing the `FlightState` argument into
+`ScheduledFlightState`. [:link:](test/airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts#L4-L34)
 
 ```typescript
 export const purchaseTicket = withScheduledFlight("TICKET_PURCHASED_FAILED", (
