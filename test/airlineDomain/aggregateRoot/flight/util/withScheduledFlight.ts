@@ -9,8 +9,8 @@ export function withScheduledFlight<TCommandFunc extends CommandThatHandlesSched
   failureEventName: Extract<FlightEvent, { reason: string }>["type"],
   command: TCommandFunc,
 ): DecoratedCommand<TCommandFunc> {
-  return ((state: Parameters<TCommandFunc>[0], data: Parameters<TCommandFunc>[1]) => {
-    if (state === undefined) {
+  return ((state: FlightState, data: Parameters<TCommandFunc>[1]) => {
+    if (state.status === "NOT_YET_SCHEDULED") {
       return {
         type: failureEventName,
         reason: "FLIGHT_NOT_YET_SCHEDULED",
