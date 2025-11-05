@@ -19,6 +19,7 @@ import { createMemoryReducedProjector } from "../src/projection/createMemoryRedu
 import { documentConstWithCode } from "./utils/documentConst.ts";
 import { flightAggregateRoot } from "../test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts";
 import { airlineAggregateRoots } from "../test/airlineDomain/index.ts";
+import { lifetimeEarningsReport } from "../test/airlineDomain/projection/lifetimeEarningsReport.ts";
 import { flightDelayProcessManager } from "../test/airlineDomain/processManager/flightDelayProcessManager.ts";
 import { flightReducer } from "../test/airlineDomain/aggregateRoot/flight/reducer.ts";
 import { purchaseTicket } from "../test/airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts";
@@ -69,6 +70,7 @@ export function README(): string {
     
     ### Projections
     
+    ${documentConstWithCode(lifetimeEarningsReport)}
     
     
     ### Bootstraps
