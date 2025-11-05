@@ -215,8 +215,9 @@ The framework does not dictate the shape or properties of a bootstrap, but inste
 components which should be composed together depending on the use case.
 
 The [`event-sourcing-bootstrap.test.ts`](test/integration/event-sourcing-bootstrap.test.ts) test is a good reference
-for initializing an in-memory bootstrap and a production bootstrap, both which pass the same test case, which begins
-with scheduling a flight:
+for initializing an [in-memory bootstrap](test/integration/bootstrap/bootstrapInMemory.ts) and a
+[production bootstrap](test/integration/bootstrap/bootstrapProduction.ts), both which pass the same test case,
+which begins with scheduling a flight:
 
 ```typescript
 it("allows us to schedule a flight", async () => {
