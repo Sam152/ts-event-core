@@ -11,11 +11,11 @@ type LifetimeEarningsReportProjection = {
 
 /**
  * With our domain producing events, we can extract valuable insights from them. Projections (or read models) are
- * data structures built from our event store which can answer questions we have of our data or satisfy certain access
+ * data structures built from our event store that can answer questions about our data or satisfy certain access
  * patterns.
  *
  * In this case, we've been tasked with producing a lifetime earnings report, summing the purchase price of all tickets
- * ever sold. Like our decision model, this is also structured as a reducer, but there is no hard requirement where this
+ * ever sold. Like our decision model, this is also structured as a reducer, but there is no hard requirement for where this
  * data is stored or how the data structure is built.
  */
 export const lifetimeEarningsReport: LifetimeEarningsReportProjection = {

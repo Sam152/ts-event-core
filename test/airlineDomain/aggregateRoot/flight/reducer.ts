@@ -2,7 +2,7 @@ import { FlightEvent, FlightState } from "./aggregateRoot.ts";
 import { assertFlightScheduled } from "./util/assertFlightScheduled.ts";
 
 /**
- * The main component of state is a reducer is responsible for creating a useful decision model out of the events raised
+ * The main component of state, a reducer, is responsible for creating a useful decision model out of the events raised
  * by the aggregate root.
  *
  * In this case we're keeping track of the total number of seats we're allowed to sell as tickets are purchased, so that

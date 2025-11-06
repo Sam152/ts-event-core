@@ -49,7 +49,7 @@ export function README(): string {
     * Passengers can purchase tickets to those flights and set notification preferences on their account.
     * When flights are delayed, all ticket holders are sent either an SMS or email, depending on their preferences.
 
-    We will start by defining our domain, then explore how its consumed by components of the framework.
+    We will start by defining our domain, then explore how it's consumed by components of the framework.
 
     ### Aggregate roots
     
