@@ -33,7 +33,7 @@ export function README(): string {
     ts-event-core
     ====
     
-    This project is an implementation of Event Sourcing, written in TypeScript using functional programming. It contains a set of loosely coupled components which can be interchanged and composed together.
+    This project is an implementation of Event Sourcing, written in TypeScript and functional programming conventions. It contains a set of loosely coupled components which can be interchanged and composed together.
 
     ----
     
