@@ -9,7 +9,8 @@ I follow a "functional light" approach:
 - **No data mutation** - work with immutable data structures
 - **Pure functions** wherever possible
 - **Composition** as the primary mechanism for code reuse
-- Avoid heavy FP abstractions (no need for complex monads or pipe/compose patterns) unless there is a clear advantage to using them
+- Avoid heavy FP abstractions (no need for complex monads or pipe/compose patterns) unless there is a clear
+  advantage to using them
 - Use array methods (`map`, `filter`, `reduce`) over imperative loops
 
 ### Examples of Functional Patterns
@@ -25,7 +26,7 @@ const applyDiscount = (order: Order, discountPercent: number): Order => {
     })),
     totalPrice: order.items.reduce(
       (sum, item) => sum + item.price * (1 - discountPercent / 100),
-      0
+      0,
     ),
   };
 };
@@ -37,7 +38,7 @@ const processOrder = (order: Order): ProcessedOrder => {
     validateOrder,
     applyPromotions,
     calculateTax,
-    assignWarehouse
+    assignWarehouse,
   );
 };
 
@@ -50,13 +51,13 @@ type Result<T, E = Error> =
   | { success: false; error: E };
 
 const chainPaymentOperations = (
-  payment: Payment
+  payment: Payment,
 ): Result<Receipt, PaymentError> => {
   return pipe(
     validatePayment(payment),
     chain(authorizePayment),
     chain(capturePayment),
-    map(generateReceipt)
+    map(generateReceipt),
   );
 };
 ```
@@ -109,13 +110,12 @@ cart.items[0].quantity = 5;
 // ✅ CORRECT - Immutable nested update
 const updatedCart = {
   ...cart,
-  items: cart.items.map((item, i) =>
-    i === 0 ? { ...item, quantity: 5 } : item
-  ),
+  items: cart.items.map((item, i) => i === 0 ? { ...item, quantity: 5 } : item),
 };
 ```
 
 **Why immutability matters:**
+
 - **Predictable**: No hidden side effects - function inputs never change
 - **Debuggable**: State changes are explicit and traceable
 - **Testable**: Pure functions are trivial to test
@@ -137,7 +137,8 @@ const updatedCart = {
 
 ## No Comments in Code
 
-Code should be self-documenting through clear naming and structure. Comments indicate that the code itself is not clear enough.
+Code should be self-documenting through clear naming and structure. Comments indicate that the code itself is
+not clear enough.
 
 ```typescript
 // Avoid: Comments explaining what the code does
@@ -199,19 +200,20 @@ const processPayment = (payment: Payment): ProcessedPayment => {
     throw new PaymentValidationError("Invalid payment");
   }
 
-  const securedPayment = requires3DSecure(payment)
-    ? apply3DSecure(payment)
-    : payment;
+  const securedPayment = requires3DSecure(payment) ? apply3DSecure(payment) : payment;
 
   return executePayment(securedPayment);
 };
 ```
 
-**Exception**: JSDoc comments for public APIs are acceptable when generating documentation, but the code should still be self-explanatory without them.
+**Exception**: JSDoc comments for public APIs are acceptable when generating documentation, but the code
+should still be self-explanatory without them.
 
 ## Prefer Options Objects
 
-Use options objects for function parameters as the default pattern. Only use positional parameters when there's a clear, compelling reason (e.g., single-parameter pure functions, well-established conventions like `map(item => item.value)`).
+Use options objects for function parameters as the default pattern. Only use positional parameters when
+there's a clear, compelling reason (e.g., single-parameter pure functions, well-established conventions like
+`map(item => item.value)`).
 
 ```typescript
 // Avoid: Multiple positional parameters
@@ -222,7 +224,7 @@ const createPayment = (
   customerId: string,
   description?: string,
   metadata?: Record<string, unknown>,
-  idempotencyKey?: string
+  idempotencyKey?: string,
 ): Payment => {
   // implementation
 };
@@ -235,7 +237,7 @@ const payment = createPayment(
   "cust_456",
   undefined,
   { orderId: "order_789" },
-  "key_123"
+  "key_123",
 );
 
 // Good: Options object with clear property names
@@ -278,7 +280,7 @@ const fetchCustomers = (
   includeInactive: boolean,
   includePending: boolean,
   includeDeleted: boolean,
-  sortByDate: boolean
+  sortByDate: boolean,
 ): Customer[] => {
   // implementation
 };
@@ -332,9 +334,7 @@ const processOrder = (options: ProcessOrderOptions): ProcessedOrder => {
   const { order, shipping, payment, promotions = {} } = options;
 
   // Clear access to nested options
-  const orderWithPromotions = promotions.autoApply
-    ? applyAvailablePromotions(order)
-    : order;
+  const orderWithPromotions = promotions.autoApply ? applyAvailablePromotions(order) : order;
 
   return executeOrder({
     ...orderWithPromotions,

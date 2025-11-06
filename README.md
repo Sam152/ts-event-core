@@ -40,7 +40,7 @@ Our example domain comes from the airline industry. We've been tasked with figur
 * Passengers can purchase tickets to those flights and set notification preferences on their account.
 * When flights are delayed, all ticket holders are sent either an SMS or email, depending on their preferences.
 
-We will start by defining our domain, then explore how its consumed by components of the framework.
+We will start by defining our domain, then explore how it's consumed by components of the framework.
 
 ### Aggregate roots
 
@@ -74,7 +74,7 @@ export const flightAggregateRoot = {
 
 ### State
 
-The main component of state is a reducer is responsible for creating a useful decision model out of the events raised
+The main component of state, a reducer, is responsible for creating a useful decision model out of the events raised
 by the aggregate root.
 
 In this case we're keeping track of the total number of seats we're allowed to sell as tickets are purchased, so that
@@ -151,11 +151,11 @@ be up-to-date and the outcome of a command will never be committed if it conflic
 for the same aggregate.
 
 The same does not apply between aggregates. If a flight is delayed the moment a ticket is purchased, the passenger may
-or may not be notified of the delay. Passengers are notified of delays at some point in the future, after a delays has been
+or may not be notified of the delay. Passengers are notified of delays at some point in the future, after a delay has been
 recorded. These tradeoffs are completely acceptable in our airline domain.
 
 Features which require strong consistency (such as not overbooking a flight) must be validated within a single aggregate
-root. If consistency issues are a headache in a given domain, it may be a sign that aggregates roots need to be less granular.
+root. If consistency issues are a headache in a given domain, it may be a sign that aggregate roots need to be less granular.
 The granularity of aggregates generally trade-off parallelism and throughput with consistency. In this case, passengers
 updating their notification preferences can happen in parallel to flight scheduling and ticket purchasing. [:link:](test/airlineDomain/processManager/flightDelayProcessManager.ts#L4-L41)
 
@@ -186,11 +186,11 @@ export async function flightDelayProcessManager(
 ### Projections
 
 With our domain producing events, we can extract valuable insights from them. Projections (or read models) are
-data structures built from our event store which can answer questions we have of our data or satisfy certain access
+data structures built from our event store that can answer questions about our data or satisfy certain access
 patterns.
 
 In this case, we've been tasked with producing a lifetime earnings report, summing the purchase price of all tickets
-ever sold. Like our decision model, this is also structured as a reducer, but there is no hard requirement where this
+ever sold. Like our decision model, this is also structured as a reducer, but there is no hard requirement for where this
 data is stored or how the data structure is built. [:link:](test/airlineDomain/projection/lifetimeEarningsReport.ts#L12-L29)
 
 ```typescript
@@ -257,7 +257,7 @@ persisting the outcome.
 #### Implementations
 
 * [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L9-L50)
-* [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L8-L25)
+* [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L5-L23)
 
 ### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L26)
 

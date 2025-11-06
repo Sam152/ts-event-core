@@ -6,9 +6,10 @@ import {
 import { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
 
 /**
- * An immediate command issuer processes commands right away. This is in contrast to other kinds
- * of command issuers which may acknowledge commands to be processed later or provide additional
- * features.
+ * Commands do not need to be processed right away. A queued command handler may be useful
+ * to implement features that depend on persistent command storage. Features like durable
+ * processing in the event of system failure, distributed processing, idempotency, scheduling
+ * and pessimistic locking can be implemented in a queued issuer.
  */
 export function createQueuedCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
