@@ -3,6 +3,11 @@
   "version": "0.1.0",
   "license": "MIT",
   "exports": "./src/index.ts",
+  "publish": {
+    "include": [
+      "./src"
+    ]
+  },
   "tasks": {
     "init:git-hooks": "git config core.hooksPath .hooks",
     "on-save": "deno --allow-run .hooks/on-save.ts",
