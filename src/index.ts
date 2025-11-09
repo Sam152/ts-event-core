@@ -1,4 +1,9 @@
 /**
+ * This module contains the ts-event-core framework.
+ * @module
+ */
+
+/**
  * Exported types.
  */
 export type { AggregateRootDefinition } from "./aggregate/AggregateRootDefinition.ts";
