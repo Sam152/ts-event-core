@@ -8,31 +8,32 @@ type EventSubscriber<TEvent extends Event> = (event: TEvent) => Promise<void> | 
  * would benefit from persistent storage.
  */
 export function createInMemoryEventStore<TEvent extends Event>(): EventStore<TEvent> {
-  const storageByAggregate: Record<string, PersistedEvent<TEvent>[]> = {};
-  const storageByInsertOrder: PersistedEvent<TEvent>[] = [];
+  const storage: PersistedEvent<TEvent>[] = [];
+  const aggregateTypeAndIdIndex: Record<string, PersistedEvent<TEvent>[]> = {};
 
   let idSequence = 0;
 
   return {
     persist: async (events) => {
-      events.forEach((event) => {
+      const sequenced = events.map((event) => ({
+        ...event,
+        id: ++idSequence,
+      }));
+
+      const hasVersionConflict = sequenced.some((event) =>
+        (aggregateTypeAndIdIndex[streamKey(event.aggregateRootType, event.aggregateRootId)] ?? []).some((
+          existing,
+        ) => existing.aggregateVersion === event.aggregateVersion)
+      );
+      if (hasVersionConflict) {
+        throw new AggregateRootVersionIntegrityError();
+      }
+
+      sequenced.forEach((event) => {
         const key = streamKey(event.aggregateRootType, event.aggregateRootId);
-        storageByAggregate[key] = storageByAggregate[key] ?? [];
-
-        if (
-          storageByAggregate[key].some((existing) => existing.aggregateVersion === event.aggregateVersion)
-        ) {
-          throw new AggregateRootVersionIntegrityError();
-        }
-
-        const id = ++idSequence;
-        const persistedEvent = {
-          id,
-          ...event,
-        };
-
-        storageByAggregate[key].push(persistedEvent);
-        storageByInsertOrder.push(persistedEvent);
+        aggregateTypeAndIdIndex[key] = aggregateTypeAndIdIndex[key] ?? [];
+        aggregateTypeAndIdIndex[key].push(event);
+        storage.push(event);
       });
     },
     retrieve: async function* ({
@@ -41,7 +42,7 @@ export function createInMemoryEventStore<TEvent extends Event>(): EventStore<TEv
       fromVersion,
     }) {
       const key = streamKey(aggregateRootType, aggregateRootId);
-      const events = storageByAggregate[key] || [];
+      const events = aggregateTypeAndIdIndex[key] || [];
       yield* (
         fromVersion !== undefined ? events.filter((event) => event.aggregateVersion > fromVersion) : events
       );
@@ -50,7 +51,7 @@ export function createInMemoryEventStore<TEvent extends Event>(): EventStore<TEv
       idGt,
       limit,
     }) {
-      yield* storageByInsertOrder.slice(idGt, idGt + limit);
+      yield* storage.slice(idGt, idGt + limit);
     },
   };
 }
