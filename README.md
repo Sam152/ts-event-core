@@ -74,11 +74,12 @@ export const flightAggregateRoot = {
 
 ### State
 
-The main component of state, a reducer, is responsible for creating a useful decision model out of the events raised
-by the aggregate root.
+The main component of state, a reducer, is responsible for creating a useful decision model out of the events raised.
+A reducer will only ever process a single stream of events from a specific aggregate root (or a specific flight in our
+case).
 
 In this case we're keeping track of the total number of seats we're allowed to sell as tickets are purchased, so that
-we don't accidentally overbook a flight. [:link:](test/airlineDomain/aggregateRoot/flight/reducer.ts#L4-L33)
+we don't accidentally overbook a flight. [:link:](test/airlineDomain/aggregateRoot/flight/reducer.ts#L4-L34)
 
 ```typescript
 export function flightReducer(state: FlightState, event: FlightEvent): FlightState {
@@ -214,10 +215,13 @@ where applicable, which are more suited to production.
 The framework does not dictate the shape or properties of a bootstrap, but instead provides a library of underlying
 components which should be composed together depending on the use case.
 
-The [`event-sourcing-bootstrap.test.ts`](test/integration/event-sourcing-bootstrap.test.ts) test is a good reference
+The [`event-sourcing-bootstrap.test.ts`](test/integration/event-sourcing-bootstrap.test.ts) test is reference
 for initializing an [in-memory bootstrap](test/integration/bootstrap/bootstrapInMemory.ts) and a
-[production bootstrap](test/integration/bootstrap/bootstrapProduction.ts), both which pass the same test case,
-which begins with scheduling a flight:
+[production bootstrap](test/integration/bootstrap/bootstrapProduction.ts), both which pass the same integration test
+case. The in-memory bootstrap runs ~10x faster allowing for fast integration testing feedback with relatively high
+fidelity to a production bootstrap.
+
+The test case beings begins with scheduling a flight:
 
 ```typescript
 it("allows us to schedule a flight", async () => {
@@ -267,7 +271,7 @@ were recorded as the result of processing a command.
 #### Implementations
 
 * [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56)
-* [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L92)
+* [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L93)
 
 ### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L39)
 
@@ -288,8 +292,8 @@ The `EventStore` retrieves and persists events.
 
 #### Implementations
 
-* [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L9-L65)
-* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L5-L99)
+* [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L6-L57)
+* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L5-L100)
 
 ### [`Projector`](src/projection/Projector.ts#L3-L15)
 
