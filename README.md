@@ -111,7 +111,7 @@ export function flightReducer(state: FlightState, event: FlightEvent): FlightSta
 Commands are pure functions. They receive a state object and command data from the issuer as arguments. They return
 an event (or array of events), which occurred as a result of processing the command.
 
-Since these are pure functions any functional programming techniques can be applied here. A lot of the commands in this
+Since these are pure functions, any functional programming techniques can be applied here. A lot of the commands in this
 domain require that a flight has already been scheduled, so the `withScheduledFlight` HOF takes care of this check
 for us, returning a `TICKET_PURCHASED_FAILED` event on our behalf and narrowing the `FlightState` argument into
 `ScheduledFlightState`. [:link:](test/airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts#L4-L34)
@@ -272,7 +272,7 @@ were recorded as the result of processing a command.
 ### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L39)
 
 Some aggregate roots contain a large number of events. Components like `createSnapshottingAggregateRootRepository` can
-persist a snapshot of aggregate state, to avoid needing to load large streams of events. Snapshots can be stored in
+persist a snapshot of aggregate state to avoid needing to load large streams of events. Snapshots can be stored in
 memory or be persistent.
 
 The `aggregateRootDefinition.state.version` is a mechanism for versioning state, as the underlying reducer evolves.

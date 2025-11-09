@@ -5,7 +5,7 @@ import { ScheduledFlightState, withScheduledFlight } from "../util/withScheduled
  * Commands are pure functions. They receive a state object and command data from the issuer as arguments. They return
  * an event (or array of events), which occurred as a result of processing the command.
  *
- * Since these are pure functions any functional programming techniques can be applied here. A lot of the commands in this
+ * Since these are pure functions, any functional programming techniques can be applied here. A lot of the commands in this
  * domain require that a flight has already been scheduled, so the `withScheduledFlight` HOF takes care of this check
  * for us, returning a `TICKET_PURCHASED_FAILED` event on our behalf and narrowing the `FlightState` argument into
  * `ScheduledFlightState`.
