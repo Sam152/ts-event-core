@@ -9,10 +9,13 @@ import { airlineAggregateRoots, LifetimeEarningsReport } from "@ts-event-core/ai
  * The framework does not dictate the shape or properties of a bootstrap, but instead provides a library of underlying
  * components which should be composed together depending on the use case.
  *
- * The [`event-sourcing-bootstrap.test.ts`](test/integration/event-sourcing-bootstrap.test.ts) test is a good reference
+ * The [`event-sourcing-bootstrap.test.ts`](test/integration/event-sourcing-bootstrap.test.ts) test is reference
  * for initializing an [in-memory bootstrap](test/integration/bootstrap/bootstrapInMemory.ts) and a
- * [production bootstrap](test/integration/bootstrap/bootstrapProduction.ts), both which pass the same test case,
- * which begins with scheduling a flight:
+ * [production bootstrap](test/integration/bootstrap/bootstrapProduction.ts), both which pass the same integration test
+ * case. The in-memory bootstrap runs ~10x faster allowing for fast integration testing feedback with relatively high
+ * fidelity to a production bootstrap.
+ *
+ * The test case beings begins with scheduling a flight:
  *
  * ```typescript
  * it("allows us to schedule a flight", async () => {
