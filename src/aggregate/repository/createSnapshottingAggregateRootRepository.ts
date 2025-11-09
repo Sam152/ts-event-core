@@ -76,8 +76,9 @@ export function createSnapshottingAggregateRootRepository<
       await eventStore.persist(events);
 
       // Persist a snapshot for this aggregate to storage. Depending on the size of
-      // the state, we could choose to do this less often and reduce the delta of
-      // the events.
+      // the state, we could choose to do this less often only persist snapshots for
+      // every N events raised. This does not require a transaction, since the system
+      // will self recover in the event a snapshot cannot be persisted.
       await snapshotStorage.persist({
         stateVersion: definition.state.version,
         aggregateRoot: {

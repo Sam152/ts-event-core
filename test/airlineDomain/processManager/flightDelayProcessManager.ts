@@ -11,7 +11,7 @@ import { airlineAggregateRoots, AirlineDomainEvent } from "../index.ts";
  *
  * The same does not apply between aggregates. If a flight is delayed the moment a ticket is purchased, the passenger may
  * or may not be notified of the delay. Passengers are notified of delays at some point in the future, after a delay has been
- * recorded. These tradeoffs are completely acceptable in our airline domain.
+ * recorded. These tradeoffs are acceptable in our sample domain.
  *
  * Features which require strong consistency (such as not overbooking a flight) must be validated within a single aggregate
  * root. If consistency issues are a headache in a given domain, it may be a sign that aggregate roots need to be less granular.

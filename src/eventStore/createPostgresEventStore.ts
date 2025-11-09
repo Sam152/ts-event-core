@@ -31,6 +31,7 @@ export function createPostgresEventStore<TEvent extends Event>(
         return;
       }
       try {
+        // @todo, linearize these inserts.
         await sql`
           INSERT INTO event_core.events ${
           sql(
