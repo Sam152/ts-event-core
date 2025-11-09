@@ -271,8 +271,8 @@ were recorded as the result of processing a command.
 
 ### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L39)
 
-Some aggregates contain a large number of events. Components like `createSnapshottingAggregateRootRepository` can
-persist a snapshot of aggregate state, to avoid needing to load and reduce many events. Snapshots can be stored in
+Some aggregate roots contain a large number of events. Components like `createSnapshottingAggregateRootRepository` can
+persist a snapshot of aggregate state, to avoid needing to load large streams of events. Snapshots can be stored in
 memory or be persistent.
 
 The `aggregateRootDefinition.state.version` is a mechanism for versioning state, as the underlying reducer evolves.
