@@ -1,7 +1,8 @@
 import { parseArgs } from "@std/cli/parse-args";
 
 /**
- * To use this in IntelliJ, add the following as a watcher: deno task on-save --file=$FileDir$/$FileName$
+ * To use this in IntelliJ, add the following as a watcher:
+ *    deno task on-save --file=$FileDir$/$FileName$
  */
 
 const flags = parseArgs(Deno.args, {
