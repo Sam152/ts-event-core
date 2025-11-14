@@ -7,6 +7,8 @@ ts-event-core
 
 This project is an implementation of Event Sourcing, written in TypeScript using functional programming conventions. It contains a set of loosely coupled components which can be interchanged and composed together.
 
+[![JSR](https://jsr.io/badges/@ts-event-core/framework)](https://jsr.io/@ts-event-core/framework) `npx jsr add @ts-event-core/framework`
+
 ----
 
 1. [Example domain](#example-domain)
@@ -263,15 +265,15 @@ persisting the outcome.
 * [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L9-L50)
 * [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L8-L26)
 
-### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L4-L26)
+### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L7-L29)
 
 An `AggregateRootRepository` is responsible for loading aggregate state and persisting any pending events which
 were recorded as the result of processing a command.
 
 #### Implementations
 
-* [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L5-L56)
-* [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L6-L93)
+* [`createBasicAggregateRootRepository`](src/aggregate/repository/createBasicAggregateRootRepository.ts#L8-L59)
+* [`createSnapshottingAggregateRootRepository`](src/aggregate/repository/createSnapshottingAggregateRootRepository.ts#L9-L96)
 
 ### [`SnapshotStorage`](src/aggregate/SnapshotStorage.ts#L8-L39)
 
@@ -284,7 +286,7 @@ The `aggregateRootDefinition.state.version` is a mechanism for versioning state,
 #### Implementations
 
 * [`createInMemorySnapshotStorage`](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) 
-* [`createPostgresSnapshotStorage`](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L5-L73) 
+* [`createPostgresSnapshotStorage`](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L9-L77) 
 
 ### [`EventStore`](src/eventStore/EventStore.ts#L22-L37)
 
@@ -293,7 +295,7 @@ The `EventStore` retrieves and persists events.
 #### Implementations
 
 * [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L6-L57)
-* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L5-L100)
+* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L6-L101)
 
 ### [`Projector`](src/projection/Projector.ts#L3-L15)
 
