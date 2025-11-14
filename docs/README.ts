@@ -35,7 +35,7 @@ export function README(): string {
     
     This project is an implementation of Event Sourcing, written in TypeScript using functional programming conventions. It contains a set of loosely coupled components which can be interchanged and composed together.
 
-    [![JSR](https://jsr.io/badges/@ts-event-core/framework)](https://jsr.io/@ts-event-core/framework) \`npx jsr add @ts-event-core/framework\`
+    <a href="https://jsr.io/@ts-event-core/framework"><img src="https://jsr.io/badges/@ts-event-core/framework" align="center" /></a> \npx jsr add @ts-event-core/framework\`
 
     ----
     
