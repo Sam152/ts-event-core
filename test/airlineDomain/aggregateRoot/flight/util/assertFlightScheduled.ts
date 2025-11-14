@@ -1,5 +1,5 @@
 import { AssertionError } from "@std/assert";
-import { FlightState } from "../aggregateRoot.ts";
+import type { FlightState } from "../aggregateRoot.ts";
 
 /**
  * A lot of reducer cases may depend on a flight having been scheduled.

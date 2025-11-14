@@ -1,4 +1,4 @@
-import { CursorPosition } from "./CursorPosition.ts";
+import type { CursorPosition } from "./CursorPosition.ts";
 
 /**
  * A memory cursor is useful for testing, or use cases where starting

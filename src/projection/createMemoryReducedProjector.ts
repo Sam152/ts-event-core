@@ -1,5 +1,5 @@
-import { Projector } from "./Projector.ts";
-import { Event } from "../eventStore/EventStore.ts";
+import type { Projector } from "./Projector.ts";
+import type { Event } from "../eventStore/EventStore.ts";
 
 /**
  * Create a projection which uses a reducer and stores the resulting data in

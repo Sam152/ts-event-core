@@ -1,20 +1,20 @@
 import { documentType, linkType } from "./utils/documentType.ts";
-import { EventStore } from "../src/eventStore/EventStore.ts";
+import type { EventStore } from "../src/eventStore/EventStore.ts";
 import { documentFunction, linkFunction } from "./utils/documentCollapsedFunction.ts";
 import { createInMemoryEventStore } from "../src/eventStore/createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "../src/eventStore/createPostgresEventStore.ts";
-import { CommandIssuer } from "../src/command/CommandIssuer.ts";
-import { AggregateRootRepository } from "../src/aggregate/AggregateRootRepository.ts";
+import type { CommandIssuer } from "../src/command/CommandIssuer.ts";
+import type { AggregateRootRepository } from "../src/aggregate/AggregateRootRepository.ts";
 import { createBasicAggregateRootRepository } from "../src/aggregate/repository/createBasicAggregateRootRepository.ts";
 import {
   createSnapshottingAggregateRootRepository,
 } from "../src/aggregate/repository/createSnapshottingAggregateRootRepository.ts";
-import { Projector } from "../src/projection/Projector.ts";
+import type { Projector } from "../src/projection/Projector.ts";
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 import { createPostgresSnapshotStorage } from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
 import { createQueuedCommandIssuer } from "../src/command/createQueuedCommandIssuer.ts";
-import { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
+import type { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
 import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
 import { documentConstWithCode } from "./utils/documentConst.ts";
 import { flightAggregateRoot } from "../test/airlineDomain/aggregateRoot/flight/aggregateRoot.ts";
@@ -23,7 +23,7 @@ import { lifetimeEarningsReport } from "../test/airlineDomain/projection/lifetim
 import { flightDelayProcessManager } from "../test/airlineDomain/processManager/flightDelayProcessManager.ts";
 import { flightReducer } from "../test/airlineDomain/aggregateRoot/flight/reducer.ts";
 import { purchaseTicket } from "../test/airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts";
-import { AirlineDomainBootstrap } from "../test/integration/bootstrap/AirlineDomainBootstrap.ts";
+import type { AirlineDomainBootstrap } from "../test/integration/bootstrap/AirlineDomainBootstrap.ts";
 
 /**
  * Add `README.ts` to soft-wraps configuration before editing.

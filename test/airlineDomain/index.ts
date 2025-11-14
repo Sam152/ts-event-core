@@ -1,6 +1,6 @@
 import { passengerAggregateRoot } from "./aggregateRoot/passenger/aggregateRoot.ts";
 import { flightAggregateRoot } from "./aggregateRoot/flight/aggregateRoot.ts";
-import { EventsRaisedByAggregateRoots } from "@ts-event-core/framework";
+import type { EventsRaisedByAggregateRoots } from "@ts-event-core/framework";
 
 /**
  * A domain starts with a declaration of the aggregate roots. Each aggregate root has an identifier, in this

@@ -1,5 +1,5 @@
-import { CommandIssuer } from "@ts-event-core/framework";
-import { airlineAggregateRoots, LifetimeEarningsReport } from "@ts-event-core/airline-domain";
+import type { CommandIssuer } from "@ts-event-core/framework";
+import type { airlineAggregateRoots, LifetimeEarningsReport } from "@ts-event-core/airline-domain";
 
 /**
  * To bootstrap a domain into a working application, key framework components need to be composed together with the

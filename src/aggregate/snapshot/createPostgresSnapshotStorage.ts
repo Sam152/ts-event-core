@@ -1,6 +1,6 @@
-import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../AggregateRootDefinition.ts";
-import { SnapshotStorage } from "../SnapshotStorage.ts";
-import postgres, { JSONValue } from "postgres";
+import type { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../AggregateRootDefinition.ts";
+import type { SnapshotStorage } from "../SnapshotStorage.ts";
+import type postgres, { JSONValue } from "postgres";
 
 /**
  * A persistent snapshot storage backed by Postgres.

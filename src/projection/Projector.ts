@@ -1,4 +1,4 @@
-import { Event } from "../eventStore/EventStore.ts";
+import type { Event } from "../eventStore/EventStore.ts";
 
 /**
  * Projectors take a stream of events from an event store and transform them into

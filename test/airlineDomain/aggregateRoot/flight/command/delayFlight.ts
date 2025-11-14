@@ -1,5 +1,5 @@
-import { FlightEvent } from "../aggregateRoot.ts";
-import { ScheduledFlightState, withScheduledFlight } from "../util/withScheduledFlight.ts";
+import type { FlightEvent } from "../aggregateRoot.ts";
+import { type ScheduledFlightState, withScheduledFlight } from "../util/withScheduledFlight.ts";
 
 export const delayFlight = withScheduledFlight("DELAY_FLIGHT_FAILED", (
   flight: ScheduledFlightState,

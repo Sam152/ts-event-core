@@ -1,4 +1,4 @@
-import { NotificationType, PassengerEvent, PassengerState } from "../aggregateRoot.ts";
+import type { NotificationType, PassengerEvent, PassengerState } from "../aggregateRoot.ts";
 
 export function notifyOfFlightDelay(
   passenger: PassengerState,

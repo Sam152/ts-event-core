@@ -1,4 +1,4 @@
-import { AirlineDomainEvent } from "../index.ts";
+import type { AirlineDomainEvent } from "../index.ts";
 
 export type Notifier = {
   sendSms: (args: { phoneNumber: string; message: string }) => Promise<void>;

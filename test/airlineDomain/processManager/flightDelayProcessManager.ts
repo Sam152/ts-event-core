@@ -1,5 +1,5 @@
-import { CommandIssuer } from "@ts-event-core/framework";
-import { airlineAggregateRoots, AirlineDomainEvent } from "../index.ts";
+import type { CommandIssuer } from "@ts-event-core/framework";
+import type { airlineAggregateRoots, AirlineDomainEvent } from "../index.ts";
 
 /**
  * A process manager facilitates coordination between aggregates. In this case, when a `FLIGHT_DELAYED` event is raised,

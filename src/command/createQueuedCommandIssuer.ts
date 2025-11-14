@@ -1,9 +1,9 @@
-import { CommandIssuer } from "./CommandIssuer.ts";
-import {
+import type { CommandIssuer } from "./CommandIssuer.ts";
+import type {
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
 } from "../aggregate/AggregateRootDefinition.ts";
-import { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
+import type { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
 
 /**
  * Commands do not need to be processed right away. A queued command handler may be useful

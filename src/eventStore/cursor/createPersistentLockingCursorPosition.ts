@@ -1,5 +1,5 @@
-import { CursorPosition } from "./CursorPosition.ts";
-import postgres from "postgres";
+import type { CursorPosition } from "./CursorPosition.ts";
+import type postgres from "postgres";
 import { createMemoryCursorPosition } from "@ts-event-core/framework";
 
 /**

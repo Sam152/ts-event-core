@@ -1,5 +1,5 @@
-import { FlightEvent } from "../aggregateRoot.ts";
-import { ScheduledFlightState, withScheduledFlight } from "../util/withScheduledFlight.ts";
+import type { FlightEvent } from "../aggregateRoot.ts";
+import { type ScheduledFlightState, withScheduledFlight } from "../util/withScheduledFlight.ts";
 
 /**
  * Commands are pure functions. They receive a state object and command data from the issuer as arguments. They return

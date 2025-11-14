@@ -11,7 +11,7 @@ import postgres from "postgres";
 import { createPostgresSnapshotStorage } from "@ts-event-core/framework";
 import {
   airlineAggregateRoots,
-  AirlineDomainEvent,
+  type AirlineDomainEvent,
   flightDelayProcessManager,
   lifetimeEarningsReport,
   notificationsReactor,
@@ -19,7 +19,7 @@ import {
 } from "@ts-event-core/airline-domain";
 import { createPersistentLockingCursorPosition } from "@ts-event-core/framework";
 import { createFakeMemoryNotifier } from "../../airlineDomain/reactor/createFakeMemoryNotifier.ts";
-import { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
+import type { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
 
 /**
  * Create a production bootstrap of the flight tracking domain.

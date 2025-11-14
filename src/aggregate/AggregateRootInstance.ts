@@ -1,4 +1,4 @@
-import { AggregateRootDefinition } from "./AggregateRootDefinition.ts";
+import type { AggregateRootDefinition } from "./AggregateRootDefinition.ts";
 
 export type AggregateRootInstance<
   TAggregateType,

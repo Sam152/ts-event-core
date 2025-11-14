@@ -1,6 +1,6 @@
 import { createInMemorySnapshotStorage } from "../snapshot/createInMemorySnapshotStorage.ts";
 import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
-import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
+import type { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 import { traceCalls } from "../../../test/integration/utils/traceCalls.ts";
 import { describe, it } from "jsr:@std/testing/bdd";

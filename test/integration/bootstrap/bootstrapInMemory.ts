@@ -7,10 +7,10 @@ import {
   createPollingEventStoreSubscriber,
   createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
-import { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
+import type { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
 import {
   airlineAggregateRoots,
-  AirlineDomainEvent,
+  type AirlineDomainEvent,
   flightDelayProcessManager,
   lifetimeEarningsReport,
   notificationsReactor,

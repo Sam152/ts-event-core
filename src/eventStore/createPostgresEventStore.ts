@@ -1,5 +1,5 @@
-import { Event, EventStore, PersistedEvent } from "./EventStore.ts";
-import postgres, { JSONValue } from "postgres";
+import type { Event, EventStore, PersistedEvent } from "./EventStore.ts";
+import type postgres, { JSONValue } from "postgres";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 
 /**

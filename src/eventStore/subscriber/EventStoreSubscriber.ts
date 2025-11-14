@@ -1,4 +1,4 @@
-import { Event } from "../EventStore.ts";
+import type { Event } from "../EventStore.ts";
 
 export type Subscriber<TEvent extends Event> = (event: TEvent) => Promise<void> | void;
 

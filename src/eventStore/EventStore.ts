@@ -1,4 +1,4 @@
-import {
+import type {
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
 } from "../aggregate/AggregateRootDefinition.ts";

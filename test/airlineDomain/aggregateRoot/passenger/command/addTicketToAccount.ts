@@ -1,4 +1,4 @@
-import { PassengerEvent, PassengerState } from "../aggregateRoot.ts";
+import type { PassengerEvent, PassengerState } from "../aggregateRoot.ts";
 
 export function addTicketToAccount(
   passenger: PassengerState,

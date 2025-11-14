@@ -1,4 +1,4 @@
-import { CallSiteObject } from "node:util";
+import type { CallSiteObject } from "node:util";
 import { dirname, resolve } from "@std/path";
 import { filenameFromImportSymbol } from "./filenameFromImportSymbol.ts";
 

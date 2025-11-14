@@ -8,7 +8,7 @@ import postgres from "postgres";
 import { testPostgresConnectionOptions } from "../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 import { assertRejects } from "@std/assert/rejects";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
-import { AirlineDomainEvent } from "@ts-event-core/airline-domain";
+import type { AirlineDomainEvent } from "@ts-event-core/airline-domain";
 
 const connection = postgres(testPostgresConnectionOptions);
 

@@ -1,9 +1,9 @@
-import {
+import type {
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
   AggregateStateVersion,
 } from "./AggregateRootDefinition.ts";
-import { AggregateRootInstance } from "./AggregateRootInstance.ts";
+import type { AggregateRootInstance } from "./AggregateRootInstance.ts";
 
 /**
  * Some aggregate roots contain a large number of events. Components like `createSnapshottingAggregateRootRepository` can

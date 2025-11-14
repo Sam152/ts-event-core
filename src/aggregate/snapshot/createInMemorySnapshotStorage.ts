@@ -1,11 +1,11 @@
-import {
+import type {
   AggregateRootDefinition,
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
   AggregateStateVersion,
 } from "../AggregateRootDefinition.ts";
-import { SnapshotStorage } from "../SnapshotStorage.ts";
-import { AggregateRootInstance } from "../AggregateRootInstance.ts";
+import type { SnapshotStorage } from "../SnapshotStorage.ts";
+import type { AggregateRootInstance } from "../AggregateRootInstance.ts";
 
 /**
  * An in-memory implementation of snapshot storage.

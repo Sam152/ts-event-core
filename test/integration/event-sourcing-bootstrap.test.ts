@@ -4,8 +4,8 @@ import { bootstrapProduction } from "./bootstrap/bootstrapProduction.ts";
 import { prepareTestDatabaseContainer } from "./utils/prepareTestDatabaseContainer.ts";
 import { describeAll } from "./utils/describeAll.ts";
 import { assertEquals } from "@std/assert";
-import { purchaseTicket } from "../airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts";
-import {
+import type { purchaseTicket } from "../airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts";
+import type {
   setNotificationPreference,
 } from "../airlineDomain/aggregateRoot/passenger/command/setNotificationPreference.ts";
 import { tryThing } from "./utils/tryThing.ts";

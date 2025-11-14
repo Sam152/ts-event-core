@@ -1,7 +1,7 @@
-import { Event, EventsRaisedByAggregateRoots, EventStore } from "../../eventStore/EventStore.ts";
-import { AggregateRootRepository } from "../AggregateRootRepository.ts";
-import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../AggregateRootDefinition.ts";
-import { SnapshotStorage } from "../SnapshotStorage.ts";
+import type { Event, EventsRaisedByAggregateRoots, EventStore } from "../../eventStore/EventStore.ts";
+import type { AggregateRootRepository } from "../AggregateRootRepository.ts";
+import type { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "../AggregateRootDefinition.ts";
+import type { SnapshotStorage } from "../SnapshotStorage.ts";
 
 /**
  * Some aggregates have very large event streams. It can be helpful to take a snapshot of the aggregate to avoid loading

@@ -1,5 +1,5 @@
-import { AggregateRootInstance } from "./AggregateRootInstance.ts";
-import { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "./AggregateRootDefinition.ts";
+import type { AggregateRootInstance } from "./AggregateRootInstance.ts";
+import type { AggregateRootDefinitionMap, AggregateRootDefinitionMapTypes } from "./AggregateRootDefinition.ts";
 
 /**
  * An `AggregateRootRepository` is responsible for loading aggregate state and persisting any pending events which

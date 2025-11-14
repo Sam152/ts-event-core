@@ -1,4 +1,4 @@
-import { PassengerEvent, PassengerState } from "./aggregateRoot.ts";
+import type { PassengerEvent, PassengerState } from "./aggregateRoot.ts";
 
 export function passengerReducer(state: PassengerState, event: PassengerEvent): PassengerState {
   switch (event.type) {

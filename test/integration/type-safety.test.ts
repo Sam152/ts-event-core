@@ -2,7 +2,7 @@ import { createBasicCommandIssuer } from "@ts-event-core/framework";
 import { createInMemoryEventStore } from "@ts-event-core/framework";
 import { createBasicAggregateRootRepository } from "@ts-event-core/framework";
 import { describe, it } from "@std/testing/bdd";
-import { airlineAggregateRoots, AirlineDomainEvent } from "@ts-event-core/airline-domain";
+import { airlineAggregateRoots, type AirlineDomainEvent } from "@ts-event-core/airline-domain";
 
 const issueCommand = createBasicCommandIssuer({
   aggregateRoots: airlineAggregateRoots,

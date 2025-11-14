@@ -1,6 +1,6 @@
-import { CursorPosition } from "../cursor/CursorPosition.ts";
-import { Event, EventStore, PersistedEvent } from "../EventStore.ts";
-import { EventStoreSubscriber, Subscriber } from "./EventStoreSubscriber.ts";
+import type { CursorPosition } from "../cursor/CursorPosition.ts";
+import type { Event, EventStore, PersistedEvent } from "../EventStore.ts";
+import type { EventStoreSubscriber, Subscriber } from "./EventStoreSubscriber.ts";
 
 type Subscribers<TEvent extends Event> = Array<(event: TEvent) => Promise<void> | void>;
 

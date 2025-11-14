@@ -1,4 +1,4 @@
-import { AirlineDomainEvent } from "@ts-event-core/airline-domain";
+import type { AirlineDomainEvent } from "@ts-event-core/airline-domain";
 
 export type LifetimeEarningsReport = {
   lifetimeEarningsCents: number;

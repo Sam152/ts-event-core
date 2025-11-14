@@ -1,4 +1,4 @@
-import { AggregateRootDefinition } from "@ts-event-core/framework";
+import type { AggregateRootDefinition } from "@ts-event-core/framework";
 import { flightReducer } from "./reducer.ts";
 import { purchaseTicket } from "./command/purchaseTicket.ts";
 import { scheduleFlight } from "./command/scheduleFlight.ts";

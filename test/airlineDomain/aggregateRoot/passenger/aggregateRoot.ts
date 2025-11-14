@@ -1,4 +1,4 @@
-import { AggregateRootDefinition } from "@ts-event-core/framework";
+import type { AggregateRootDefinition } from "@ts-event-core/framework";
 import { passengerReducer } from "./reducer.ts";
 import { notifyOfFlightDelay } from "./command/notifyOfFlightDelay.ts";
 import { addTicketToAccount } from "./command/addTicketToAccount.ts";

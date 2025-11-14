@@ -1,6 +1,6 @@
 import { createInMemorySnapshotStorage } from "../snapshot/createInMemorySnapshotStorage.ts";
 import { createInMemoryEventStore } from "../../eventStore/createInMemoryEventStore.ts";
-import { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
+import type { EventsRaisedByAggregateRoots } from "../../eventStore/EventStore.ts";
 import { createSnapshottingAggregateRootRepository } from "./createSnapshottingAggregateRootRepository.ts";
 
 import { it } from "@std/testing/bdd";

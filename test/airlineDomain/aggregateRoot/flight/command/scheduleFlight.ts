@@ -1,4 +1,4 @@
-import { FlightEvent, FlightState } from "../aggregateRoot.ts";
+import type { FlightEvent, FlightState } from "../aggregateRoot.ts";
 
 export function scheduleFlight(
   flight: FlightState,
