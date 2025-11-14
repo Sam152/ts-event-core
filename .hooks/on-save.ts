@@ -16,6 +16,7 @@ console.log(`Running on ${flags.file}`);
 
 await run(new Deno.Command("deno", { args: ["lint", `--fix`, flags.file] }));
 await run(new Deno.Command("deno", { args: ["fmt", flags.file ?? ""] }));
+await run(new Deno.Command("deno", { args: ["task", "readme"] }));
 
 async function run(command: Deno.Command) {
   const { stdout } = await command.output();
