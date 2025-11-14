@@ -41,7 +41,7 @@ export type AggregateReducer<TState, TEvent> = (state: TState, event: TEvent) =>
  * An alternative is to define AggregateRootDefinitionMap as
  * Record<string, AggregateRootDefinition<any, any>>, which seems to maintain fine
  * type safety for callers, but this means internally the library has to contend
- * with `any`.
+ * with `any`, and disabled type checking.
  *
  * @see https://stackoverflow.com/questions/65343641
  */

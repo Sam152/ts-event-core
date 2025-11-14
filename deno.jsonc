@@ -43,7 +43,8 @@
       "exclude": [
         // Do not automatically remove unused vars.
         "unused-fixer/no-unused-vars",
-        "require-await"
+        "require-await",
+        "no-explicit-any"
       ]
     }
   }
