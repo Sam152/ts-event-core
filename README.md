@@ -2,12 +2,12 @@
 
 <!-- This file was automatically generated from ./docs/README.ts -->
 
+[![JSR](https://jsr.io/badges/@ts-event-core/framework)](https://jsr.io/@ts-event-core/framework)
+
 ts-event-core
 ====
 
 This project is an implementation of Event Sourcing, written in TypeScript using functional programming conventions. It contains a set of loosely coupled components which can be interchanged and composed together.
-
-[![JSR](https://jsr.io/badges/@ts-event-core/framework)](https://jsr.io/@ts-event-core/framework)
 
 ----
 
