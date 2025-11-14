@@ -257,8 +257,8 @@ it("ensures notifications are sent to affected passengers through the correct ch
 
 ### [`CommandIssuer`](src/command/CommandIssuer.ts#L6-L21)
 
-A CommandIssuer is responsible for receiving commands, preparing the required state, executing commands and then
-persisting the outcome.
+A CommandIssuer is responsible for receiving a command, loading the associated aggregate, executing the command and
+then persisting the outcome.
 
 #### Implementations
 
@@ -267,7 +267,7 @@ persisting the outcome.
 
 ### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L7-L29)
 
-An `AggregateRootRepository` is responsible for loading aggregate state and persisting any pending events which
+An `AggregateRootRepository` is responsible for loading an aggregate and persisting any pending events which
 were recorded as the result of processing a command.
 
 #### Implementations
@@ -301,14 +301,14 @@ The `EventStore` retrieves and persists events.
 
 Projectors take a stream of events from an event store and transform them into
 useful data structures. These are often called read models. Read models are
-considered eventually consistent and can be created or deleted as required.
+considered eventually consistent.
 
 These data structures can be stored in memory, relational databases, speciality
 databases or any other system.
 
-For these reasons, the signature of a projection is extremely simple, the only
+For these reasons, the signature of a projector is extremely simple, the only
 contract that needs to be fulfilled is providing a stream of events. How data is
-reduced, retrieved or accessed beyond, is dependent on the use case.
+reduced, retrieved or accessed is dependent on the use case.
 
 #### Implementations
 

@@ -4,8 +4,8 @@ import type {
 } from "../aggregate/AggregateRootDefinition.ts";
 
 /**
- * A CommandIssuer is responsible for receiving commands, preparing the required state, executing commands and then
- * persisting the outcome.
+ * A CommandIssuer is responsible for receiving a command, loading the associated aggregate, executing the command and
+ * then persisting the outcome.
  */
 export type CommandIssuer<
   TAggregateRootDefinitionMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
