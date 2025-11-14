@@ -11,7 +11,7 @@ export function documentType<TType>(): string {
     callSites: getCallSites(),
     depth: 0,
   });
-  const { docString, symbolBody, lineRef } = extractSymbolAndDocString({
+  const { docString } = extractSymbolAndDocString({
     filePath,
     symbolName: typeName,
     symbolType: "type",

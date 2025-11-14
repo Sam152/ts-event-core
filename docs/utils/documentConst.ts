@@ -7,32 +7,7 @@ import { formatDocString } from "./formatDocString.ts";
 import { formatCode } from "./formatCode.ts";
 import { padAfterFirstLine } from "./padAfterFirstLine.ts";
 
-export function documentConst(constToDocument: unknown): string {
-  const constName = getConstNameFromCallSite();
-  const callSite = getCallSites()[1];
-
-  const filePath = resolve(
-    dirname(callSite.scriptName),
-    filenameFromImportSymbol({
-      fileContents: Deno.readTextFileSync(callSite.scriptName),
-      symbolName: constName,
-    }),
-  );
-
-  const { docString } = extractSymbolAndDocString({
-    filePath,
-    symbolName: constName,
-    symbolType: "const",
-  });
-
-  if (!docString) {
-    throw new Error(`Could not extract doc string for const ${constName} in ${filePath}`);
-  }
-
-  return padAfterFirstLine({ count: 4, char: " " })(formatDocString(docString));
-}
-
-export function documentConstWithCode(constToDocument: unknown): string {
+export function documentConstWithCode(_constToDocument: unknown): string {
   const constName = getConstNameFromCallSite();
   const callSite = getCallSites()[1];
 
