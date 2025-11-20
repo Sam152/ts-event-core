@@ -14,16 +14,16 @@ import type postgres from "postgres";
  *   );
  * ```
  */
-export async function createPersistentLockingCursorPosition(
+export function createPersistentLockingCursorPosition(
   { connection: sql, id }: {
     connection: ReturnType<typeof postgres>;
     id: string;
   },
-): Promise<CursorPosition> {
-  await sql`INSERT INTO event_core.cursor (id, position) VALUES (${id}, 0) ON CONFLICT (id) DO NOTHING`;
-
+): CursorPosition {
   return {
     acquire: async () => {
+      await sql`INSERT INTO event_core.cursor (id, position) VALUES (${id}, 0) ON CONFLICT (id) DO NOTHING`;
+
       const lock = await sql.reserve();
       await lock`BEGIN`;
       await lock`SELECT pg_advisory_xact_lock(100)`;
