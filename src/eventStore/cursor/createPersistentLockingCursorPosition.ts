@@ -24,6 +24,10 @@ export async function createPersistentLockingCursorPosition(
 
   return {
     acquire: async () => {
+      const lock = await sql.reserve();
+      await lock`BEGIN`;
+      await lock`SELECT pg_advisory_xact_lock(100)`;
+
       const [row] = await sql`
         SELECT position
         FROM event_core.cursor
@@ -37,6 +41,9 @@ export async function createPersistentLockingCursorPosition(
             SET position = ${newPosition.toString()}
             WHERE id = ${id}
           `;
+
+          await lock`COMMIT`;
+          lock.release();
         },
       };
     },

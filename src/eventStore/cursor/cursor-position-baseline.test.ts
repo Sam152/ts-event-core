@@ -44,15 +44,15 @@ describeAll(
       const callTwo = cursor.acquire();
       const callThree = cursor.acquire();
 
-      const { position: positionOne, update: updateOne } = await callOne;
+      const { position: positionOne, update: updateOne } = await Promise.race([callOne, callTwo, callThree]);
       assertEquals(positionOne, 0n);
       await updateOne(100n);
 
-      const { position: positionTwo, update: updateTwo } = await callTwo;
+      const { position: positionTwo, update: updateTwo } = await Promise.race([callTwo, callThree]);
       assertEquals(positionTwo, 100n);
       await updateTwo(200n);
 
-      const { position: positionThree } = await callThree;
+      const { position: positionThree } = await Promise.race([callTwo, callThree]);
       assertEquals(positionThree, 200n);
     });
   },
