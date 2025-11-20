@@ -11,7 +11,7 @@ export function createInMemoryEventStore<TEvent extends Event>(): EventStore<TEv
   const storage: PersistedEvent<TEvent>[] = [];
   const aggregateTypeAndIdIndex: Record<string, PersistedEvent<TEvent>[]> = {};
 
-  let idSequence = 0;
+  let idSequence = 0n;
 
   return {
     persist: async (events) => {
@@ -51,7 +51,7 @@ export function createInMemoryEventStore<TEvent extends Event>(): EventStore<TEv
       idGt,
       limit,
     }) {
-      yield* storage.slice(idGt, idGt + limit);
+      yield* storage.slice(Number(idGt), Number(idGt) + limit);
     },
   };
 }

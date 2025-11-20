@@ -16,7 +16,7 @@ export type Event<TEventPayload = unknown> = {
 };
 
 export type PersistedEvent<TEvent = Event> = TEvent & {
-  id: number;
+  id: bigint;
 };
 
 /**
@@ -31,7 +31,7 @@ export type EventStore<TEvent extends Event = Event> = {
   }) => AsyncGenerator<PersistedEvent<TEvent>>;
 
   retrieveAll: (args: {
-    idGt: number;
+    idGt: bigint;
     limit: number;
   }) => AsyncGenerator<PersistedEvent<TEvent>>;
 };

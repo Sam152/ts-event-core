@@ -4,13 +4,12 @@ import { describeAll } from "../../test/integration/utils/describeAll.ts";
 import { createInMemoryEventStore } from "./createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "./createPostgresEventStore.ts";
 import { prepareTestDatabaseContainer } from "../../test/integration/utils/prepareTestDatabaseContainer.ts";
-import postgres from "postgres";
-import { testPostgresConnectionOptions } from "../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 import { assertRejects } from "@std/assert/rejects";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 import type { AirlineDomainEvent } from "@ts-event-core/airline-domain";
+import { createTestConnection } from "../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 
-const connection = postgres(testPostgresConnectionOptions);
+const connection = createTestConnection();
 
 const implementations = [
   {
@@ -85,7 +84,7 @@ describeAll(
       await eventStore.persist(testEventStream);
       assertEquals(
         (await Array.fromAsync(eventStore.retrieveAll({
-          idGt: 1,
+          idGt: 1n,
           limit: 2,
         }))).map((e) => e.payload.type),
         [
@@ -99,7 +98,7 @@ describeAll(
       await eventStore.persist(testEventStream);
       assertEquals(
         (await Array.fromAsync(eventStore.retrieveAll({
-          idGt: 4,
+          idGt: 4n,
           limit: 1000,
         }))).map((e) => e.payload.type),
         [],

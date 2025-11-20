@@ -26,7 +26,7 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
       return;
     }
 
-    const position = await cursor.acquire();
+    const { position, update } = await cursor.acquire();
     const events = eventStore.retrieveAll({
       idGt: position,
       limit: 1000,
@@ -37,7 +37,7 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
     });
 
     if (result.outcome === "PROCESSED_BATCH") {
-      await cursor.update(result.newPosition);
+      await update(result.newPosition);
       // Immediately poll for the next batch in cases where we processed a batch, such that
       // if we are processing a long stream of events, we aren't held up by the interval.
       lastTimer = setTimeout(() => {
@@ -46,7 +46,7 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
     }
 
     if (result.outcome === "NO_EVENTS_PROCESSED") {
-      await cursor.update(position);
+      await update(position);
       lastTimer = setTimeout(() => {
         lastInvocation = processBatch();
       }, pollIntervalMs);
@@ -70,9 +70,9 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
 
 type CallSubscribersSerialOutcome =
   | { outcome: "NO_EVENTS_PROCESSED" }
-  | { outcome: "PROCESSED_BATCH"; newPosition: number }
-  | { outcome: "CRASHED_WITH_POSITION"; newPosition: number }
-  | { outcome: "CRASHED_NO_EVENTS_PROCESSED"; newPosition: number };
+  | { outcome: "PROCESSED_BATCH"; newPosition: bigint }
+  | { outcome: "CRASHED_WITH_POSITION"; newPosition: bigint }
+  | { outcome: "CRASHED_NO_EVENTS_PROCESSED"; newPosition: bigint };
 
 async function callSubscribersSerial<TEvent extends Event = Event>(
   { events, subscribers }: {
@@ -80,7 +80,7 @@ async function callSubscribersSerial<TEvent extends Event = Event>(
     subscribers: Subscribers<TEvent>;
   },
 ): Promise<CallSubscribersSerialOutcome> {
-  let newPosition = -1;
+  let newPosition = -1n;
   for await (const event of events) {
     await subscribers.reduce(async (acc, subscriber) => {
       await acc;
@@ -88,7 +88,7 @@ async function callSubscribersSerial<TEvent extends Event = Event>(
       newPosition = event.id;
     }, Promise.resolve());
   }
-  return newPosition === -1
+  return newPosition === -1n
     ? { outcome: "NO_EVENTS_PROCESSED" }
     : { outcome: "PROCESSED_BATCH", newPosition };
 }
