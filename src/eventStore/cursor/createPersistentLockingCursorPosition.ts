@@ -1,9 +1,8 @@
 import type { CursorPosition } from "./CursorPosition.ts";
 import type postgres from "postgres";
-import { wait } from "../../../test/integration/utils/wait.ts";
 
 /**
- * A persistent cursor position backed by Postgres with row-level locking.
+ * A persistent cursor position backed by Postgres with advisory locking.
  *
  * This implementation depends on the following schema:
  *
@@ -15,50 +14,31 @@ import { wait } from "../../../test/integration/utils/wait.ts";
  *   );
  * ```
  */
-export function createPersistentLockingCursorPosition(
-  { connection: sql, id, sleepDurationMs = 25 }: {
+export async function createPersistentLockingCursorPosition(
+  { connection: sql, id }: {
     connection: ReturnType<typeof postgres>;
     id: string;
-    sleepDurationMs?: number;
   },
-): CursorPosition {
-  async function acquire(): ReturnType<CursorPosition["acquire"]> {
-    const attempt: Awaited<ReturnType<CursorPosition["acquire"]>> | "LOCKED" = await sql.begin(
-      async (txn) => {
-        await txn`
-          INSERT INTO event_core.cursor (id, position)
-          VALUES (${id}, 0)
-          ON CONFLICT (id) DO NOTHING
-        `;
-        const [row] = await txn`
-          SELECT position
-          FROM event_core.cursor
-          WHERE id = ${id}
-          FOR UPDATE SKIP LOCKED
-        `;
-
-        if (!row) {
-          return "LOCKED";
-        }
-
-        return {
-          position: BigInt(row.position),
-          update: async (newPosition: bigint) => {
-            await txn`UPDATE event_core.cursor SET position = ${newPosition.toString()} WHERE id = ${id}`;
-          },
-        };
-      },
-    );
-
-    if (attempt === "LOCKED") {
-      await wait(sleepDurationMs);
-      return await acquire();
-    }
-
-    return attempt;
-  }
+): Promise<CursorPosition> {
+  await sql`INSERT INTO event_core.cursor (id, position) VALUES (${id}, 0) ON CONFLICT (id) DO NOTHING`;
 
   return {
-    acquire,
+    acquire: async () => {
+      const [row] = await sql`
+        SELECT position
+        FROM event_core.cursor
+        WHERE id = ${id}
+      `;
+      return {
+        position: BigInt(row.position),
+        update: async (newPosition: bigint) => {
+          await sql`
+            UPDATE event_core.cursor
+            SET position = ${newPosition.toString()}
+            WHERE id = ${id}
+          `;
+        },
+      };
+    },
   };
 }
