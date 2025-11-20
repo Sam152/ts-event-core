@@ -4,13 +4,12 @@ import { describeAll } from "../../test/integration/utils/describeAll.ts";
 import { createInMemoryEventStore } from "./createInMemoryEventStore.ts";
 import { createPostgresEventStore } from "./createPostgresEventStore.ts";
 import { prepareTestDatabaseContainer } from "../../test/integration/utils/prepareTestDatabaseContainer.ts";
-import postgres from "postgres";
-import { testPostgresConnectionOptions } from "../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 import { assertRejects } from "@std/assert/rejects";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
 import type { AirlineDomainEvent } from "@ts-event-core/airline-domain";
+import { createTestConnection } from "../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 
-const connection = postgres(testPostgresConnectionOptions);
+const connection = createTestConnection();
 
 const implementations = [
   {

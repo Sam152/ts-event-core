@@ -1,15 +1,23 @@
 import type { CursorPosition } from "./CursorPosition.ts";
 
 /**
- * A memory cursor is useful for testing, or use cases where starting
- * a container some processing of the entire event store.
+ * A memory cursor, where a lock is acquired once per cursor instance, per thread.
  */
 export function createMemoryCursorPosition(): CursorPosition {
-  let positionStorage = 0;
+  let position = 0;
+  let lock: Promise<void> = Promise.resolve();
+
   return {
-    acquire: async () => positionStorage,
-    update: async (position) => {
-      positionStorage = position;
+    acquire: async () => {
+      await lock;
+      const { resolve, promise = lock } = Promise.withResolvers<void>();
+      return {
+        position,
+        update: async (newPosition: number) => {
+          position = newPosition;
+          resolve();
+        },
+      };
     },
   };
 }

@@ -1,14 +1,17 @@
 /**
- * If we consider a stream of events, a cursor position tracks a single
- * point in the stream. As the stream is processed, the cursor can be advanced
- * to keep track of where in the workload we are up to.
+ * A cursor position tracks a point in a  monotonically increasing sequence. This is useful for
+ * processing workflows that are a function of an event stream. Components like reactors, process
+ * managers and projections can use cursors to track positions within the stream.
  */
 export type CursorPosition = {
   /**
-   * Positions can be considered to be "acquired", in the sense that some implementations
-   * may choose to hold a lock on the position, to prevent multiple containers processing
-   * a workload, which requires exactly-once processing.
+   * A cursor positions are acquired, because acquisition happens in a locking fashion. That is
+   * only a single instance of a cursor position can be acquired at any given moment. For persistent
+   * cursors, this happens globally across all app containers, using the persistence mechanism for locking
+   * and for memory based cursors, these are considered to be locked per app instance.
    */
-  acquire: () => Promise<number>;
-  update: (position: number) => Promise<void>;
+  acquire: () => Promise<{
+    position: number;
+    update: (position: number) => Promise<void>;
+  }>;
 };
