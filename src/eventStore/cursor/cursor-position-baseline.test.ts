@@ -1,5 +1,4 @@
 import { afterAll, beforeEach, it } from "@std/testing/bdd";
-
 import { createMemoryCursorPosition, createPersistentLockingCursorPosition } from "@ts-event-core/framework";
 import { prepareTestDatabaseContainer } from "../../../test/integration/utils/prepareTestDatabaseContainer.ts";
 import { describeAll } from "../../../test/integration/utils/describeAll.ts";
@@ -30,9 +29,9 @@ describeAll(
 
     it("should acquire and update positions", async () => {
       const cursor = factory();
-      const position = cursor.acquire();
+      const { position } = await cursor.acquire();
 
-      assertEquals(position, undefined);
+      assertEquals(position, 0);
     });
   },
 );

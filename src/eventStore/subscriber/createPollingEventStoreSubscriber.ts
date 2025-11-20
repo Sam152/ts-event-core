@@ -26,7 +26,7 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
       return;
     }
 
-    const position = await cursor.acquire();
+    const { position, update } = await cursor.acquire();
     const events = eventStore.retrieveAll({
       idGt: position,
       limit: 1000,
@@ -37,7 +37,7 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
     });
 
     if (result.outcome === "PROCESSED_BATCH") {
-      await cursor.update(result.newPosition);
+      await update(result.newPosition);
       // Immediately poll for the next batch in cases where we processed a batch, such that
       // if we are processing a long stream of events, we aren't held up by the interval.
       lastTimer = setTimeout(() => {
@@ -46,7 +46,7 @@ export function createPollingEventStoreSubscriber<TEvent extends Event = Event>(
     }
 
     if (result.outcome === "NO_EVENTS_PROCESSED") {
-      await cursor.update(position);
+      await update(position);
       lastTimer = setTimeout(() => {
         lastInvocation = processBatch();
       }, pollIntervalMs);

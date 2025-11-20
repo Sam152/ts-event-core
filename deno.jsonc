@@ -13,8 +13,8 @@
     "init:git-hooks": "git config core.hooksPath .hooks",
     "on-save": "deno --allow-run .hooks/on-save.ts",
     "test": "deno test --allow-run --allow-env --allow-net",
-    "test:debug": "deno test --inspect-brk --allow-run --allow-env --allow-net",
-    "test:db-reset": "docker compose -f test/integration/utils/infra/docker-compose.yml down -v",
+    "test:debug": "deno test --inspect --allow-run --allow-env --allow-net",
+    "test:start-db": "docker compose -f test/integration/utils/infra/docker-compose.yml down -v && docker compose -f test/integration/utils/infra/docker-compose.yml up -d",
     "readme": "deno --allow-write --allow-read ./docs/generateReadme.ts",
     "readme:debug": "deno fmt && deno --inspect-brk --allow-write --allow-read ./docs/generateReadme.ts"
   },

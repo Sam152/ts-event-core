@@ -5,9 +5,8 @@ import {
   createPollingEventStoreSubscriber,
   createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
-import { testPostgresConnectionOptions } from "../utils/infra/testPostgresConnectionOptions.ts";
+import { createTestConnection } from "../utils/infra/testPostgresConnectionOptions.ts";
 import { createPostgresEventStore } from "../../../src/eventStore/createPostgresEventStore.ts";
-import postgres from "postgres";
 import { createPostgresSnapshotStorage } from "@ts-event-core/framework";
 import {
   airlineAggregateRoots,
@@ -25,7 +24,7 @@ import type { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
  * Create a production bootstrap of the flight tracking domain.
  */
 export function bootstrapProduction(): AirlineDomainBootstrap {
-  const connection = postgres(testPostgresConnectionOptions);
+  const connection = createTestConnection();
 
   // Create event store and command issuer.
   const eventStore = createPostgresEventStore<AirlineDomainEvent>({ connection });

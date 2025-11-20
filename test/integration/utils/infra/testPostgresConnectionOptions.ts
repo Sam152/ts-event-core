@@ -1,7 +1,7 @@
 import type { Options } from "postgres";
 import postgres from "postgres";
 
-export const testPostgresConnectionOptions: Options<never> = {
+const testPostgresConnectionOptions: Options<never> = {
   host: "127.0.0.1",
   user: "postgres",
   pass: "ts-event-core",
