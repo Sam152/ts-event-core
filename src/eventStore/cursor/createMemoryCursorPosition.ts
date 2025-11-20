@@ -9,8 +9,12 @@ export function createMemoryCursorPosition(): CursorPosition {
 
   return {
     acquire: async () => {
-      await lock;
-      const { resolve, promise = lock } = Promise.withResolvers<void>();
+      const currentLock = lock;
+      const { resolve, promise } = Promise.withResolvers<void>();
+      lock = promise;
+
+      await currentLock;
+
       return {
         position,
         update: async (newPosition: number) => {
