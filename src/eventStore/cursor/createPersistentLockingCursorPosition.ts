@@ -16,7 +16,11 @@ import { wait } from "../../../test/integration/utils/wait.ts";
  * ```
  */
 export function createPersistentLockingCursorPosition(
-  { connection: sql, id }: { connection: ReturnType<typeof postgres>; id: string },
+  { connection: sql, id, sleepDurationMs = 25 }: {
+    connection: ReturnType<typeof postgres>;
+    id: string;
+    sleepDurationMs?: number;
+  },
 ): CursorPosition {
   async function acquire(): ReturnType<CursorPosition["acquire"]> {
     const attempt: Awaited<ReturnType<CursorPosition["acquire"]>> | "LOCKED" = await sql.begin(
@@ -47,7 +51,7 @@ export function createPersistentLockingCursorPosition(
     );
 
     if (attempt === "LOCKED") {
-      await wait(100);
+      await wait(sleepDurationMs);
       return await acquire();
     }
 
