@@ -14,7 +14,7 @@ const implementations = [
     afterAllHook: () => undefined,
   },
   {
-    factory: () => createPersistentLockingCursorPosition({ connection, id: "test_cursor_position" }),
+    factory: (id: string) => createPersistentLockingCursorPosition({ connection, id }),
     beforeEachHook: prepareTestDatabaseContainer,
     afterAllHook: connection.end,
   },
@@ -28,32 +28,32 @@ describeAll(
     afterAll(afterAllHook);
 
     it("should acquire and update a position", async () => {
-      const cursor = factory();
+      const cursor = factory("update");
 
       const { position, update } = await cursor.acquire();
-      assertEquals(position, 0);
+      assertEquals(position, 0n);
 
-      await update(30);
-      assertEquals((await cursor.acquire()).position, 30);
+      await update(30n);
+      assertEquals((await cursor.acquire()).position, 30n);
     });
 
     it("should implement a lock, only resolving one position at a time", async () => {
-      const cursor = factory();
+      const cursor = factory("lock");
 
       const callOne = cursor.acquire();
       const callTwo = cursor.acquire();
       const callThree = cursor.acquire();
 
       const { position: positionOne, update: updateOne } = await callOne;
-      assertEquals(positionOne, 0);
-      await updateOne(100);
+      assertEquals(positionOne, 0n);
+      await updateOne(100n);
 
       const { position: positionTwo, update: updateTwo } = await callTwo;
-      assertEquals(positionTwo, 100);
-      await updateTwo(200);
+      assertEquals(positionTwo, 100n);
+      await updateTwo(200n);
 
       const { position: positionThree } = await callThree;
-      assertEquals(positionThree, 200);
+      assertEquals(positionThree, 200n);
     });
   },
 );

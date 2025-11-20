@@ -24,3 +24,9 @@ CREATE TABLE event_core.snapshots
     state                       JSONB       NOT NULL,
     CONSTRAINT "snapshotAccess" UNIQUE ("aggregateRootType", "aggregateRootId", "stateVersion")
 );
+
+CREATE TABLE event_core.cursor
+(
+    id       TEXT   PRIMARY KEY,
+    position BIGINT NOT NULL DEFAULT 0
+);

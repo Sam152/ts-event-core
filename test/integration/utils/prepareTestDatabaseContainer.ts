@@ -7,5 +7,6 @@ export async function prepareTestDatabaseContainer() {
   // Reset test tables, that might container any data.
   await sql`TRUNCATE TABLE "event_core"."events" RESTART IDENTITY CASCADE`;
   await sql`TRUNCATE TABLE "event_core"."snapshots" RESTART IDENTITY CASCADE`;
+  await sql`TRUNCATE TABLE "event_core"."cursor" RESTART IDENTITY CASCADE`;
   await sql.end();
 }

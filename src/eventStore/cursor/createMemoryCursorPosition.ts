@@ -4,7 +4,7 @@ import type { CursorPosition } from "./CursorPosition.ts";
  * A memory cursor, where a lock is acquired once per cursor instance, per thread.
  */
 export function createMemoryCursorPosition(): CursorPosition {
-  let position = 0;
+  let position = 0n;
   let lock: Promise<void> = Promise.resolve();
 
   return {
@@ -17,7 +17,7 @@ export function createMemoryCursorPosition(): CursorPosition {
 
       return {
         position,
-        update: async (newPosition: number) => {
+        update: async (newPosition: bigint) => {
           position = newPosition;
           resolve();
         },

@@ -11,7 +11,7 @@ export type CursorPosition = {
    * and for memory based cursors, these are considered to be locked per app instance.
    */
   acquire: () => Promise<{
-    position: number;
-    update: (position: number) => Promise<void>;
+    position: bigint;
+    update: (position: bigint) => Promise<void>;
   }>;
 };

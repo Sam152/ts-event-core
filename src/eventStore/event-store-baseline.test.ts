@@ -84,7 +84,7 @@ describeAll(
       await eventStore.persist(testEventStream);
       assertEquals(
         (await Array.fromAsync(eventStore.retrieveAll({
-          idGt: 1,
+          idGt: 1n,
           limit: 2,
         }))).map((e) => e.payload.type),
         [
@@ -98,7 +98,7 @@ describeAll(
       await eventStore.persist(testEventStream);
       assertEquals(
         (await Array.fromAsync(eventStore.retrieveAll({
-          idGt: 4,
+          idGt: 4n,
           limit: 1000,
         }))).map((e) => e.payload.type),
         [],

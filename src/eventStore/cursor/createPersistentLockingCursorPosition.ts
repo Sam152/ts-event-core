@@ -1,17 +1,45 @@
 import type { CursorPosition } from "./CursorPosition.ts";
 import type postgres from "postgres";
-import { createMemoryCursorPosition } from "@ts-event-core/framework";
 
 /**
- * Requirements:
- *  - Have a table with columns: name, position.
- *  - When We get the position, we start a transaction and acquire a row level lock on the position.
- *  - When we update the position, we set the position, then commit the transaction.
- *  - If the row doesn't exist, it is upserted with a default position of 0.
+ * A persistent cursor position backed by Postgres with row-level locking.
+ *
+ * This implementation depends on the following schema:
+ *
+ * ```sql
+ *   CREATE TABLE event_core.cursor
+ *   (
+ *       id       TEXT   PRIMARY KEY,
+ *       position BIGINT NOT NULL DEFAULT 0
+ *   );
+ * ```
  */
 export function createPersistentLockingCursorPosition(
   { connection: sql, id }: { connection: ReturnType<typeof postgres>; id: string },
 ): CursorPosition {
-  // @TODO - Implement the persistent locking cursor.
-  return createMemoryCursorPosition();
+  return {
+    acquire: async () => {
+      return await sql.begin(async (txn) => {
+        await txn`
+          INSERT INTO event_core.cursor (id, position)
+          VALUES (${id}, 0)
+          ON CONFLICT (id) DO NOTHING
+        `;
+
+        const [row] = await txn`
+          SELECT position
+          FROM event_core.cursor
+          WHERE id = ${id}
+          FOR UPDATE
+        `;
+
+        return {
+          position: BigInt(row.position),
+          update: async (newPosition: bigint) => {
+            await txn`UPDATE event_core.cursor SET position = ${newPosition.toString()} WHERE id = ${id}`;
+          },
+        };
+      });
+    },
+  };
 }

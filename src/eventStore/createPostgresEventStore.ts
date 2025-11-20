@@ -89,7 +89,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       const cursor = sql<PersistedEvent<TEvent>[]>`
         SELECT *
         FROM "event_core"."events"
-        WHERE id > ${idGt}
+        WHERE id > ${idGt.toString()}
         ORDER BY id ASC
         LIMIT ${limit}
       `.cursor(1000);
