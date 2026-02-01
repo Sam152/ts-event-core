@@ -73,7 +73,7 @@ export function createQueuedCommandIssuer<
     },
     startQueueWorker: () => {
       const signal: QueueSignal = { status: "WORKING" };
-      const workingPromise = workQueue({ signal, sql });
+      const workingPromise = workQueue({ signal, sql, aggregateRoots, aggregateRootRepository });
       return {
         halt: async () => {
           signal.status = "HALTED";
