@@ -28,7 +28,7 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
 
   // Create an event store and command issuer.
   const eventStore = createPostgresEventStore<AirlineDomainEvent>({ connection });
-  const { issueCommand } = createQueuedCommandIssuer({
+  const { issueCommand, startQueueWorker } = createQueuedCommandIssuer({
     connection,
     aggregateRoots: airlineAggregateRoots,
     aggregateRootRepository: createSnapshottingAggregateRootRepository({
@@ -40,6 +40,8 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
       snapshotStorage: createPostgresSnapshotStorage({ connection }),
     }),
   });
+
+  const worker = startQueueWorker();
 
   // Initialize a projection. In production this could be persistent, but depending
   // on the size of the event stream, it may be acceptable for a replay each time a
@@ -92,6 +94,7 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
       await processManagers.start();
     },
     halt: async () => {
+      await worker.halt();
       await processManagers.halt();
       await notificationOutboxSubscriber.halt();
       await projections.halt();

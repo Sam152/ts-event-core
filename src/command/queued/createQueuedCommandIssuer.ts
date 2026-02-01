@@ -6,15 +6,16 @@ import type {
 import type { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
 import type postgres from "postgres";
 import type { JSONValue } from "npm:postgres@3.4.7";
+import { wait } from "../../../test/integration/utils/wait.ts";
 
 type QueuedCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 > = {
   issueCommand: CommandIssuer<TAggregateMap, TAggregateMapTypes>;
-  startQueueWorker: () => Promise<{
+  startQueueWorker: () => {
     halt: () => Promise<void>;
-  }>;
+  };
 };
 
 /**
@@ -35,7 +36,8 @@ type QueuedCommandIssuer<
  *     "commandName"       TEXT                            NOT NULL,
  *     "commandData"       JSONB                           NOT NULL,
  *     "raisedEvents"      BIGINT[]                       NOT NULL DEFAULT '{}',
- *     status              event_core.command_queue_status NOT NULL DEFAULT 'pending'
+ *     status              event_core.command_queue_status NOT NULL DEFAULT 'pending',
+ *     "issuedAt"          TIMESTAMPTZ                     NOT NULL DEFAULT NOW()
  * );
  * CREATE INDEX idx_command_queue_pending
  *     ON event_core.command_queue (id) WHERE status = 'pending';
@@ -67,14 +69,41 @@ export function createQueuedCommandIssuer<
           INSERT INTO event_core.command_queue ("aggregateRootType", "aggregateRootId", "commandName", "commandData")
           VALUES (${String(aggregateRootType)}, ${aggregateRootId}, ${String(command)}, ${
         sql.json(data as JSONValue)
-      })
-      `;
+      })`;
     },
-    startQueueWorker: async () => {
+    startQueueWorker: () => {
+      const signal: Signal = { status: "WORKING" };
+      const workingPromise = workQueue({ signal, sql });
       return {
         halt: async () => {
+          signal.status = "HALTED";
+          await workingPromise;
         },
       };
     },
   };
+}
+
+// @todo - create a typescript type representing the row from postgres, as it will come out of the database.
+type QueuedCommand = {};
+type Signal = { status: "WORKING" | "HALTED" };
+
+async function workQueue(
+  { signal, sql }: { signal: Signal; sql: ReturnType<typeof postgres> },
+) {
+  while (signal.status === "WORKING") {
+    await runPendingCommandFromQueue({ sql });
+    await wait(5);
+  }
+}
+
+async function runPendingCommandFromQueue({ sql }: {
+  sql: ReturnType<typeof postgres>;
+}) {
+  // Select the oldest non-locked command from the queue to work.
+  const command = await sql`SELECT *
+              FROM event_core.command_queue
+              where status = 'pending'
+              ORDER BY id ASC LIMIT 1 
+              FOR UPDATE SKIP LOCKED`;
 }

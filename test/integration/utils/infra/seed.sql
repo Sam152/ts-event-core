@@ -33,7 +33,6 @@ CREATE TABLE event_core.cursor
 
 CREATE TYPE event_core.command_queue_status AS ENUM ('pending', 'complete');
 
-# @todo add an "issuedAt" column
 CREATE TABLE event_core.command_queue
 (
     id                  BIGSERIAL PRIMARY KEY,
@@ -43,7 +42,8 @@ CREATE TABLE event_core.command_queue
     "commandData"       JSONB                           NOT NULL,
     "raisedEvents"      BIGINT[]                        NOT NULL DEFAULT '{}',
     attempts            INT4                            NOT NULL DEFAULT 0,
-    status              event_core.command_queue_status NOT NULL DEFAULT 'pending'
+    status              event_core.command_queue_status NOT NULL DEFAULT 'pending',
+    "issuedAt"          TIMESTAMPTZ                     NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_command_queue_pending
