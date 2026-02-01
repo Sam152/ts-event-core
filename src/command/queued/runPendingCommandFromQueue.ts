@@ -56,7 +56,7 @@ export async function runPendingCommandFromQueue<
     const raisedEvents = Array.isArray(commandResult) ? commandResult : [commandResult];
 
     // When completing the command fails, the events persisted by this call may still be inserted.
-    // For more durability, the events inserted by this command should be rolled back.
+    // A more durable solution would integrate the inserts done here with the command transaction.
     await aggregateRootRepository.persist({
       aggregateRoot: aggregate,
       pendingEventPayloads: raisedEvents,
