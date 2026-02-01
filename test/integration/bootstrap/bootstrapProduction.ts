@@ -80,7 +80,8 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
     })
   );
 
-  let worker: ReturnType<typeof startQueueWorker>;
+  const queueWorkers: ReturnType<typeof startQueueWorker>[] = [];
+
   return {
     issueCommand,
     notificationLog: notifierFake.log,
@@ -88,13 +89,15 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
       lifetimeEarnings,
     },
     start: async () => {
-      worker = startQueueWorker();
+      queueWorkers.push(startQueueWorker());
+      queueWorkers.push(startQueueWorker());
+
       await projections.start();
       await notificationOutboxSubscriber.start();
       await processManagers.start();
     },
     halt: async () => {
-      await worker?.halt();
+      await Promise.all(queueWorkers.map((worker) => worker.halt()));
       await processManagers.halt();
       await notificationOutboxSubscriber.halt();
       await projections.halt();

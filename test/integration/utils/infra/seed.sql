@@ -33,6 +33,7 @@ CREATE TABLE event_core.cursor
 
 CREATE TYPE event_core.command_queue_status AS ENUM ('pending', 'complete');
 
+-- @todo, add a completedAt timestamp to this table, and create a trigger which sets it, when the status is set to completed.
 CREATE TABLE event_core.command_queue
 (
     id                  BIGSERIAL PRIMARY KEY,
