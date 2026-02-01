@@ -91,6 +91,8 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
     start: async () => {
       queueWorkers.push(startQueueWorker());
       queueWorkers.push(startQueueWorker());
+      queueWorkers.push(startQueueWorker());
+      queueWorkers.push(startQueueWorker());
 
       await projections.start();
       await notificationOutboxSubscriber.start();
