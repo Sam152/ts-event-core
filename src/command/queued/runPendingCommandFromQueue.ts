@@ -34,7 +34,7 @@ export async function runPendingCommandFromQueue<
   const command = (await txn<QueuedCommand[]>`SELECT *
               FROM event_core.command_queue
               where status = 'pending'
-              ORDER BY id ASC LIMIT 1 
+              ORDER BY id ASC LIMIT 1
               FOR UPDATE SKIP LOCKED`)[0];
 
   if (!command) {
