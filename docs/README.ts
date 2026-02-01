@@ -13,7 +13,7 @@ import type { Projector } from "../src/projection/Projector.ts";
 import { createInMemorySnapshotStorage } from "../src/aggregate/snapshot/createInMemorySnapshotStorage.ts";
 import { createPostgresSnapshotStorage } from "../src/aggregate/snapshot/createPostgresSnapshotStorage.ts";
 import { createBasicCommandIssuer } from "../src/command/createBasicCommandIssuer.ts";
-import { createQueuedCommandIssuer } from "../src/command/createQueuedCommandIssuer.ts";
+import { createQueuedCommandIssuer } from "../src/command/queued/createQueuedCommandIssuer.ts";
 import type { SnapshotStorage } from "../src/aggregate/SnapshotStorage.ts";
 import { createMemoryReducedProjector } from "../src/projection/createMemoryReducedProjector.ts";
 import { documentConstWithCode } from "./utils/documentConst.ts";

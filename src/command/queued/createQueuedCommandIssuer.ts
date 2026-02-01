@@ -1,9 +1,11 @@
-import type { CommandIssuer } from "./CommandIssuer.ts";
+import type { CommandIssuer } from "../CommandIssuer.ts";
 import type {
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
-} from "../aggregate/AggregateRootDefinition.ts";
-import type { AggregateRootRepository } from "../aggregate/AggregateRootRepository.ts";
+} from "../../aggregate/AggregateRootDefinition.ts";
+import type { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
+
+type QueueWorker = {};
 
 /**
  * Commands do not need to be processed right away. A queued command handler may be useful
@@ -19,7 +21,7 @@ export function createQueuedCommandIssuer<
     aggregateRoots: TAggregateMap;
     aggregateRootRepository: AggregateRootRepository<TAggregateMap, TAggregateMapTypes>;
   },
-): CommandIssuer<TAggregateMap, TAggregateMapTypes> {
+): { issuer: CommandIssuer<TAggregateMap, TAggregateMapTypes>; queueWorker: QueueWorker } {
   return async ({ aggregateRootType, aggregateRootId, command, data }) => {
     // @todo find a suitable queue implementation.
   };
