@@ -89,6 +89,10 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
       lifetimeEarnings,
     },
     start: async () => {
+      // The queue could be worked multiple times in the same process, if the queue is
+      // IO bound, or worked across many threads if it is CPU bound. Our tests reflect
+      // a single thread, consuming many commands from the queue in parallel. Each worker
+      // could in theory process up to (1000 / POLLING_SLEEP_MS) commands per second.
       queueWorkers.push(startQueueWorker());
       queueWorkers.push(startQueueWorker());
       queueWorkers.push(startQueueWorker());
