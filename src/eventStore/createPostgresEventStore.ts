@@ -32,18 +32,19 @@ export function createPostgresEventStore<TEvent extends Event>(
         return;
       }
       try {
-        for (const event of events) {
-          await sql`
-            INSERT INTO event_core.events ${
-            sql({
+        // @todo, linearize these inserts.
+        await sql`
+          INSERT INTO event_core.events ${
+          sql(
+            events.map((event) => ({
               aggregateRootType: event.aggregateRootType,
               aggregateRootId: event.aggregateRootId,
               aggregateVersion: event.aggregateVersion,
               payload: event.payload as JSONValue,
-            })
-          }
-          `;
+            })),
+          )
         }
+        `;
       } catch (error) {
         const isAggregateIntegrityError = error &&
           typeof error === "object" &&
