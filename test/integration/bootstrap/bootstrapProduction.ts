@@ -41,8 +41,6 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
     }),
   });
 
-  const worker = startQueueWorker();
-
   // Initialize a projection. In production this could be persistent, but depending
   // on the size of the event stream, it may be acceptable for a replay each time a
   // container starts.
@@ -82,6 +80,7 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
     })
   );
 
+  let worker: ReturnType<typeof startQueueWorker>;
   return {
     issueCommand,
     notificationLog: notifierFake.log,
@@ -89,12 +88,13 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
       lifetimeEarnings,
     },
     start: async () => {
+      worker = startQueueWorker();
       await projections.start();
       await notificationOutboxSubscriber.start();
       await processManagers.start();
     },
     halt: async () => {
-      await worker.halt();
+      await worker?.halt();
       await processManagers.halt();
       await notificationOutboxSubscriber.halt();
       await projections.halt();
