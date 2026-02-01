@@ -31,6 +31,12 @@ export async function runPendingCommandFromQueue<
 }) {
   const txn = await sql.reserve();
   await txn`BEGIN`;
+
+  // @todo, modify this query, here is exactly what I would like:
+  //  - In a CTE, select all the pending commands, group them by aggregate ID, ordered by the oldest commands.
+  //  - Loop over each aggregate ID, and select all the pending commands for that aggregate with "FOR UPDATE SKIP LOCKED", until a result set is returned
+  //  - If a result set is returned, select the oldest command.
+  //  - Do this all with postgres in a single query, or with functions.
   const command = (await txn<QueuedCommand[]>`SELECT *
               FROM event_core.command_queue
               where status = 'pending'
