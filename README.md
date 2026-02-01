@@ -263,7 +263,7 @@ then persisting the outcome.
 #### Implementations
 
 * [`createBasicCommandIssuer`](src/command/createBasicCommandIssuer.ts#L9-L50)
-* [`createQueuedCommandIssuer`](src/command/createQueuedCommandIssuer.ts#L8-L26)
+* [`createQueuedCommandIssuer`](src/command/queued/createQueuedCommandIssuer.ts#L21-L85)
 
 ### [`AggregateRootRepository`](src/aggregate/AggregateRootRepository.ts#L7-L29)
 

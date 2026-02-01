@@ -1,5 +1,4 @@
 import {
-  createBasicCommandIssuer,
   createMemoryCursorPosition,
   createMemoryReducedProjector,
   createPollingEventStoreSubscriber,
@@ -19,6 +18,7 @@ import {
 import { createPersistentLockingCursorPosition } from "@ts-event-core/framework";
 import { createFakeMemoryNotifier } from "../../airlineDomain/reactor/createFakeMemoryNotifier.ts";
 import type { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
+import { createQueuedCommandIssuer } from "../../../src/command/queued/createQueuedCommandIssuer.ts";
 
 /**
  * Create a production bootstrap of the flight tracking domain.
@@ -26,9 +26,10 @@ import type { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
 export function bootstrapProduction(): AirlineDomainBootstrap {
   const connection = createTestConnection();
 
-  // Create event store and command issuer.
+  // Create an event store and command issuer.
   const eventStore = createPostgresEventStore<AirlineDomainEvent>({ connection });
-  const issueCommand = createBasicCommandIssuer({
+  const { issueCommand, startQueueWorker } = createQueuedCommandIssuer({
+    connection,
     aggregateRoots: airlineAggregateRoots,
     aggregateRootRepository: createSnapshottingAggregateRootRepository({
       aggregateRoots: airlineAggregateRoots,
@@ -79,6 +80,7 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
     })
   );
 
+  let worker: ReturnType<typeof startQueueWorker>;
   return {
     issueCommand,
     notificationLog: notifierFake.log,
@@ -86,11 +88,13 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
       lifetimeEarnings,
     },
     start: async () => {
+      worker = startQueueWorker();
       await projections.start();
       await notificationOutboxSubscriber.start();
       await processManagers.start();
     },
     halt: async () => {
+      await worker?.halt();
       await processManagers.halt();
       await notificationOutboxSubscriber.halt();
       await projections.halt();

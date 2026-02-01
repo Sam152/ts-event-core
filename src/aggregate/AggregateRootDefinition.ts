@@ -1,5 +1,5 @@
 /**
- * A thing.
+ * The definition of an aggregate root.
  */
 export type AggregateRootDefinition<TAggregateRootState, TEvent> = {
   commands: {

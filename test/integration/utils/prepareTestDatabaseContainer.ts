@@ -8,5 +8,6 @@ export async function prepareTestDatabaseContainer() {
   await sql`TRUNCATE TABLE "event_core"."events" RESTART IDENTITY CASCADE`;
   await sql`TRUNCATE TABLE "event_core"."snapshots" RESTART IDENTITY CASCADE`;
   await sql`TRUNCATE TABLE "event_core"."cursor" RESTART IDENTITY CASCADE`;
+  await sql`TRUNCATE TABLE "event_core"."command_queue" RESTART IDENTITY CASCADE`;
   await sql.end();
 }
