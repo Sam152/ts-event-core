@@ -28,6 +28,7 @@ type QueuedCommandIssuer<
  *
  * ```sql
  * CREATE TYPE event_core.command_queue_status AS ENUM ('pending', 'complete');
+ *
  * CREATE TABLE event_core.command_queue
  * (
  *     id                  BIGSERIAL PRIMARY KEY,
@@ -35,12 +36,30 @@ type QueuedCommandIssuer<
  *     "aggregateRootId"   TEXT                            NOT NULL,
  *     "commandName"       TEXT                            NOT NULL,
  *     "commandData"       JSONB                           NOT NULL,
- *     "raisedEvents"      BIGINT[]                       NOT NULL DEFAULT '{}',
+ *     "raisedEvents"      BIGINT[]                        NOT NULL DEFAULT '{}',
+ *     attempts            INT4                            NOT NULL DEFAULT 0,
  *     status              event_core.command_queue_status NOT NULL DEFAULT 'pending',
- *     "issuedAt"          TIMESTAMPTZ                     NOT NULL DEFAULT NOW()
+ *     "issuedAt"          TIMESTAMPTZ                     NOT NULL DEFAULT clock_timestamp(),
+ *     "completedAt"       TIMESTAMPTZ
  * );
+ *
  * CREATE INDEX idx_command_queue_pending
  *     ON event_core.command_queue (id) WHERE status = 'pending';
+ *
+ * CREATE OR REPLACE FUNCTION event_core.set_completed_at()
+ *     RETURNS TRIGGER AS $$
+ * BEGIN
+ *     IF NEW.status = 'complete' AND OLD.status != 'complete' THEN
+ *         NEW."completedAt" = clock_timestamp();
+ *     END IF;
+ *     RETURN NEW;
+ * END;
+ * $$ LANGUAGE plpgsql;
+ *
+ * CREATE TRIGGER trg_set_completed_at
+ *     BEFORE UPDATE ON event_core.command_queue
+ *     FOR EACH ROW
+ *     EXECUTE FUNCTION event_core.set_completed_at();
  * ```
  */
 export function createQueuedCommandIssuer<
