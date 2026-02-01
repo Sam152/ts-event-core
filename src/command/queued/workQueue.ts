@@ -9,6 +9,8 @@ import type {
 
 export type QueueSignal = { status: "WORKING" | "HALTED" };
 
+const POLLING_SLEEP_MS = 5;
+
 export async function workQueue<
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
@@ -25,6 +27,6 @@ export async function workQueue<
 ) {
   while (signal.status === "WORKING") {
     await runPendingCommandFromQueue({ sql, aggregateRoots, aggregateRootRepository });
-    await wait(5);
+    await wait(POLLING_SLEEP_MS);
   }
 }

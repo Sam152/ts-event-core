@@ -80,7 +80,8 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
     })
   );
 
-  let worker: ReturnType<typeof startQueueWorker>;
+  const queueWorkers: ReturnType<typeof startQueueWorker>[] = [];
+
   return {
     issueCommand,
     notificationLog: notifierFake.log,
@@ -88,13 +89,21 @@ export function bootstrapProduction(): AirlineDomainBootstrap {
       lifetimeEarnings,
     },
     start: async () => {
-      worker = startQueueWorker();
+      // The queue could be worked multiple times in the same process, if the queue is
+      // IO bound, or worked across many threads if it is CPU bound. Our tests reflect
+      // a single thread, consuming many commands from the queue in parallel. Each worker
+      // could in theory process up to (1000 / POLLING_SLEEP_MS) commands per second.
+      queueWorkers.push(startQueueWorker());
+      queueWorkers.push(startQueueWorker());
+      queueWorkers.push(startQueueWorker());
+      queueWorkers.push(startQueueWorker());
+
       await projections.start();
       await notificationOutboxSubscriber.start();
       await processManagers.start();
     },
     halt: async () => {
-      await worker?.halt();
+      await Promise.all(queueWorkers.map((worker) => worker.halt()));
       await processManagers.halt();
       await notificationOutboxSubscriber.halt();
       await projections.halt();
