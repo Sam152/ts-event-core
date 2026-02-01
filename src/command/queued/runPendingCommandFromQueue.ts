@@ -32,7 +32,11 @@ export async function runPendingCommandFromQueue<
   const txn = await sql.reserve();
   await txn`BEGIN`;
 
+  // This query will work a FIFO queue of commands ensuring that no single aggregate
+  // instance is being worked in parallel, with pessimistic locking, such that any
+  // optimistic locking implemented in the event store is not required.
   const command = (await txn<QueuedCommand[]>`
+    ${/* Create a list of all candidate aggregates to work, with their oldest command ID. */ ""}
     WITH aggregates_with_pending_commands AS (
       SELECT "aggregateRootId", MIN(id) AS oldest
       FROM event_core.command_queue
@@ -40,9 +44,11 @@ export async function runPendingCommandFromQueue<
       GROUP BY "aggregateRootId"
       ORDER BY oldest
     ),
+    ${/* From those aggregates, select one which can produce a record from the join. */ ""}
     latest_unlocked_aggregate_command AS (
       SELECT queue.*
       FROM aggregates_with_pending_commands aggregates
+      ${/* Join to the aggregates oldest command, only if it is not locked */ ""}
       CROSS JOIN LATERAL (
         SELECT *
         FROM event_core.command_queue inner_queue
