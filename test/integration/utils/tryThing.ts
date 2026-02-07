@@ -5,11 +5,11 @@ export async function tryThing(thing: () => unknown) {
 
   const timer = setInterval(() => {
     status = "TIMEOUT_EXCEEDED";
-  }, 500);
+  }, 30_000);
 
   while (status !== "SUCCEEDED") {
     try {
-      thing();
+      await thing();
       status = "SUCCEEDED";
     } catch (e) {
       // @ts-expect-error - Is this a bug in typescript narrowing?
