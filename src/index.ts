@@ -6,9 +6,11 @@
 /**
  * Exported types.
  */
+
 export type { AggregateRootDefinition } from "./aggregate/AggregateRootDefinition.ts";
 export type { EventsRaisedByAggregateRoots } from "./eventStore/EventStore.ts";
 export type { CommandIssuer } from "./command/CommandIssuer.ts";
+export type { Event } from "./eventStore/EventStore.ts";
 
 /**
  * Exported functions.
