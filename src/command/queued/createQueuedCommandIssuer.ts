@@ -8,7 +8,7 @@ import type postgres from "postgres";
 import type { JSONValue } from "npm:postgres@3.4.7";
 import { type QueueSignal, workQueue } from "./workQueue.ts";
 
-type QueuedCommandIssuer<
+export type QueuedCommandIssuer<
   TAggregateMap extends AggregateRootDefinitionMap<TAggregateMapTypes>,
   TAggregateMapTypes extends AggregateRootDefinitionMapTypes,
 > = {

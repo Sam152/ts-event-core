@@ -11,6 +11,7 @@ export type { AggregateRootDefinition } from "./aggregate/AggregateRootDefinitio
 export type { EventsRaisedByAggregateRoots } from "./eventStore/EventStore.ts";
 export type { CommandIssuer } from "./command/CommandIssuer.ts";
 export type { Event } from "./eventStore/EventStore.ts";
+export type { QueuedCommandIssuer } from "./command/queued/createQueuedCommandIssuer.ts";
 
 /**
  * Exported functions.
@@ -27,3 +28,4 @@ export { createInMemoryEventStore } from "./eventStore/createInMemoryEventStore.
 export { createMemoryReducedProjector } from "./projection/createMemoryReducedProjector.ts";
 export { createBasicAggregateRootRepository } from "./aggregate/repository/createBasicAggregateRootRepository.ts";
 export { createPersistentLockingCursorPosition } from "./eventStore/cursor/createPersistentLockingCursorPosition.ts";
+export { createQueuedCommandIssuer } from "./command/queued/createQueuedCommandIssuer.ts";
