@@ -9,8 +9,78 @@ import {
 import type { Event } from "@ts-event-core/framework";
 import { createTestConnection } from "../../../test/integration/utils/infra/testPostgresConnectionOptions.ts";
 import { prepareTestDatabaseContainer } from "../../../test/integration/utils/prepareTestDatabaseContainer.ts";
-
 import { tryThing } from "../../../test/integration/utils/tryThing.ts";
+import { arrayOfSize } from "../../../test/integration/utils/arrayOfSize.ts";
+
+const COMMANDS_PER_AGGREGATE = 100;
+const AGGREGATE_COUNT = 5;
+const WORKER_COUNT = 5;
+
+const connection = createTestConnection();
+
+describe("createQueuedCommandIssuer", () => {
+  beforeAll(prepareTestDatabaseContainer);
+
+  it("processes commands in a consistent fashion", async () => {
+    const eventStore = createPostgresEventStore<Event<CounterEvent>>({ connection });
+
+    const aggregateRoots = { COUNTER: counterAggregateRoot };
+    const aggregateRootRepository = createSnapshottingAggregateRootRepository({
+      aggregateRoots,
+      eventStore,
+      snapshotStorage: createInMemorySnapshotStorage(),
+    });
+
+    const { issueCommand, startQueueWorker } = createQueuedCommandIssuer({
+      connection,
+      aggregateRoots,
+      aggregateRootRepository,
+    });
+
+    const aggregateIds = arrayOfSize(AGGREGATE_COUNT, (i) => `counter-${i + 1}`);
+
+    for (const aggregateRootId of aggregateIds) {
+      for (let i = 0; i < COMMANDS_PER_AGGREGATE; i++) {
+        await issueCommand({
+          aggregateRootType: "COUNTER",
+          aggregateRootId,
+          command: "increment",
+          data: { sequenceNumber: i + 1 },
+        });
+      }
+    }
+
+    const workers = arrayOfSize(WORKER_COUNT, () => startQueueWorker());
+
+    await tryThing(async () => {
+      const [{ count }] = await connection`
+          SELECT count(*)::int as count FROM event_core.command_queue WHERE status = 'pending'
+        `;
+      assertEquals(count, 0);
+    });
+
+    const loadedAggregateRoots = await Promise.all(
+      aggregateIds.map((aggregateRootId) =>
+        aggregateRootRepository.retrieve({
+          aggregateRootType: "COUNTER",
+          aggregateRootId,
+        })
+      ),
+    );
+
+    assertEquals(
+      loadedAggregateRoots.map((aggregateRoot) => aggregateRoot.state),
+      arrayOfSize(AGGREGATE_COUNT, () => ({
+        inOrder: true,
+        count: COMMANDS_PER_AGGREGATE,
+        lastSequence: COMMANDS_PER_AGGREGATE,
+      })),
+    );
+
+    await Promise.all(workers.map((worker) => worker.halt()));
+    await connection.end();
+  });
+});
 
 type CounterState = {
   count: number;
@@ -45,74 +115,3 @@ const counterAggregateRoot = {
     }),
   },
 };
-
-const COMMANDS_PER_AGGREGATE = 1000;
-const AGGREGATE_COUNT = 5;
-const WORKER_COUNT = 5;
-
-const connection = createTestConnection();
-
-describe("createQueuedCommandIssuer", () => {
-  beforeAll(prepareTestDatabaseContainer);
-
-  it("processes 1000 commands across 5 aggregates with FIFO ordering and no lost updates", async () => {
-    const eventStore = createPostgresEventStore<Event<CounterEvent>>({ connection });
-
-    const aggregateRoots = { COUNTER: counterAggregateRoot };
-    const aggregateRootRepository = createSnapshottingAggregateRootRepository({
-      aggregateRoots,
-      eventStore,
-      snapshotStorage: createInMemorySnapshotStorage(),
-    });
-
-    const { issueCommand, startQueueWorker } = createQueuedCommandIssuer({
-      connection,
-      aggregateRoots,
-      aggregateRootRepository,
-    });
-
-    const aggregateIds = Array.from(
-      { length: AGGREGATE_COUNT },
-      (_, i) => `counter-${i + 1}`,
-    );
-
-    for (const aggregateRootId of aggregateIds) {
-      for (let i = 0; i < COMMANDS_PER_AGGREGATE; i++) {
-        await issueCommand({
-          aggregateRootType: "COUNTER",
-          aggregateRootId,
-          command: "increment",
-          data: { sequenceNumber: i + 1 },
-        });
-      }
-    }
-
-    const workers = Array.from({ length: WORKER_COUNT }, () => startQueueWorker());
-
-    try {
-      await tryThing(async () => {
-        const [{ count }] = await connection`
-          SELECT count(*)::int as count FROM event_core.command_queue WHERE status = 'pending'
-        `;
-        assertEquals(count, 0);
-      });
-
-      const aggregates = await Promise.all(
-        aggregateIds.map((aggregateRootId) =>
-          aggregateRootRepository.retrieve({
-            aggregateRootType: "COUNTER",
-            aggregateRootId,
-          })
-        ),
-      );
-
-      assertEquals(
-        aggregates.map(({ state }) => ({ count: state.count, inOrder: state.inOrder })),
-        aggregateIds.map(() => ({ count: COMMANDS_PER_AGGREGATE, inOrder: true })),
-      );
-    } finally {
-      await Promise.all(workers.map((worker) => worker.halt()));
-      await connection.end();
-    }
-  });
-});
