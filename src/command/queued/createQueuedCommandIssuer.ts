@@ -37,7 +37,6 @@ export type QueuedCommandIssuer<
  *     "commandName"       TEXT                            NOT NULL,
  *     "commandData"       JSONB                           NOT NULL,
  *     "raisedEvents"      BIGINT[]                        NOT NULL DEFAULT '{}',
- *     attempts            INT4                            NOT NULL DEFAULT 0,
  *     status              event_core.command_queue_status NOT NULL DEFAULT 'pending',
  *     "issuedAt"          TIMESTAMPTZ                     NOT NULL DEFAULT clock_timestamp(),
  *     "completedAt"       TIMESTAMPTZ

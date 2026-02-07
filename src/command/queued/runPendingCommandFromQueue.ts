@@ -13,7 +13,6 @@ type QueuedCommand = {
   commandName: string;
   commandData: JSONValue;
   raisedEvents: string[];
-  attempts: number;
   status: "pending" | "complete";
   issuedAt: Date;
 };
@@ -91,10 +90,6 @@ export async function runPendingCommandFromQueue<
     });
 
     await txn`UPDATE event_core.command_queue SET status = 'complete' WHERE id = ${command.id}`;
-  } catch {
-    await txn`UPDATE event_core.command_queue SET attempts = ${
-      command.attempts + 1
-    } WHERE id = ${command.id}`;
   } finally {
     await txn`COMMIT`;
     txn.release();
