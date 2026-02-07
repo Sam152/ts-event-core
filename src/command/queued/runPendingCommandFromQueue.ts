@@ -48,7 +48,8 @@ export async function runPendingCommandFromQueue<
     latest_unlocked_aggregate_command AS (
       SELECT queue.*
       FROM aggregates_with_pending_commands aggregates
-      -- Join to the aggregates oldest command, only if it is not locked.
+      -- Join to the aggregates oldest command on the condition it is not locked, moving on
+      -- to evaluate each candidate aggregate until a command is found.
       CROSS JOIN LATERAL (
         SELECT *
         FROM event_core.command_queue inner_queue
