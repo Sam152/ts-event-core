@@ -1,11 +1,11 @@
 import type postgres from "postgres";
-import { wait } from "../../../test/integration/utils/wait.ts";
 import { runPendingCommandFromQueue } from "./runPendingCommandFromQueue.ts";
 import type { AggregateRootRepository } from "../../aggregate/AggregateRootRepository.ts";
 import type {
   AggregateRootDefinitionMap,
   AggregateRootDefinitionMapTypes,
 } from "../../aggregate/AggregateRootDefinition.ts";
+import { wait } from "../../util/wait.ts";
 
 export type QueueSignal = { status: "WORKING" | "HALTED" };
 
