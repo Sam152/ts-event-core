@@ -52,7 +52,11 @@ export async function runPendingCommandFromQueue<
       CROSS JOIN LATERAL (
         SELECT *
         FROM event_core.command_queue inner_queue
+        -- The use of FOR UPDATE will ensure we do not read a stale 'pending' status due to
+        -- MVCC and transaction isolation levels, see https://www.postgresql.org/docs/current/transaction-iso.html:
+        -- > The search condition of the command (the WHERE clause) is re-evaluated to see if the updated version of the row still matches the search condition.
         WHERE inner_queue.id = aggregates.oldest
+        AND inner_queue.status = 'pending'
         FOR UPDATE SKIP LOCKED
       ) queue
       LIMIT 1
