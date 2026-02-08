@@ -25,7 +25,11 @@ export async function withTxn<T>(
 
 export function usingTxn(fallback?: PostgresConnection): PostgresConnection {
   const txn = transactionContext.getStore();
-  if (txn) return txn;
-  if (fallback) return fallback;
+  if (txn) {
+    return txn;
+  }
+  if (fallback) {
+    return fallback;
+  }
   throw new Error("No transaction context available");
 }
