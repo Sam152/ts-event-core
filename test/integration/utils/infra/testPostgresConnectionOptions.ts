@@ -10,6 +10,6 @@ const testPostgresConnectionOptions: Options<never> = {
   connect_timeout: 10000,
 };
 
-export function createTestConnection() {
+export function createTestConnection(): ReturnType<typeof postgres> {
   return postgres(testPostgresConnectionOptions);
 }

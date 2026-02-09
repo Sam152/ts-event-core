@@ -20,6 +20,7 @@ export { createMemoryCursorPosition } from "./eventStore/cursor/createMemoryCurs
 export { createPollingEventStoreSubscriber } from "./eventStore/subscriber/createPollingEventStoreSubscriber.ts";
 export { createInMemorySnapshotStorage } from "./aggregate/snapshot/createInMemorySnapshotStorage.ts";
 export { createPostgresSnapshotStorage } from "./aggregate/snapshot/createPostgresSnapshotStorage.ts";
+export { createPostgresEventStore } from "./eventStore/createPostgresEventStore.ts";
 export {
   createSnapshottingAggregateRootRepository,
 } from "./aggregate/repository/createSnapshottingAggregateRootRepository.ts";

@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, it } from "@std/testing/bdd";
-import { bootstrapInMemory } from "./bootstrap/bootstrapInMemory.ts";
-import { bootstrapProduction } from "./bootstrap/bootstrapProduction.ts";
+import { bootstrapInMemory } from "../airlineDomain/bootstrap/bootstrapInMemory.ts";
+import { bootstrapProduction } from "../airlineDomain/bootstrap/bootstrapProduction.ts";
 import { prepareTestDatabaseContainer } from "./utils/prepareTestDatabaseContainer.ts";
 import { describeAll } from "./utils/describeAll.ts";
 import { assertEquals } from "@std/assert";
@@ -10,6 +10,7 @@ import type {
 } from "../airlineDomain/aggregateRoot/passenger/command/setNotificationPreference.ts";
 import { tryThing } from "./utils/tryThing.ts";
 import { assertArrayIncludes } from "@std/assert/array-includes";
+import { createTestConnection } from "./utils/infra/testPostgresConnectionOptions.ts";
 
 const implementations = [
   {
@@ -17,7 +18,7 @@ const implementations = [
     beforeAllHook: () => undefined,
   },
   {
-    bootstrapFn: bootstrapProduction,
+    bootstrapFn: () => bootstrapProduction({ connection: createTestConnection() }),
     beforeAllHook: prepareTestDatabaseContainer,
   },
 ];

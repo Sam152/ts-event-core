@@ -23,7 +23,7 @@ import { lifetimeEarningsReport } from "../test/airlineDomain/projection/lifetim
 import { flightDelayProcessManager } from "../test/airlineDomain/processManager/flightDelayProcessManager.ts";
 import { flightReducer } from "../test/airlineDomain/aggregateRoot/flight/reducer.ts";
 import { purchaseTicket } from "../test/airlineDomain/aggregateRoot/flight/command/purchaseTicket.ts";
-import type { AirlineDomainBootstrap } from "../test/integration/bootstrap/AirlineDomainBootstrap.ts";
+import type { AirlineDomainBootstrap } from "../test/airlineDomain/bootstrap/AirlineDomainBootstrap.ts";
 
 /**
  * Add `README.ts` to soft-wraps configuration before editing.

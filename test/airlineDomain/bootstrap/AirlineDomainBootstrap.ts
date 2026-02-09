@@ -4,7 +4,7 @@ import type { airlineAggregateRoots, LifetimeEarningsReport } from "@ts-event-co
 /**
  * To bootstrap a domain into a working application, key framework components need to be composed together with the
  * domain. All components have in-memory implementations, which allow for fast integration testing and persistent components
- * where applicable, which are more suited to production.
+ * where applicable, which are suited to a production environment.
  *
  * The framework does not dictate the shape or properties of a bootstrap, but instead provides a library of underlying
  * components which should be composed together depending on the use case.

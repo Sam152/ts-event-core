@@ -1,12 +1,13 @@
 import {
   createMemoryCursorPosition,
   createMemoryReducedProjector,
+  createPersistentLockingCursorPosition,
   createPollingEventStoreSubscriber,
+  createPostgresEventStore,
+  createPostgresSnapshotStorage,
+  createQueuedCommandIssuer,
   createSnapshottingAggregateRootRepository,
 } from "@ts-event-core/framework";
-import { createTestConnection } from "../utils/infra/testPostgresConnectionOptions.ts";
-import { createPostgresEventStore } from "../../../src/eventStore/createPostgresEventStore.ts";
-import { createPostgresSnapshotStorage } from "@ts-event-core/framework";
 import {
   airlineAggregateRoots,
   type AirlineDomainEvent,
@@ -15,17 +16,16 @@ import {
   notificationsReactor,
   ticketProcessManager,
 } from "@ts-event-core/airline-domain";
-import { createPersistentLockingCursorPosition } from "@ts-event-core/framework";
-import { createFakeMemoryNotifier } from "../../airlineDomain/reactor/createFakeMemoryNotifier.ts";
+import { createFakeMemoryNotifier } from "../reactor/createFakeMemoryNotifier.ts";
 import type { AirlineDomainBootstrap } from "./AirlineDomainBootstrap.ts";
-import { createQueuedCommandIssuer } from "../../../src/command/queued/createQueuedCommandIssuer.ts";
+import type postgres from "postgres";
 
 /**
  * Create a production bootstrap of the flight tracking domain.
  */
-export function bootstrapProduction(): AirlineDomainBootstrap {
-  const connection = createTestConnection();
-
+export function bootstrapProduction(
+  { connection }: { connection: ReturnType<typeof postgres> },
+): AirlineDomainBootstrap {
   // Create an event store and command issuer.
   const eventStore = createPostgresEventStore<AirlineDomainEvent>({ connection });
   const { issueCommand, startQueueWorker } = createQueuedCommandIssuer({
