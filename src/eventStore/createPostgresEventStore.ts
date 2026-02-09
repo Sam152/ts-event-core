@@ -2,6 +2,7 @@ import type { Event, EventStore, PersistedEvent } from "./EventStore.ts";
 import type postgres from "postgres";
 import type { JSONValue } from "postgres";
 import { AggregateRootVersionIntegrityError } from "./error/AggregateRootVersionIntegrityError.ts";
+import { getTxn } from "@ts-event-core/framework";
 
 /**
  * A persistent event store backed by Postgres.
@@ -33,7 +34,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       }
       try {
         // @todo, linearize these inserts.
-        await sql`
+        await getTxn(sql)`
           INSERT INTO event_core.events ${
           sql(
             events.map((event) => ({
@@ -68,7 +69,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       aggregateRootId: string;
       fromVersion?: number;
     }) {
-      const cursor = sql<PersistedEvent<TEvent>[]>`
+      const cursor = getTxn(sql)<PersistedEvent<TEvent>[]>`
         SELECT *
         FROM "event_core"."events"
         WHERE "aggregateRootType" = ${aggregateRootType}
@@ -86,7 +87,7 @@ export function createPostgresEventStore<TEvent extends Event>(
       idGt,
       limit,
     }) {
-      const cursor = sql<PersistedEvent<TEvent>[]>`
+      const cursor = getTxn(sql)<PersistedEvent<TEvent>[]>`
         SELECT *
         FROM "event_core"."events"
         WHERE id > ${idGt.toString()}

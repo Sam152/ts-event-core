@@ -286,7 +286,7 @@ The `aggregateRootDefinition.state.version` is a mechanism for versioning state,
 #### Implementations
 
 * [`createInMemorySnapshotStorage`](src/aggregate/snapshot/createInMemorySnapshotStorage.ts#L10-L56) 
-* [`createPostgresSnapshotStorage`](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L9-L77) 
+* [`createPostgresSnapshotStorage`](src/aggregate/snapshot/createPostgresSnapshotStorage.ts#L10-L78) 
 
 ### [`EventStore`](src/eventStore/EventStore.ts#L22-L37)
 
@@ -295,7 +295,7 @@ The `EventStore` retrieves and persists events.
 #### Implementations
 
 * [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L6-L57)
-* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L6-L101)
+* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L7-L102)
 
 ### [`Projector`](src/projection/Projector.ts#L3-L15)
 

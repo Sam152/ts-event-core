@@ -6,6 +6,7 @@ import type {
   AggregateRootDefinitionMapTypes,
 } from "../../aggregate/AggregateRootDefinition.ts";
 import { wait } from "../../util/wait.ts";
+import { withTxn } from "@ts-event-core/framework";
 
 export type QueueSignal = { status: "WORKING" | "HALTED" };
 
@@ -26,7 +27,16 @@ export async function workQueue<
   },
 ) {
   while (signal.status === "WORKING") {
-    await runPendingCommandFromQueue({ sql, aggregateRoots, aggregateRootRepository });
+    try {
+      await withTxn(sql, async () => {
+        await runPendingCommandFromQueue({ aggregateRoots, aggregateRootRepository });
+      });
+    } catch {
+      // All data created or updated while running a command from the queue is within a
+      // transaction. Any errors thrown will result in a rollback and the command being
+      // run again.
+      // @todo - log an error.
+    }
     await wait(POLLING_SLEEP_MS);
   }
 }
