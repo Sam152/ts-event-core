@@ -295,7 +295,7 @@ The `EventStore` retrieves and persists events.
 #### Implementations
 
 * [`createInMemoryEventStore`](src/eventStore/createInMemoryEventStore.ts#L6-L57)
-* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L6-L101)
+* [`createPostgresEventStore`](src/eventStore/createPostgresEventStore.ts#L7-L102)
 
 ### [`Projector`](src/projection/Projector.ts#L3-L15)
 
