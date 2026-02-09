@@ -7,7 +7,7 @@ const transactionContext = new AsyncLocalStorage<PostgresConnection>();
 
 export async function withTxn<T>(
   sql: PostgresConnection,
-  fn: () => T | Promise<T>,
+  fn: () => Promise<T>,
 ): Promise<T> {
   const txn = await sql.reserve();
   await txn`BEGIN`;
@@ -23,7 +23,7 @@ export async function withTxn<T>(
   }
 }
 
-export function usingTxn(fallback?: PostgresConnection): PostgresConnection {
+export function getTxn(fallback?: PostgresConnection): PostgresConnection {
   const txn = transactionContext.getStore();
   if (txn) {
     return txn;
@@ -31,5 +31,5 @@ export function usingTxn(fallback?: PostgresConnection): PostgresConnection {
   if (fallback) {
     return fallback;
   }
-  throw new Error("No transaction context available");
+  throw new Error("No transaction context or fallback connection available");
 }

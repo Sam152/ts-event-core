@@ -29,4 +29,4 @@ export { createMemoryReducedProjector } from "./projection/createMemoryReducedPr
 export { createBasicAggregateRootRepository } from "./aggregate/repository/createBasicAggregateRootRepository.ts";
 export { createPersistentLockingCursorPosition } from "./eventStore/cursor/createPersistentLockingCursorPosition.ts";
 export { createQueuedCommandIssuer } from "./command/queued/createQueuedCommandIssuer.ts";
-export { withTxn, usingTxn } from "./util/transaction.ts";
+export { getTxn, withTxn } from "./util/transaction.ts";
