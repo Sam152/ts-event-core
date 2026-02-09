@@ -5,6 +5,7 @@ import type {
 import type { SnapshotStorage } from "../SnapshotStorage.ts";
 import type postgres from "postgres";
 import type { JSONValue } from "postgres";
+import { getTxn } from "../../util/transaction.ts";
 
 /**
  * A persistent snapshot storage backed by Postgres.
@@ -36,7 +37,7 @@ export function createPostgresSnapshotStorage<
       aggregateRoot,
       stateVersion,
     }) => {
-      await sql`
+      await getTxn(sql)`
         INSERT INTO event_core.snapshots ${
         sql({
           aggregateRootType: aggregateRoot.aggregateRootType.toString(),
@@ -57,7 +58,7 @@ export function createPostgresSnapshotStorage<
       aggregateRootId,
       stateVersion,
     }) => {
-      const result = await sql`
+      const result = await getTxn(sql)`
         SELECT "aggregateRootType", "aggregateRootId", "aggregateVersion", state
         FROM "event_core"."snapshots"
         WHERE "aggregateRootType" = ${aggregateRootType as string}
